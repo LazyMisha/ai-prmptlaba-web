@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Prompt Laba
+
+Professional prompt creation and management tool built with Next.js 16, React 19, and TypeScript.
+
+## Features
+
+- ⚡ Next.js 16 with App Router
+- ⚛️ React 19 with React Compiler
+- 📘 TypeScript with strict mode
+- 🎨 Tailwind CSS 4
+- 🧪 Jest + React Testing Library
+- 🔍 ESLint + Prettier
+- 🐶 Husky + lint-staged for pre-commit hooks
+- 🔒 Security headers configured
+- 🌙 Dark mode ready
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- npm or yarn or pnpm
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd ai-prmptlaba-web
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up environment variables:
+
+```bash
+cp .env.local.example .env.local
+```
+
+4. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run lint:fix` - Fix ESLint errors
+- `npm run type-check` - Run TypeScript type checking
+- `npm run format` - Format code with Prettier
+- `npm run test` - Run tests
+- `npm run test:watch` - Run tests in watch mode
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                # Next.js app router pages
+│   ├── layout.tsx      # Root layout
+│   ├── page.tsx        # Home page
+│   ├── error.tsx       # Error boundary
+│   ├── loading.tsx     # Loading UI
+│   └── not-found.tsx   # 404 page
+├── components/         # React components
+│   └── common/         # Shared components
+├── lib/                # Utility functions
+├── hooks/              # Custom React hooks
+├── types/              # TypeScript type definitions
+└── constants/          # App-wide constants
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Code Quality
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project uses:
 
-## Deploy on Vercel
+- **ESLint** for code linting
+- **Prettier** for code formatting
+- **TypeScript** with strict mode enabled
+- **Husky** for pre-commit hooks
+- **lint-staged** for running linters on staged files
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+All commits are automatically checked for code quality.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Testing
+
+Run tests with:
+
+```bash
+npm run test
+```
+
+Tests are configured with Jest and React Testing Library. Place test files next to the components they test with `.test.tsx` or `.spec.tsx` extension.
+
+## Deployment
+
+### Vercel (Recommended)
+
+The easiest way to deploy is using [Vercel](https://vercel.com):
+
+```bash
+npm run build
+```
+
+Then deploy to Vercel with the Vercel CLI or by connecting your Git repository.
+
+### Other Platforms
+
+Build the application:
+
+```bash
+npm run build
+```
+
+Start the production server:
+
+```bash
+npm run start
+```
+
+## License
+
+Private
