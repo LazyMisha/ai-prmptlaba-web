@@ -13,6 +13,8 @@ Professional prompt creation and management tool built with Next.js 16, React 19
 - 🐶 Husky + lint-staged for pre-commit hooks
 - 🔒 Security headers configured
 - 🌙 Dark mode ready
+- 🤖 OpenAI-powered prompt enhancement
+- 💾 In-memory caching built-in
 
 ## Getting Started
 
@@ -39,8 +41,16 @@ npm install
 3. Set up environment variables:
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
+
+Edit `.env.local` and add your OpenAI API key:
+
+```env
+OPENAI_API_KEY=sk-proj-...your-actual-key-here...
+```
+
+Get your API key from [OpenAI Platform](https://platform.openai.com/api-keys).
 
 4. Run the development server:
 
@@ -71,14 +81,101 @@ src/
 │   ├── page.tsx        # Home page
 │   ├── error.tsx       # Error boundary
 │   ├── loading.tsx     # Loading UI
-│   └── not-found.tsx   # 404 page
+│   ├── not-found.tsx   # 404 page
+│   └── api/            # API routes
+│       └── enhance/    # Prompt enhancement endpoint
 ├── components/         # React components
 │   └── common/         # Shared components
 ├── lib/                # Utility functions
+│   ├── openai.ts       # OpenAI API client
+│   ├── ai/             # AI-related utilities
+│   │   └── prompt-enhancer.ts  # Prompt enhancement logic
+│   └── utils/          # General utilities
+│       └── cache.ts    # TTL cache implementation
 ├── hooks/              # Custom React hooks
 ├── types/              # TypeScript type definitions
 └── constants/          # App-wide constants
 ```
+
+## API Documentation
+
+### POST /api/enhance
+
+Enhances a user prompt based on the target platform or context using OpenAI's GPT-4o-mini model.
+
+**Request Body:**
+
+```json
+{
+  "target": "LinkedIn",
+  "prompt": "write post about my promotion"
+}
+```
+
+**Parameters:**
+
+- `target` (string, required): Target platform or context. Supported values:
+  - `LinkedIn` - Professional networking content
+  - `Facebook` - Personal social networking content
+  - `Development` - Software development prompts
+  - `Copilot` - AI coding assistant prompts
+  - `General` - General-purpose enhancement
+- `prompt` (string, required): The user's raw prompt text (3-2000 characters)
+
+**Response (200 OK):**
+
+```json
+{
+  "enhanced": "Craft a professional LinkedIn post announcing my recent promotion..."
+}
+```
+
+**Error Responses:**
+
+- `400 Bad Request` - Invalid or missing parameters
+  ```json
+  {
+    "error": "Missing or invalid \"target\" field"
+  }
+  ```
+- `500 Internal Server Error` - Server error or OpenAI API failure
+  ```json
+  {
+    "error": "Internal server error",
+    "retryable": true
+  }
+  ```
+
+**Features:**
+
+- ✅ Input validation (length limits, type checking)
+- ✅ Automatic caching (12 hours TTL)
+- ✅ Automatic retries on transient errors (5xx, network issues)
+- ✅ Request timeout (30 seconds)
+- ✅ Platform-specific prompt optimization
+
+**Example cURL:**
+
+```bash
+curl -X POST http://localhost:3000/api/enhance \
+  -H "Content-Type: application/json" \
+  -d '{
+    "target": "LinkedIn",
+    "prompt": "write post about my promotion"
+  }'
+```
+
+## Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+# OpenAI API Configuration (Required)
+# Get your API key from: https://platform.openai.com/api-keys
+OPENAI_API_KEY=sk-proj-...your-actual-key-here...
+```
+
+**Important:** Never commit your `.env.local` file to version control. It's already in `.gitignore`.
 
 ## Code Quality
 
@@ -104,15 +201,42 @@ Tests are configured with Jest and React Testing Library. Place test files next 
 
 ## Deployment
 
+### Production Considerations
+
+**⚠️ Important for Production Scaling:**
+
+The current implementation uses **in-memory caching**, which is suitable for single-instance deployments but has limitations:
+
+1. **Cache is not distributed** - Each server instance maintains its own cache
+2. **Cache is lost on restart** - Cached data doesn't persist between deployments
+
+**For production at scale, replace with:**
+
+- **Redis** for distributed caching with TTL
+- Or use managed services like:
+  - Vercel Edge Config for caching
+  - Upstash Redis for distributed caching
+  - CloudFlare Workers KV
+
+**Note:** Rate limiting can be added later as needed based on your requirements.
+
+The code includes `TODO` comments indicating where to implement Redis-based caching.
+
 ### Vercel (Recommended)
 
 The easiest way to deploy is using [Vercel](https://vercel.com):
 
+1. Push your code to GitHub/GitLab/Bitbucket
+2. Import the project in Vercel
+3. Add the `OPENAI_API_KEY` environment variable in Vercel settings
+4. Deploy
+
+Or use the Vercel CLI:
+
 ```bash
 npm run build
+vercel
 ```
-
-Then deploy to Vercel with the Vercel CLI or by connecting your Git repository.
 
 ### Other Platforms
 
@@ -127,6 +251,8 @@ Start the production server:
 ```bash
 npm run start
 ```
+
+Make sure to set the `OPENAI_API_KEY` environment variable in your hosting platform.
 
 ## License
 
