@@ -76,25 +76,46 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ```
 src/
-├── app/                # Next.js app router pages
-│   ├── layout.tsx      # Root layout
-│   ├── page.tsx        # Home page
-│   ├── error.tsx       # Error boundary
-│   ├── loading.tsx     # Loading UI
-│   ├── not-found.tsx   # 404 page
-│   └── api/            # API routes
-│       └── enhance/    # Prompt enhancement endpoint
-├── components/         # React components
-│   └── common/         # Shared components
-├── lib/                # Utility functions
-│   ├── openai.ts       # OpenAI API client
-│   ├── ai/             # AI-related utilities
-│   │   └── prompt-enhancer.ts  # Prompt enhancement logic
-│   └── utils/          # General utilities
-│       └── cache.ts    # TTL cache implementation
-├── hooks/              # Custom React hooks
-├── types/              # TypeScript type definitions
-└── constants/          # App-wide constants
+├── app/                    # Next.js app router pages
+│   ├── layout.tsx          # Root layout
+│   ├── page.tsx            # Home page
+│   ├── globals.css         # Global styles with Tailwind imports
+│   ├── error.tsx           # Error boundary
+│   ├── loading.tsx         # Loading UI
+│   ├── not-found.tsx       # 404 page
+│   ├── enhance/            # Enhance page route
+│   │   └── page.tsx        # Prompt enhancement UI page
+│   ├── api/                # API routes
+│   │   └── enhance/        # Prompt enhancement endpoint
+│   │       └── route.ts    # POST /api/enhance handler
+│   └── __tests__/          # Page tests
+├── components/             # React components
+│   ├── common/             # Shared components
+│   │   ├── Header.tsx      # Site header with navigation (formerly Navbar)
+│   │   ├── Footer.tsx      # Site footer
+│   │   └── __tests__/      # Component tests
+│   └── enhance/            # Prompt enhancement UI components
+│       ├── EnhanceForm.tsx     # Main form orchestrator
+│       ├── TargetSelector.tsx  # Platform dropdown selector
+│       ├── PromptInput.tsx     # Textarea with validation
+│       ├── EnhanceButton.tsx   # Submit button with loading
+│       └── EnhancedResult.tsx  # Result display with copy
+├── lib/                    # Utility functions
+│   ├── openai.ts           # OpenAI API client with retries
+│   ├── utils.ts            # cn() utility for className merging
+│   ├── ai/                 # AI-related utilities
+│   │   ├── prompt-enhancer.ts  # Core enhancement logic
+│   │   └── __tests__/          # Enhancement tests
+│   ├── utils/              # General utilities
+│   │   └── cache.ts        # TTL cache implementation
+│   ├── api/                # API utilities
+│   │   └── __tests__/      # API tests
+│   └── __tests__/          # Lib tests
+├── types/                  # TypeScript type definitions
+│   └── enhance.ts          # Enhancement types
+├── constants/              # App-wide constants
+│   └── app.ts              # App name and config
+└── hooks/                  # Custom React hooks (empty)
 ```
 
 ## API Documentation
