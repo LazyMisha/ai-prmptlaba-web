@@ -140,6 +140,10 @@ Enhances a user prompt based on the target platform or context using OpenAI's GP
   - `Facebook` - Personal social networking content
   - `Development` - Software development prompts
   - `Copilot` - AI coding assistant prompts
+  - `Midjourney` - AI image generation (Midjourney)
+  - `DALL-E` - AI image generation (DALL-E)
+  - `Sora` - AI video generation (Sora)
+  - `Claude` - Claude AI assistant prompts
   - `General` - General-purpose enhancement
 - `prompt` (string, required): The user's raw prompt text (3-2000 characters)
 

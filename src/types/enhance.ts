@@ -6,6 +6,10 @@ export const ENHANCEMENT_TARGETS = [
   'Facebook',
   'Development',
   'Copilot',
+  'Midjourney',
+  'DALL-E',
+  'Sora',
+  'Claude',
   'General',
 ] as const
 
