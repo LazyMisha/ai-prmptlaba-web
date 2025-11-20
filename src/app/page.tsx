@@ -1,8 +1,52 @@
+import { cn } from '@/lib/utils'
+
 export default function HomePage() {
   return (
-    <main>
-      <h1>AI Prompt Laba</h1>
-      <p>Your hub for smart prompt creation and management.</p>
-    </main>
+    <div
+      className={cn(
+        // width=768px max
+        'max-w-3xl',
+        // center horizontally
+        'mx-auto',
+        // center text
+        'text-center',
+        // vertical spacing
+        'space-y-6',
+        // padding
+        'p-4',
+      )}
+    >
+      <h1
+        className={cn(
+          // font size
+          'text-4xl',
+          // font weight
+          'font-semibold',
+        )}
+      >
+        AI Prompt Laba
+      </h1>
+      <h2
+        className={cn(
+          // font size
+          'text-2xl',
+          // font weight
+          'font-medium',
+        )}
+      >
+        Home page
+      </h2>
+      <p
+        className={cn(
+          // font size
+          'text-lg',
+          // line height
+          'leading-relaxed',
+        )}
+      >
+        Your hub for smart prompt creation and management. Transform basic ideas into professional,
+        effective AI instructions.
+      </p>
+    </div>
   )
 }

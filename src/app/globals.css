@@ -1,9 +1,7 @@
 /* ----------------------------- */
-/* Tailwind imports              */
+/* Tailwind v4 imports           */
 /* ----------------------------- */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
 /* ----------------------------- */
 /* Root variables for theming     */
@@ -47,20 +45,6 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* ----------------------------- */
-/* Typography defaults            */
-/* ----------------------------- */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 600;
-  color: var(--color-text);
-  margin: 0 0 var(--spacing-md) 0;
 }
 
 p {

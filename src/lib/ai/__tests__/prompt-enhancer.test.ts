@@ -148,7 +148,7 @@ describe('enhancePrompt', () => {
       await enhancePrompt('LinkedIn', 'test prompt')
 
       expect(mockCallOpenAI).toHaveBeenCalledWith(
-        expect.stringContaining('professional LinkedIn content'),
+        expect.stringContaining('LinkedIn content creation'),
         'test prompt',
         undefined,
       )
@@ -158,7 +158,7 @@ describe('enhancePrompt', () => {
       await enhancePrompt('Facebook', 'test prompt')
 
       expect(mockCallOpenAI).toHaveBeenCalledWith(
-        expect.stringContaining('engaging Facebook content'),
+        expect.stringContaining('Facebook content creation'),
         'test prompt',
         undefined,
       )
@@ -188,7 +188,7 @@ describe('enhancePrompt', () => {
       await enhancePrompt('CustomTarget', 'test prompt')
 
       expect(mockCallOpenAI).toHaveBeenCalledWith(
-        expect.stringContaining('expert prompt engineer'),
+        expect.stringContaining('professional prompt engineer'),
         'test prompt',
         undefined,
       )
