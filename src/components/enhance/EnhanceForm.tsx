@@ -12,7 +12,6 @@ import type {
   EnhanceErrorResponse,
 } from '@/types/enhance'
 import { TOOL_CATEGORIES } from '@/constants/tool-categories'
-import { cn } from '@/lib/utils'
 
 /**
  * Main form component that orchestrates the prompt enhancement flow
