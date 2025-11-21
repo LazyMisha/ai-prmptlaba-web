@@ -26,16 +26,6 @@ export default function HomePage() {
       >
         AI Prompt Laba
       </h1>
-      <h2
-        className={cn(
-          // font size
-          'text-2xl',
-          // font weight
-          'font-medium',
-        )}
-      >
-        Home page
-      </h2>
       <p
         className={cn(
           // font size
@@ -45,7 +35,7 @@ export default function HomePage() {
         )}
       >
         Your hub for smart prompt creation and management. Transform basic ideas into professional,
-        effective AI instructions.
+        effective AI instructions with ease.
       </p>
     </div>
   )

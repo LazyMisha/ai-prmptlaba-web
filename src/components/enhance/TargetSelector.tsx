@@ -29,7 +29,7 @@ export default function TargetSelector({ value, onChange, disabled }: TargetSele
         )}
         htmlFor="target-selector"
       >
-        Target Platform:
+        Target:
       </label>
       <select
         className={cn(
@@ -67,7 +67,7 @@ export default function TargetSelector({ value, onChange, disabled }: TargetSele
           'text-gray-600',
         )}
       >
-        <span>Choose the platform or context for prompt optimization</span>
+        <span>Choose the context for prompt optimization</span>
       </div>
     </div>
   )

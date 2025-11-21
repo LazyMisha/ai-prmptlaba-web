@@ -19,14 +19,14 @@ export type ToolCategory = (typeof TOOL_CATEGORIES)[keyof typeof TOOL_CATEGORIES
  * Human-readable names for tool categories
  */
 export const TOOL_CATEGORY_NAMES: Record<ToolCategory, string> = {
-  [TOOL_CATEGORIES.IMAGE_GENERATOR]: 'Image Generator',
-  [TOOL_CATEGORIES.VIDEO_GENERATOR]: 'Video Generator',
-  [TOOL_CATEGORIES.TEXT_GENERATOR]: 'Text Generator',
+  [TOOL_CATEGORIES.IMAGE_GENERATOR]: 'Image',
+  [TOOL_CATEGORIES.VIDEO_GENERATOR]: 'Video',
+  [TOOL_CATEGORIES.TEXT_GENERATOR]: 'Text',
   [TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT]: 'Software Development Assistant',
-  [TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR]: 'LinkedIn Post Generator',
-  [TOOL_CATEGORIES.FACEBOOK_POST_CREATOR]: 'Facebook Post Creator',
-  [TOOL_CATEGORIES.TWITTER_POST_CREATOR]: 'Twitter (X) Post Creator',
-  [TOOL_CATEGORIES.INSTAGRAM_POST_GENERATOR]: 'Instagram Post Generator',
+  [TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR]: 'LinkedIn Post',
+  [TOOL_CATEGORIES.FACEBOOK_POST_CREATOR]: 'Facebook Post',
+  [TOOL_CATEGORIES.TWITTER_POST_CREATOR]: 'Twitter (X) Post',
+  [TOOL_CATEGORIES.INSTAGRAM_POST_GENERATOR]: 'Instagram Post',
   [TOOL_CATEGORIES.GENERAL]: 'General',
 }
 

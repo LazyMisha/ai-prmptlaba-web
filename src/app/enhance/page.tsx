@@ -47,7 +47,7 @@ export default function EnhancePage() {
           )}
         >
           Transform your basic prompts into professional, effective AI instructions optimized for
-          your target platform
+          your target context.
         </p>
       </div>
 
