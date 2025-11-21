@@ -15,6 +15,7 @@ export default function Footer() {
         // Center text
         'text-center',
       )}
+      role="contentinfo"
     >
       <p
         className={cn(

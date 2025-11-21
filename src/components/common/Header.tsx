@@ -19,6 +19,7 @@ export default function Header() {
         // Z-index to stay above content
         'z-10',
       )}
+      role="banner"
     >
       <nav
         className={cn(
@@ -29,6 +30,8 @@ export default function Header() {
           // Items center
           'items-center',
         )}
+        role="navigation"
+        aria-label="Main navigation"
       >
         <Link
           className={cn(
@@ -36,8 +39,17 @@ export default function Header() {
             'text-xl',
             // Font weight
             'font-bold',
+            // Focus styles
+            'focus:outline-none',
+            'focus:ring-2',
+            'focus:ring-blue-500',
+            'focus:ring-offset-2',
+            'rounded',
+            'px-2',
+            'py-1',
           )}
           href="/"
+          aria-label="Go to home page"
         >
           {APP_NAME}
         </Link>
@@ -47,8 +59,17 @@ export default function Header() {
             'text-lg',
             // Font weight
             'font-medium',
+            // Focus styles
+            'focus:outline-none',
+            'focus:ring-2',
+            'focus:ring-blue-500',
+            'focus:ring-offset-2',
+            'rounded',
+            'px-2',
+            'py-1',
           )}
           href="/enhance"
+          aria-label="Go to prompt enhancer page"
         >
           Enhance Prompt
         </Link>

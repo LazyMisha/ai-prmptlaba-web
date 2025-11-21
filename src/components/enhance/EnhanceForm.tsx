@@ -1,10 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import TargetSelector from './TargetSelector'
-import PromptInput from './PromptInput'
-import EnhanceButton from './EnhanceButton'
-import EnhancedResult from './EnhancedResult'
+import { useState, useRef } from 'react'
+
 import type {
   EnhancementTarget,
   EnhanceRequest,
@@ -12,11 +9,19 @@ import type {
   EnhanceErrorResponse,
 } from '@/types/enhance'
 import { TOOL_CATEGORIES } from '@/constants/tool-categories'
+import { cn } from '@/lib/utils'
+
+import TargetSelector from './TargetSelector'
+import PromptInput from './PromptInput'
+import EnhanceButton from './EnhanceButton'
+import EnhancedResult from './EnhancedResult'
 
 /**
- * Main form component that orchestrates the prompt enhancement flow
+ * Main form component that orchestrates the prompt enhancement flow.
+ * Manages state, validation, API calls, and accessibility features.
  */
 export default function EnhanceForm() {
+  const resultRef = useRef<HTMLDivElement>(null)
   const [target, setTarget] = useState<EnhancementTarget>(TOOL_CATEGORIES.GENERAL)
   const [prompt, setPrompt] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -88,6 +93,11 @@ export default function EnhanceForm() {
       const successData = data as EnhanceResponse
 
       setEnhanced(successData.enhanced)
+
+      // Move focus to results for screen readers after successful enhancement
+      setTimeout(() => {
+        resultRef.current?.focus()
+      }, 100)
     } catch (err) {
       setError(
         err instanceof Error
@@ -112,8 +122,14 @@ export default function EnhanceForm() {
   return (
     <div>
       {/* Input Form */}
-      <div>
-        <TargetSelector value={target} onChange={setTarget} disabled={isLoading} />
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleEnhance()
+        }}
+        aria-label="Prompt enhancement form"
+      >
+        <TargetSelector value={target} onChange={setTarget} disabled={isLoading} className="mb-4" />
 
         <PromptInput
           value={prompt}
@@ -121,6 +137,7 @@ export default function EnhanceForm() {
           disabled={isLoading}
           error={error && !enhanced ? error : null}
           onKeyDown={handleKeyDown}
+          className="mb-4"
         />
 
         <EnhanceButton
@@ -128,14 +145,17 @@ export default function EnhanceForm() {
           disabled={!prompt.trim() || prompt.length < 3 || prompt.length > 2000}
           isLoading={isLoading}
         />
-      </div>
+      </form>
 
       {/* Result Display */}
-      <EnhancedResult
-        enhanced={enhanced}
-        error={error && enhanced ? error : null}
-        originalPrompt={prompt}
-      />
+      <div ref={resultRef} tabIndex={-1} className={cn('focus:outline-none')}>
+        <EnhancedResult
+          enhanced={enhanced}
+          error={error && enhanced ? error : null}
+          originalPrompt={prompt}
+          isLoading={isLoading}
+        />
+      </div>
     </div>
   )
 }
