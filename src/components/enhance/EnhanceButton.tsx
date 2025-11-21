@@ -22,6 +22,8 @@ export default function EnhanceButton({ onClick, disabled, isLoading }: EnhanceB
         // Padding
         'px-4',
         'py-2',
+        // Margin
+        'mt-4',
         // Border radius
         'rounded',
         // Hover effect

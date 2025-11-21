@@ -1,19 +1,9 @@
-/**
- * Available target platforms for prompt enhancement
- */
-export const ENHANCEMENT_TARGETS = [
-  'LinkedIn',
-  'Facebook',
-  'Development',
-  'Copilot',
-  'Midjourney',
-  'DALL-E',
-  'Sora',
-  'Claude',
-  'General',
-] as const
+import type { ToolCategory } from '@/constants/tool-categories'
 
-export type EnhancementTarget = (typeof ENHANCEMENT_TARGETS)[number]
+/**
+ * Enhancement target is now a ToolCategory
+ */
+export type EnhancementTarget = ToolCategory
 
 /**
  * Request payload for the enhance API

@@ -1,7 +1,7 @@
 'use client'
 
 import type { EnhancementTarget } from '@/types/enhance'
-import { ENHANCEMENT_TARGETS } from '@/types/enhance'
+import { TOOL_CATEGORY_LIST } from '@/constants/tool-categories'
 import { cn } from '@/lib/utils'
 
 interface TargetSelectorProps {
@@ -24,10 +24,12 @@ export default function TargetSelector({ value, onChange, disabled }: TargetSele
           'mb-2',
           // display block
           'block',
+          // text alignment
+          'text-left',
         )}
         htmlFor="target-selector"
       >
-        Target Platform
+        Target Platform:
       </label>
       <select
         className={cn(
@@ -45,24 +47,28 @@ export default function TargetSelector({ value, onChange, disabled }: TargetSele
         onChange={(e) => onChange(e.target.value as EnhancementTarget)}
         disabled={disabled}
       >
-        {ENHANCEMENT_TARGETS.map((target) => (
-          <option key={target} value={target}>
-            {target}
+        {TOOL_CATEGORY_LIST.map(({ value: categoryValue, label }) => (
+          <option key={categoryValue} value={categoryValue}>
+            {label}
           </option>
         ))}
       </select>
-      <p
+      <div
         className={cn(
-          // font size
-          'text-sm',
-          // color
-          'text-gray-600',
           // margin top
           'mt-1',
+          // flex container
+          'flex',
+          // justify content
+          'justify-center',
+          // text small
+          'text-sm',
+          // text gray
+          'text-gray-600',
         )}
       >
-        Choose the platform or context for prompt optimization
-      </p>
+        <span>Choose the platform or context for prompt optimization</span>
+      </div>
     </div>
   )
 }

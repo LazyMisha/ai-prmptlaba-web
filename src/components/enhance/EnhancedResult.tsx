@@ -105,6 +105,8 @@ export default function EnhancedResult({ enhanced, error, originalPrompt }: Enha
             'whitespace-pre-wrap',
             // font family
             'font-mono',
+            // text align
+            'text-left',
           )}
         >
           {enhanced}
@@ -153,6 +155,8 @@ export default function EnhancedResult({ enhanced, error, originalPrompt }: Enha
                 'whitespace-pre-wrap',
                 // font family
                 'font-mono',
+                // text align
+                'text-left',
               )}
             >
               {originalPrompt}

@@ -34,10 +34,12 @@ export default function PromptInput({
           'mb-2',
           // display block
           'block',
+          // text alignment
+          'text-left',
         )}
         htmlFor="prompt-input"
       >
-        Your Prompt
+        Your Prompt:
       </label>
       <textarea
         className={cn(

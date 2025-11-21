@@ -1,6 +1,7 @@
 import { enhancePrompt, ValidationError } from '../prompt-enhancer'
 import { callOpenAI } from '@/lib/openai'
 import * as cacheModule from '@/lib/utils/cache'
+import { TOOL_CATEGORIES } from '@/constants/tool-categories'
 
 // Mock dependencies
 jest.mock('@/lib/openai')
@@ -71,13 +72,13 @@ describe('enhancePrompt', () => {
     })
 
     it('should accept valid input with minimum length', async () => {
-      const result = await enhancePrompt('LinkedIn', 'abc')
+      const result = await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'abc')
       expect(result).toBe('Enhanced prompt text')
       expect(mockCallOpenAI).toHaveBeenCalledTimes(1)
     })
 
     it('should trim whitespace from inputs', async () => {
-      await enhancePrompt('  LinkedIn  ', '  test prompt  ')
+      await enhancePrompt(`  ${TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR}  `, '  test prompt  ')
       expect(mockCallOpenAI).toHaveBeenCalledWith(expect.any(String), 'test prompt', undefined)
     })
   })
@@ -86,7 +87,7 @@ describe('enhancePrompt', () => {
     it('should return cached result when available', async () => {
       mockCache.get = jest.fn().mockReturnValue('Cached enhanced prompt')
 
-      const result = await enhancePrompt('LinkedIn', 'test prompt')
+      const result = await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'test prompt')
 
       expect(result).toBe('Cached enhanced prompt')
       expect(mockCache.get).toHaveBeenCalledTimes(1)
@@ -97,7 +98,7 @@ describe('enhancePrompt', () => {
       mockCache.get = jest.fn().mockReturnValue(undefined)
       mockCallOpenAI.mockResolvedValue('New enhanced prompt')
 
-      const result = await enhancePrompt('LinkedIn', 'test prompt')
+      const result = await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'test prompt')
 
       expect(result).toBe('New enhanced prompt')
       expect(mockCache.set).toHaveBeenCalledTimes(1)
@@ -110,13 +111,13 @@ describe('enhancePrompt', () => {
     it('should use different cache keys for different inputs', async () => {
       mockCache.get = jest.fn().mockReturnValue(undefined)
 
-      await enhancePrompt('LinkedIn', 'prompt 1')
+      await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'prompt 1')
       const cacheKey1 = (mockCache.set as jest.Mock).mock.calls[0][0]
 
-      await enhancePrompt('Facebook', 'prompt 1')
+      await enhancePrompt(TOOL_CATEGORIES.FACEBOOK_POST_CREATOR, 'prompt 1')
       const cacheKey2 = (mockCache.set as jest.Mock).mock.calls[1][0]
 
-      await enhancePrompt('LinkedIn', 'prompt 2')
+      await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'prompt 2')
       const cacheKey3 = (mockCache.set as jest.Mock).mock.calls[2][0]
 
       expect(cacheKey1).not.toBe(cacheKey2)
@@ -127,17 +128,17 @@ describe('enhancePrompt', () => {
     it('should use case-insensitive cache keys for target', async () => {
       mockCache.get = jest.fn().mockReturnValue(undefined)
 
-      await enhancePrompt('LinkedIn', 'test prompt')
+      await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'test prompt')
       const call1 = mockGenerateCacheKey.mock.calls[0]
 
-      await enhancePrompt('LINKEDIN', 'test prompt')
+      await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR.toUpperCase(), 'test prompt')
       const call2 = mockGenerateCacheKey.mock.calls[1]
 
-      // Both calls should have lowercase 'linkedin' as first argument
+      // Both calls should have lowercase category value as first argument
       expect(call1).toBeDefined()
       expect(call2).toBeDefined()
-      expect(call1![0]).toBe('linkedin')
-      expect(call2![0]).toBe('linkedin')
+      expect(call1![0]).toBe(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR)
+      expect(call2![0]).toBe(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR)
       expect(call1![1]).toBe('test prompt')
       expect(call2![1]).toBe('test prompt')
     })
@@ -145,7 +146,7 @@ describe('enhancePrompt', () => {
 
   describe('OpenAI Integration', () => {
     it('should call OpenAI with correct system prompt for LinkedIn', async () => {
-      await enhancePrompt('LinkedIn', 'test prompt')
+      await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'test prompt')
 
       expect(mockCallOpenAI).toHaveBeenCalledWith(
         expect.stringContaining('LinkedIn content creation'),
@@ -155,7 +156,7 @@ describe('enhancePrompt', () => {
     })
 
     it('should call OpenAI with correct system prompt for Facebook', async () => {
-      await enhancePrompt('Facebook', 'test prompt')
+      await enhancePrompt(TOOL_CATEGORIES.FACEBOOK_POST_CREATOR, 'test prompt')
 
       expect(mockCallOpenAI).toHaveBeenCalledWith(
         expect.stringContaining('Facebook content creation'),
@@ -165,20 +166,70 @@ describe('enhancePrompt', () => {
     })
 
     it('should call OpenAI with correct system prompt for Development', async () => {
-      await enhancePrompt('Development', 'test prompt')
+      await enhancePrompt(TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT, 'test prompt')
 
       expect(mockCallOpenAI).toHaveBeenCalledWith(
-        expect.stringContaining('software development'),
+        expect.stringContaining('AI coding assistants and development tools'),
         'test prompt',
         undefined,
       )
     })
 
     it('should call OpenAI with correct system prompt for Copilot', async () => {
-      await enhancePrompt('Copilot', 'test prompt')
+      await enhancePrompt(TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT, 'test prompt')
 
       expect(mockCallOpenAI).toHaveBeenCalledWith(
         expect.stringContaining('AI coding assistants'),
+        'test prompt',
+        undefined,
+      )
+    })
+
+    it('should call OpenAI with correct system prompt for image generation tools', async () => {
+      await enhancePrompt(TOOL_CATEGORIES.IMAGE_GENERATOR, 'test prompt')
+
+      expect(mockCallOpenAI).toHaveBeenCalledWith(
+        expect.stringContaining('AI image generation tools'),
+        'test prompt',
+        undefined,
+      )
+    })
+
+    it('should call OpenAI with correct system prompt for video generation tools', async () => {
+      await enhancePrompt(TOOL_CATEGORIES.VIDEO_GENERATOR, 'test prompt')
+
+      expect(mockCallOpenAI).toHaveBeenCalledWith(
+        expect.stringContaining('AI video generation tools'),
+        'test prompt',
+        undefined,
+      )
+    })
+
+    it('should call OpenAI with correct system prompt for text generation tools', async () => {
+      await enhancePrompt(TOOL_CATEGORIES.TEXT_GENERATOR, 'test prompt')
+
+      expect(mockCallOpenAI).toHaveBeenCalledWith(
+        expect.stringContaining('AI text generation and conversational AI tools'),
+        'test prompt',
+        undefined,
+      )
+    })
+
+    it('should call OpenAI with correct system prompt for Twitter', async () => {
+      await enhancePrompt(TOOL_CATEGORIES.TWITTER_POST_CREATOR, 'test prompt')
+
+      expect(mockCallOpenAI).toHaveBeenCalledWith(
+        expect.stringContaining('Twitter (X) content creation'),
+        'test prompt',
+        undefined,
+      )
+    })
+
+    it('should call OpenAI with correct system prompt for Instagram', async () => {
+      await enhancePrompt(TOOL_CATEGORIES.INSTAGRAM_POST_GENERATOR, 'test prompt')
+
+      expect(mockCallOpenAI).toHaveBeenCalledWith(
+        expect.stringContaining('Instagram content creation'),
         'test prompt',
         undefined,
       )
@@ -197,7 +248,7 @@ describe('enhancePrompt', () => {
     it('should return enhanced prompt from OpenAI', async () => {
       mockCallOpenAI.mockResolvedValue('Enhanced by AI')
 
-      const result = await enhancePrompt('LinkedIn', 'test prompt')
+      const result = await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'test prompt')
 
       expect(result).toBe('Enhanced by AI')
     })
@@ -205,7 +256,7 @@ describe('enhancePrompt', () => {
     it('should pass AbortSignal to OpenAI call', async () => {
       const controller = new AbortController()
 
-      await enhancePrompt('LinkedIn', 'test prompt', controller.signal)
+      await enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'test prompt', controller.signal)
 
       expect(mockCallOpenAI).toHaveBeenCalledWith(
         expect.any(String),
@@ -224,9 +275,9 @@ describe('enhancePrompt', () => {
       mockCache.get = jest.fn().mockReturnValue(undefined)
       mockCallOpenAI.mockRejectedValue(new Error('Unexpected error'))
 
-      await expect(enhancePrompt('LinkedIn', 'test prompt')).rejects.toThrow(
-        'Failed to enhance prompt: Unexpected error',
-      )
+      await expect(
+        enhancePrompt(TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR, 'test prompt'),
+      ).rejects.toThrow('Failed to enhance prompt: Unexpected error')
     })
   })
 })

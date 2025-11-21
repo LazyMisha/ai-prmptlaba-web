@@ -1,6 +1,10 @@
 import { callOpenAI } from '@/lib/openai'
 import { generateCacheKey, promptEnhancementCache } from '@/lib/utils/cache'
-import { TOOL_VERSIONS } from '@/constants/toolversions'
+import {
+  TOOL_CATEGORIES,
+  resolveToolCategory,
+  type ToolCategory,
+} from '@/constants/tool-categories'
 
 /**
  * Configuration for prompt enhancement
@@ -58,127 +62,141 @@ function validateInput(target: string, prompt: string): void {
  * Generate system prompt based on target platform
  */
 function generateSystemPrompt(target: string): string {
-  const targetLower = target.toLowerCase()
+  const category = resolveToolCategory(target)
 
-  // Platform-specific instructions
-  const platformInstructions: Record<string, string> = {
-    linkedin: `You are a professional prompt engineer specializing in LinkedIn content creation.
+  // Category-specific instructions
+  const categoryInstructions: Record<ToolCategory, string> = {
+    [TOOL_CATEGORIES.IMAGE_GENERATOR]: `You are a professional prompt engineer specializing in AI image generation tools.
 
-Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for LinkedIn content generation.
-
-Transform the prompt to be:
-- Professional yet engaging in tone
-- Focused on business networking and professional achievements
-- Clear about the desired LinkedIn post format and key points
-- Specific about target audience and purpose
-- Structured for optimal AI content generation`,
-
-    facebook: `You are a professional prompt engineer specializing in Facebook content creation.
-
-Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for Facebook content generation.
-
-Transform the prompt to be:
-- Friendly and conversational in tone
-- Clear about the desired casual social media format
-- Specific about engagement goals and audience
-- Personal and authentic in approach
-- Structured for optimal AI content generation`,
-
-    development: `You are a professional prompt engineer specializing in software development.
-
-Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for code generation or technical documentation.
-
-Transform the prompt to be:
-- Technically precise with clear specifications
-- Explicit about programming languages, frameworks, and requirements
-- Structured with context, constraints, and expected outputs
-- Focused on best practices and code quality
-- Optimized for AI code generation tools`,
-
-    copilot: `You are a professional prompt engineer specializing in AI coding assistants like GitHub Copilot.
-
-Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for AI-powered code generation.
-
-Transform the prompt to be:
-- Explicit about the desired code functionality and structure
-- Clear on programming language, framework, and dependencies
-- Specific about input/output expectations and edge cases
-- Detailed with relevant context and constraints
-- Formatted for optimal AI comprehension and code generation
-- Optimized for latest Copilot features: multi-file context, chat capabilities, and workspace understanding`,
-
-    midjourney: `You are a professional prompt engineer specializing in Midjourney image generation.
-
-Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for Midjourney AI image generation.
-You create prompts that leverage the full capabilities of Midjourney version ${TOOL_VERSIONS.midjourney}.
+Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for AI image generation platforms like Midjourney, DALL-E, Stable Diffusion, and similar tools.
 
 Transform the prompt to be:
 - Visually descriptive with specific details about composition, lighting, and style
-- Clear about artistic style, medium, and aesthetic references
+- Clear about artistic style, medium, and aesthetic references (e.g., photorealistic, oil painting, digital art)
 - Explicit about subject matter, mood, and atmosphere
-- Structured with relevant Midjourney parameters (--v, --ar, --style, --quality, --chaos, etc.)
-- Optimized for latest Midjourney features and capabilities
+- Detailed about colors, textures, and spatial relationships
+- Structured with relevant technical parameters when applicable (aspect ratios, quality settings)
 - Include relevant keywords like camera angles, art movements, or famous artists when appropriate
-- Consider latest version improvements like better photorealism, text rendering, and coherence`,
+- Optimized for generating coherent, high-quality images with clear visual intent
+- Specific about perspective, depth of field, and focal points`,
 
-    'dall-e': `You are a professional prompt engineer specializing in DALL-E image generation.
+    [TOOL_CATEGORIES.VIDEO_GENERATOR]: `You are a professional prompt engineer specializing in AI video generation tools.
 
-Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for DALL-E AI image generation.
-You create prompts that leverage the full capabilities of DALL-E version ${TOOL_VERSIONS['dall-e']}.
-
-Transform the prompt to be:
-- Descriptive and detailed about visual elements, colors, and composition
-- Clear about style, perspective, and artistic approach
-- Specific about subjects, objects, and their relationships in the scene
-- Explicit about lighting, mood, and atmosphere
-- Structured for DALL-E's natural language understanding and latest capabilities
-- Focused on creating coherent, high-quality images with clear intent
-- Optimized for DALL-E's improved text rendering, detail, and instruction following`,
-
-    sora: `You are a professional prompt engineer specializing in Sora AI video generation.
-
-Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for Sora AI video generation.
-You create prompts that leverage the full capabilities of Sora version ${TOOL_VERSIONS.sora}.
+Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for AI video generation platforms like Sora, Runway, and similar tools.
 
 Transform the prompt to be:
 - Descriptive about motion, camera movement, and temporal progression
-- Clear about scene composition, lighting, and visual style
+- Clear about scene composition, lighting, and visual style throughout the sequence
 - Specific about subjects, actions, and their evolution over time
-- Explicit about video duration (up to 60 seconds), pacing, and key moments
-- Detailed about atmosphere, mood, and cinematography
+- Explicit about video duration, pacing, and key moments or transitions
+- Detailed about atmosphere, mood, and cinematography techniques
 - Structured to describe a coherent narrative or visual sequence
-- Optimized for Sora's latest capabilities: realistic physics, complex camera motion, and emotional character rendering
-- Leverage latest features like extended duration, improved temporal consistency, and enhanced detail`,
+- Focused on realistic physics, fluid motion, and temporal consistency
+- Include details about camera work (panning, zooming, tracking shots)
+- Optimized for creating compelling video content with clear storytelling`,
 
-    claude: `You are a professional prompt engineer specializing in Claude AI assistant.
+    [TOOL_CATEGORIES.TEXT_GENERATOR]: `You are a professional prompt engineer specializing in AI text generation and conversational AI tools.
 
-Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for Claude's conversational AI capabilities.
-You create prompts that leverage the full capabilities of Claude version ${TOOL_VERSIONS.claude}.
+Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for advanced language models like Claude, ChatGPT, and similar AI assistants.
 
 Transform the prompt to be:
 - Clear and well-structured with explicit instructions
 - Specific about the desired output format and level of detail
-- Explicit about tone, style, and any constraints
+- Explicit about tone, style, and any constraints or requirements
 - Detailed with relevant context and background information
-- Optimized for Claude's latest analytical and reasoning capabilities
-- Structured to leverage Claude's strengths: extended context (200K+ tokens), nuanced understanding, coding, and thoughtful responses
-- Take advantage of latest improvements in tool use, vision capabilities, and complex reasoning`,
+- Structured to leverage AI strengths: reasoning, analysis, creative writing, and problem-solving
+- Optimized for nuanced understanding and thoughtful responses
+- Clear about word count, structure, or formatting requirements when applicable
+- Focused on extracting maximum value from the AI's capabilities`,
 
-    general: `You are a professional prompt engineer.
+    [TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT]: `You are a professional prompt engineer specializing in AI coding assistants and development tools.
+
+Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for AI-powered development tools like GitHub Copilot, Cursor, and similar coding assistants.
+
+Transform the prompt to be:
+- Technically precise with clear specifications and requirements
+- Explicit about programming languages, frameworks, libraries, and dependencies
+- Clear about code functionality, structure, and architecture patterns
+- Specific about input/output expectations, edge cases, and error handling
+- Detailed with relevant context about the existing codebase and constraints
+- Structured with best practices, coding standards, and design patterns in mind
+- Focused on code quality, maintainability, and performance
+- Optimized for generating production-ready, well-documented code
+- Include requirements for tests, documentation, or specific implementation approaches`,
+
+    [TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR]: `You are a professional prompt engineer specializing in LinkedIn content creation.
+
+Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for generating LinkedIn posts and professional content.
+
+Transform the prompt to be:
+- Professional yet engaging and authentic in tone
+- Focused on business networking, career achievements, and professional insights
+- Clear about the desired LinkedIn post format (announcement, thought leadership, milestone, etc.)
+- Specific about target audience (industry peers, recruiters, team members)
+- Explicit about key points, calls-to-action, and engagement goals
+- Structured for optimal LinkedIn algorithm performance and professional credibility
+- Detailed about length requirements (typically 150-300 words for optimal engagement)
+- Focused on value delivery, relationship building, and personal brand`,
+
+    [TOOL_CATEGORIES.FACEBOOK_POST_CREATOR]: `You are a professional prompt engineer specializing in Facebook content creation.
+
+Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for generating Facebook posts and social content.
+
+Transform the prompt to be:
+- Friendly, conversational, and authentic in tone
+- Clear about the desired Facebook post format (personal update, event, story)
+- Specific about engagement goals and target audience (friends, family, community)
+- Personal and relatable in approach while maintaining appropriate boundaries
+- Structured for optimal social media engagement and sharing
+- Explicit about content type (text, photo caption, video description)
+- Focused on storytelling, emotional connection, and community building
+- Detailed about desired length and formatting (paragraphs, emojis, hashtags)`,
+
+    [TOOL_CATEGORIES.TWITTER_POST_CREATOR]: `You are a professional prompt engineer specializing in Twitter (X) content creation.
+
+Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for generating Twitter/X posts and threads.
+
+Transform the prompt to be:
+- Concise and impactful, optimized for Twitter's format and culture
+- Clear about content type (single tweet, thread, reply, quote tweet)
+- Specific about character limits and brevity requirements (280 characters per tweet)
+- Explicit about tone (witty, informative, thought-provoking, conversational)
+- Structured for maximum engagement (retweets, likes, replies)
+- Detailed about hashtag usage, mentions, and call-to-action
+- Focused on timely, shareable content that resonates with Twitter audience
+- Clear about thread structure if creating multi-tweet content`,
+
+    [TOOL_CATEGORIES.INSTAGRAM_POST_GENERATOR]: `You are a professional prompt engineer specializing in Instagram content creation.
+
+Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for generating Instagram captions and visual content descriptions.
+
+Transform the prompt to be:
+- Visually-focused with emphasis on aesthetic appeal and storytelling
+- Clear about content type (feed post, carousel, Reel caption, Story)
+- Specific about target audience, brand voice, and engagement goals
+- Explicit about caption structure (hook, story, call-to-action)
+- Detailed about hashtag strategy and emoji usage
+- Structured for Instagram's visual-first platform and algorithm
+- Focused on authenticity, lifestyle content, and community engagement
+- Clear about desired caption length and formatting (line breaks, spacing)`,
+
+    [TOOL_CATEGORIES.GENERAL]: `You are a professional prompt engineer.
 
 Your task is to REWRITE and IMPROVE the user's prompt (not execute it) so it becomes more effective for AI processing.
 
 Transform the prompt to be:
 - Clear and specific with no ambiguity
-- Well-structured with explicit requirements
+- Well-structured with explicit requirements and expectations
 - Detailed with relevant context and constraints
-- Focused on a specific objective
-- Optimized for AI comprehension and execution`,
+- Focused on a specific, achievable objective
+- Optimized for AI comprehension and accurate execution
+- Explicit about desired output format, length, and style
+- Structured to maximize the quality and relevance of AI-generated content`,
   }
 
   const instruction =
-    platformInstructions[targetLower] ||
-    platformInstructions.general ||
+    categoryInstructions[category] ||
+    categoryInstructions[TOOL_CATEGORIES.GENERAL] ||
     "You are a prompt engineer. Rewrite and improve the user's prompt to make it clearer and more effective."
 
   return `${instruction}
@@ -205,8 +223,20 @@ Now, improve this user's prompt:`
  * - Strict input validation
  * - In-memory TTL caching (12 hours)
  * - OpenAI API integration with retries
+ * - Automatic tool categorization
  *
- * @param target - The target platform or context (e.g., "LinkedIn", "Facebook", "Development", "Copilot", "Midjourney", "DALL-E", "Sora", "Claude", "General")
+ * Supported categories:
+ * - Image Generator (for Midjourney, DALL-E, Stable Diffusion, etc.)
+ * - Video Generator (for Sora, Runway, etc.)
+ * - Text Generator (for Claude, ChatGPT, etc.)
+ * - Software Development Assistant (for GitHub Copilot, Cursor, etc.)
+ * - LinkedIn Post Generator
+ * - Facebook Post Creator
+ * - Twitter (X) Post Creator
+ * - Instagram Post Generator
+ * - General (fallback category)
+ *
+ * @param target - The target tool or platform name (automatically resolved to appropriate category)
  * @param prompt - The user's raw prompt to enhance
  * @param signal - Optional AbortSignal for request cancellation
  * @returns Enhanced, professional version of the prompt
@@ -215,7 +245,11 @@ Now, improve this user's prompt:`
  *
  * @example
  * const enhanced = await enhancePrompt('LinkedIn', 'write post about my promotion');
- * // Returns: "Craft a professional LinkedIn post announcing my recent promotion..."
+ * // Returns: "Create a professional LinkedIn post announcing my recent promotion..."
+ *
+ * @example
+ * const enhanced = await enhancePrompt('Midjourney', 'cat in space');
+ * // Returns: "Generate a highly detailed image of a cat floating in outer space..."
  */
 export async function enhancePrompt(
   target: string,

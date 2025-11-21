@@ -11,13 +11,14 @@ import type {
   EnhanceResponse,
   EnhanceErrorResponse,
 } from '@/types/enhance'
+import { TOOL_CATEGORIES } from '@/constants/tool-categories'
 import { cn } from '@/lib/utils'
 
 /**
  * Main form component that orchestrates the prompt enhancement flow
  */
 export default function EnhanceForm() {
-  const [target, setTarget] = useState<EnhancementTarget>('General')
+  const [target, setTarget] = useState<EnhancementTarget>(TOOL_CATEGORIES.GENERAL)
   const [prompt, setPrompt] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [enhanced, setEnhanced] = useState<string | null>(null)
@@ -123,44 +124,11 @@ export default function EnhanceForm() {
           onKeyDown={handleKeyDown}
         />
 
-        <div>
-          <p
-            className={cn(
-              // margin top
-              'mt-1',
-              // text small
-              'text-sm',
-              // text gray
-              'text-gray-600',
-            )}
-          >
-            Press{' '}
-            <kbd
-              className={cn(
-                // padding x
-                'px-1',
-                // padding y
-                'py-0.5',
-                // border
-                'border',
-                // border radius
-                'rounded',
-                // background color
-                'bg-gray-200',
-                // font weight
-                'font-medium',
-              )}
-            >
-              Enter
-            </kbd>{' '}
-            to enhance
-          </p>
-          <EnhanceButton
-            onClick={handleEnhance}
-            disabled={!prompt.trim() || prompt.length < 3 || prompt.length > 2000}
-            isLoading={isLoading}
-          />
-        </div>
+        <EnhanceButton
+          onClick={handleEnhance}
+          disabled={!prompt.trim() || prompt.length < 3 || prompt.length > 2000}
+          isLoading={isLoading}
+        />
       </div>
 
       {/* Result Display */}
