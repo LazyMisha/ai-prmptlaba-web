@@ -16,7 +16,16 @@ export default function Footer() {
         'text-center',
       )}
     >
-      <div>Footer</div>
+      <p
+        className={cn(
+          // Text small
+          'text-sm',
+          // Text gray
+          'text-gray-600',
+        )}
+      >
+        &copy; {new Date().getFullYear()} AI PromptLaba. All rights reserved.
+      </p>
     </footer>
   )
 }
