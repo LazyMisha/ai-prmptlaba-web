@@ -1,42 +1,25 @@
-import { cn } from '@/lib/utils'
+import type { Metadata } from 'next'
+import { PageContainer } from '@/components/common/PageContainer'
+import { PageHeading } from '@/components/common/PageHeading'
+import { PageDescription } from '@/components/common/PageDescription'
 
+export const metadata: Metadata = {
+  title: 'AI Prompt Laba | Smart Prompt Creation & Management',
+  description:
+    'Your hub for smart prompt creation and management. Transform basic ideas into professional, effective AI instructions with ease.',
+}
+
+/**
+ * Home page (Server Component)
+ */
 export default function HomePage() {
   return (
-    <div
-      className={cn(
-        // width=768px max
-        'max-w-3xl',
-        // center horizontally
-        'mx-auto',
-        // center text
-        'text-center',
-        // vertical spacing
-        'space-y-6',
-        // padding
-        'p-4',
-      )}
-    >
-      <h1
-        className={cn(
-          // font size
-          'text-4xl',
-          // font weight
-          'font-semibold',
-        )}
-      >
-        AI Prompt Laba
-      </h1>
-      <p
-        className={cn(
-          // font size
-          'text-lg',
-          // line height
-          'leading-relaxed',
-        )}
-      >
+    <PageContainer>
+      <PageHeading>AI Prompt Laba</PageHeading>
+      <PageDescription className="leading-relaxed">
         Your hub for smart prompt creation and management. Transform basic ideas into professional,
         effective AI instructions with ease.
-      </p>
-    </div>
+      </PageDescription>
+    </PageContainer>
   )
 }
