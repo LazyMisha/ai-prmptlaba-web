@@ -35,10 +35,13 @@ export default function Header() {
       >
         <Link
           className={cn(
-            // Font size
+            // Typography
             'text-xl',
-            // Font weight
-            'font-bold',
+            'font-light',
+            'tracking-tight',
+            'text-gray-600',
+            // Rendering
+            'antialiased',
             // Focus styles
             'focus:outline-none',
             'focus:ring-2',
@@ -55,10 +58,13 @@ export default function Header() {
         </Link>
         <Link
           className={cn(
-            // Font size
+            // Typography
             'text-lg',
-            // Font weight
-            'font-medium',
+            'font-light',
+            'tracking-tight',
+            'text-gray-600',
+            // Rendering
+            'antialiased',
             // Focus styles
             'focus:outline-none',
             'focus:ring-2',

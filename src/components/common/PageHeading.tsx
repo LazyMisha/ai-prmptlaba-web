@@ -16,10 +16,14 @@ export function PageHeading({ children, className }: PageHeadingProps) {
   return (
     <h1
       className={cn(
-        // font size
+        // Typography
         'text-4xl',
-        // font weight
-        'font-semibold',
+        'font-light',
+        'tracking-tight',
+        'text-gray-600',
+        // Rendering
+        'antialiased',
+        'leading-tight',
         className,
       )}
     >
