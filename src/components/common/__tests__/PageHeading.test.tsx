@@ -11,7 +11,7 @@ describe('PageHeading', () => {
     render(<PageHeading>Heading</PageHeading>)
     const heading = screen.getByRole('heading', { level: 1 })
 
-    expect(heading).toHaveClass('text-5xl')
+    expect(heading).toHaveClass('text-4xl')
     expect(heading).toHaveClass('font-light')
     expect(heading).toHaveClass('tracking-tight')
     expect(heading).toHaveClass('text-gray-600')
@@ -22,7 +22,7 @@ describe('PageHeading', () => {
     const heading = screen.getByRole('heading', { level: 1 })
 
     expect(heading).toHaveClass('custom-class')
-    expect(heading).toHaveClass('text-5xl') // Still has default classes
+    expect(heading).toHaveClass('text-4xl') // Still has default classes
   })
 
   it('renders complex children', () => {

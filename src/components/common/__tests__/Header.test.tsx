@@ -13,4 +13,28 @@ describe('Header', () => {
     const header = screen.getByRole('banner')
     expect(header).toBeInTheDocument()
   })
+
+  it('renders app name link', () => {
+    render(<Header />)
+    const appNameLink = screen.getByRole('link', { name: /go to home page/i })
+    expect(appNameLink).toBeInTheDocument()
+    expect(appNameLink).toHaveAttribute('href', '/')
+  })
+
+  it('renders desktop navigation with Enhance Prompt link', () => {
+    render(<Header />)
+    const enhanceLinks = screen.getAllByRole('link', {
+      name: /go to prompt enhancer page/i,
+    })
+    // Should have at least one link (desktop nav)
+    expect(enhanceLinks.length).toBeGreaterThan(0)
+    // Desktop link should have href="/enhance"
+    expect(enhanceLinks[0]).toHaveAttribute('href', '/enhance')
+  })
+
+  it('renders mobile menu button', () => {
+    render(<Header />)
+    const menuButton = screen.getByRole('button', { name: /open menu/i })
+    expect(menuButton).toBeInTheDocument()
+  })
 })

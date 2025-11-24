@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { APP_NAME } from '@/constants/app'
 import { cn } from '@/lib/utils'
+import MobileMenu from './MobileMenu'
+import NavLink from './NavLink'
 
 export default function Header() {
   return (
@@ -29,6 +31,8 @@ export default function Header() {
           'justify-between',
           // Items center
           'items-center',
+          // Relative positioning for menu
+          'relative',
         )}
         role="navigation"
         aria-label="Main navigation"
@@ -56,29 +60,25 @@ export default function Header() {
         >
           {APP_NAME}
         </Link>
-        <Link
+
+        {/* Desktop Navigation - Hidden on mobile */}
+        <div
           className={cn(
-            // Typography
-            'text-lg',
-            'font-light',
-            'tracking-tight',
-            'text-gray-600',
-            // Rendering
-            'antialiased',
-            // Focus styles
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-blue-500',
-            'focus:ring-offset-2',
-            'rounded',
-            'px-2',
-            'py-1',
+            // Hidden on mobile
+            'hidden',
+            // Visible on md and up
+            'md:flex',
+            // Gap between items
+            'gap-4',
           )}
-          href="/enhance"
-          aria-label="Go to prompt enhancer page"
         >
-          Enhance Prompt
-        </Link>
+          <NavLink href="/enhance" ariaLabel="Go to prompt enhancer page">
+            Enhance Prompt
+          </NavLink>
+        </div>
+
+        {/* Mobile Menu - Hidden on desktop */}
+        <MobileMenu />
       </nav>
     </header>
   )
