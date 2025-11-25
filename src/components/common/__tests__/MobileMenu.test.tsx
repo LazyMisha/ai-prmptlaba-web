@@ -30,9 +30,10 @@ describe('MobileMenu', () => {
     fireEvent.click(menuButton)
     expect(screen.getByRole('menu')).toBeInTheDocument()
 
-    // Click menu item
-    const menuItem = screen.getByRole('menuitem')
-    fireEvent.click(menuItem)
+    // Click first menu item
+    const menuItems = screen.getAllByRole('menuitem')
+    expect(menuItems.length).toBeGreaterThan(0)
+    fireEvent.click(menuItems[0]!)
 
     // Menu should be closed
     expect(screen.queryByRole('menu')).not.toBeInTheDocument()
@@ -114,5 +115,32 @@ describe('MobileMenu', () => {
     })
     expect(enhanceLink).toBeInTheDocument()
     expect(enhanceLink).toHaveAttribute('href', '/enhance')
+  })
+
+  it('renders Recent Prompts link in menu', () => {
+    render(<MobileMenu />)
+    const menuButton = screen.getByRole('button', { name: /open menu/i })
+
+    // Open menu
+    fireEvent.click(menuButton)
+
+    // Check for link
+    const historyLink = screen.getByRole('menuitem', {
+      name: /go to prompt history page/i,
+    })
+    expect(historyLink).toBeInTheDocument()
+    expect(historyLink).toHaveAttribute('href', '/history')
+  })
+
+  it('renders both menu items when open', () => {
+    render(<MobileMenu />)
+    const menuButton = screen.getByRole('button', { name: /open menu/i })
+
+    // Open menu
+    fireEvent.click(menuButton)
+
+    // Check both links are present
+    const menuItems = screen.getAllByRole('menuitem')
+    expect(menuItems).toHaveLength(2)
   })
 })

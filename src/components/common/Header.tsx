@@ -75,6 +75,9 @@ export default function Header() {
           <NavLink href="/enhance" ariaLabel="Go to prompt enhancer page">
             Enhance Prompt
           </NavLink>
+          <NavLink href="/history" ariaLabel="Go to prompt history page">
+            Recent Prompts
+          </NavLink>
         </div>
 
         {/* Mobile Menu - Hidden on desktop */}

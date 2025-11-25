@@ -170,6 +170,29 @@ export default function MobileMenu() {
           >
             Enhance Prompt
           </NavLink>
+          <NavLink
+            href="/history"
+            onClick={closeMenu}
+            ariaLabel="Go to prompt history page"
+            role="menuitem"
+            className={cn(
+              // Display
+              'block',
+              // Spacing
+              'px-4',
+              'py-3',
+              // Typography
+              'text-base',
+              // Hover
+              'hover:bg-gray-50',
+              // Last item
+              'rounded-b-lg',
+              // Focus styles
+              'focus:bg-gray-100',
+            )}
+          >
+            Recent Prompts
+          </NavLink>
         </div>
       )}
     </div>

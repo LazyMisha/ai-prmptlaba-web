@@ -8,8 +8,9 @@ import type {
   EnhanceResponse,
   EnhanceErrorResponse,
 } from '@/types/enhance'
-import { TOOL_CATEGORIES } from '@/constants/tool-categories'
+import { TOOL_CATEGORIES, TOOL_CATEGORY_NAMES } from '@/constants/tool-categories'
 import { cn } from '@/lib/utils'
+import { savePromptHistory } from '@/lib/db/prompt-history'
 
 import TargetSelector from './TargetSelector'
 import PromptInput from './PromptInput'
@@ -93,6 +94,18 @@ export default function EnhanceForm() {
       const successData = data as EnhanceResponse
 
       setEnhanced(successData.enhanced)
+
+      // Save to history
+      try {
+        await savePromptHistory({
+          originalPrompt: prompt.trim(),
+          enhancedPrompt: successData.enhanced,
+          target: TOOL_CATEGORY_NAMES[target],
+        })
+      } catch (historyError) {
+        // Log error but don't block the user experience
+        console.error('Failed to save to history:', historyError)
+      }
 
       // Move focus to results for screen readers after successful enhancement
       setTimeout(() => {
