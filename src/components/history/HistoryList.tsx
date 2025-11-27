@@ -8,6 +8,7 @@ import {
   deletePromptHistory,
   clearAllPromptHistory,
 } from '@/lib/db/prompt-history'
+import ConfirmDialog from '@/components/common/ConfirmDialog'
 import HistoryItem from './HistoryItem'
 import EmptyHistoryState from './EmptyHistoryState'
 
@@ -19,6 +20,7 @@ export default function HistoryList() {
   const [entries, setEntries] = useState<PromptHistoryEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
 
   // Load history entries on mount
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function HistoryList() {
       setEntries(history)
     } catch (err) {
       console.error('Failed to load history:', err)
+
       setError('Failed to load prompt history')
     } finally {
       setIsLoading(false)
@@ -45,22 +48,23 @@ export default function HistoryList() {
       setEntries((prev) => prev.filter((entry) => entry.id !== id))
     } catch (err) {
       console.error('Failed to delete entry:', err)
+
       setError('Failed to delete history entry')
     }
   }
 
-  const handleClearAll = async () => {
-    if (
-      !window.confirm('Are you sure you want to clear all history? This action cannot be undone.')
-    ) {
-      return
-    }
+  const handleClearAll = () => {
+    setShowClearConfirm(true)
+  }
 
+  const confirmClearAll = async () => {
+    setShowClearConfirm(false)
     try {
       await clearAllPromptHistory()
       setEntries([])
     } catch (err) {
       console.error('Failed to clear history:', err)
+
       setError('Failed to clear history')
     }
   }
@@ -220,6 +224,18 @@ export default function HistoryList() {
           <HistoryItem key={entry.id} entry={entry} onDelete={handleDelete} />
         ))}
       </div>
+
+      {/* Clear all confirmation dialog */}
+      <ConfirmDialog
+        isOpen={showClearConfirm}
+        onClose={() => setShowClearConfirm(false)}
+        onConfirm={confirmClearAll}
+        title="Clear all history?"
+        description="This will permanently delete all your prompt history. This action cannot be undone."
+        confirmText="Clear all"
+        cancelText="Cancel"
+        isDestructive
+      />
     </div>
   )
 }

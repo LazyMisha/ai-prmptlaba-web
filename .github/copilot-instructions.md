@@ -581,6 +581,7 @@ Before writing or modifying code for any feature, Copilot must:
    - State management approach (local state, context, or server actions)
    - Error, loading, and empty-state handling
    - Performance and accessibility considerations
+   - Testing strategy (unit, component, integration tests)
 
 2. Wait for user approval before writing any code.
 
