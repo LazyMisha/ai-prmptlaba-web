@@ -32,6 +32,9 @@ The project structure is fully established and must not be recreated. Copilot mu
 
 ## 3. Project Structure (must always be respected)
 
+.github/ # Copilot and GitHub configurations
+.husky/ # Git hooks for linting and tests
+├── pre-commit # Run linting and tests before each commit
 src/
 ├── app/ # Next.js app router pages
 │ ├── layout.tsx # Root layout
@@ -40,28 +43,19 @@ src/
 │ ├── error.tsx # Error boundary
 │ ├── loading.tsx # Loading UI
 │ ├── not-found.tsx # 404 page
-│ ├── enhance/ # Enhance page route
 │ ├── api/ # API routes
-│ │ └── enhance/ # Prompt enhancement endpoint
-│ └── **tests**/ # Page tests
 ├── components/ # React components
 │ ├── common/ # Shared components
-│ │ ├── Header.tsx # Site header with navigation (formerly Navbar)
-│ │ ├── Footer.tsx # Site footer
-│ │ └── **tests**/ # Component tests
-│ └── enhance/ # Prompt enhancement UI components
 ├── lib/ # Utility functions
-│ ├── openai.ts # OpenAI API client with retries
 │ ├── utils.ts # cn() utility for className merging
-│ ├── ai/ # AI-related utilities
 │ ├── utils/ # General utilities
 │ ├── api/ # API utilities
-│ │ └── **tests**/ # API tests
-│ └── **tests**/ # Lib tests
 ├── types/ # TypeScript type definitions
 ├── constants/ # App-wide constants
-│ └── app.ts # App name and config
-└── hooks/ # Custom React hooks (empty)
+└── hooks/ # Custom React hooks (not existing yet)
+└── i18n/ # Internationalization (not existing yet)
+├── .env.example # Environment variable template
+├── .env.local # Local environment variables (not committed)
 
 All new components or APIs must be placed in the appropriate folder.
 
@@ -106,7 +100,7 @@ All new components or APIs must be placed in the appropriate folder.
 
 ### Performance
 
-- Optimize for performance (React.memo, useMemo, useCallback when beneficial).
+- Optimize for performance when needed.
 - Implement lazy loading for heavy components.
 - Use code splitting for routes and large features.
 - Avoid unnecessary re-renders.
@@ -129,7 +123,84 @@ All new components or APIs must be placed in the appropriate folder.
 - Use environment variables for sensitive data.
 - Follow OWASP security best practices.
 
+### Data Fetching
+
+- Use native `fetch` with Next.js caching.
+- Prefer Server Components for data fetching.
+- Use React `use()` hook when needed.
+- Implement proper error boundaries.
+- Add loading.tsx for route-level loading states.
+
+### Forms
+
+- Use Server Actions for form submissions when possible.
+- Validate on both client and server.
+- Provide inline validation feedback.
+- Handle loading and error states.
+- Use progressive enhancement.
+
+### Performance metrics
+
+- Target Lighthouse score: 90+
+- First Contentful Paint: < 1.5s
+- Time to Interactive: < 3.5s
+- Cumulative Layout Shift: < 0.1
+- Use Next.js Image optimization
+- Implement code splitting for routes > 200KB
+
+### Performance Guardrails
+
+All new code must be optimized by default. Copilot must:
+
+1. Prevent runtime bottlenecks:
+   - Avoid unnecessary re-renders
+   - Use Server Components for data-heavy logic
+   - Fetch data with caching (Next.js Cache API, `revalidate`)
+
+2. Control bundle size:
+   - Dynamically import heavy components
+   - Avoid unused/large dependency additions (must request approval)
+   - Aim for page bundles < 200KB after compression
+
+3. Optimize media and assets:
+   - Use `next/image` for all images
+   - Use responsive and lazy-loading media by default
+
+4. Monitoring & validation:
+   - Confirm Lighthouse score ≥ 90 before changes
+   - Log bundle impact using `npx next build --analyze`
+   - Ensure no regressions to Core Web Vitals:
+     - FCP: < 1.5s
+     - TTI: < 3.5s
+     - CLS: < 0.1
+
+If Copilot suggests code that may reduce performance,
+it must:
+
+- Explain the trade-offs explicitly
+- Provide mitigation steps
+- Request user confirmation before proceeding
+
 ## 5. Styling Rules
+
+### Design Philosophy
+
+Follow Apple's design principles for all UI components:
+
+- **Clarity** - Text is legible, icons are precise, adornments are subtle and appropriate
+- **Deference** - Fluid motion and crisp interface help users focus on content
+- **Depth** - Visual layers and realistic motion convey hierarchy and facilitate understanding
+
+**Key characteristics:**
+
+- Clean, minimalist layouts with generous whitespace
+- Subtle shadows and depth (avoid harsh drop shadows)
+- Smooth, meaningful animations and transitions
+- High-quality typography with clear hierarchy
+- Muted, sophisticated color palettes with purposeful accent colors
+- Rounded corners with consistent border-radius
+- Frosted glass effects (backdrop-blur) where appropriate
+- Focus on content over chrome
 
 ### TailwindCSS
 
@@ -202,7 +273,7 @@ import { cn } from '@/lib/utils'
 - Use consistent response structure:
   ```typescript
   // Success: { data: T }
-  // Error: { error: string, details?: unknown }
+  // Error: { error: string, code?: string, details?: unknown }
   ```
 - Set appropriate HTTP status codes (200, 201, 400, 401, 404, 500).
 - Include proper Content-Type headers.
@@ -226,7 +297,7 @@ import { cn } from '@/lib/utils'
 
 - Implement caching where appropriate.
 - Set proper cache headers.
-- Use database connection pooling.
+- Use database connection pooling if applicable.
 - Implement request timeouts.
 - Consider pagination for large datasets.
 
@@ -236,29 +307,27 @@ import { cn } from '@/lib/utils'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-const schema = z.object({
-  name: z.string().min(1).max(100),
-  email: z.string().email(),
+const requestSchema = z.object({
+  prompt: z.string().min(1).max(2000),
+  target: z.string().min(1).max(100),
 })
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const validated = schema.parse(body)
+export type EnhanceRequest = z.infer<typeof requestSchema>
 
-    // Process request
-    const result = await processData(validated)
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const validated = requestSchema.parse(body) as EnhanceRequest
+    // business logic
+    const result = await enhancePrompt(validated)
 
     return NextResponse.json({ data: result }, { status: 201 })
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation failed', details: error.errors },
-        { status: 400 },
-      )
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return NextResponse.json({ error: 'Validation failed', details: err.errors }, { status: 400 })
     }
+    console.error('Enhance API error:', err)
 
-    console.error('API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -294,8 +363,24 @@ export async function POST(request: NextRequest) {
 - Aim for high test coverage on critical paths.
 - Test error handling and validation logic.
 - Test async operations and loading states.
-- Test accessibility features.
+- Test accessibility features with jest-axe, or keyboard/semantic test automation.
 - Don't test third-party library internals.
+
+### Test Planning Requirement
+
+Before writing code for any new functionality, Copilot must:
+
+1. Provide a clear Test Plan that includes:
+   - All intended test cases and user flows
+   - Edge cases, error cases, and accessibility validations
+   - Unit and component testing responsibilities
+   - Mocking strategy (if needed)
+   - Expected behavior for loading and failure states
+
+2. Wait for user approval before generating code or test files.
+
+All new code must follow the test plan. If the implementation changes,
+the test plan must be updated accordingly before adjusting tests.
 
 ### Best Practices
 
@@ -336,6 +421,15 @@ describe('EnhanceButton', () => {
 })
 ```
 
+or/and
+
+```typescript
+// in component test
+import { toHaveNoViolations } from 'jest-axe'
+expect.extend(toHaveNoViolations)
+// ... render component and run axe
+```
+
 ## 8. Component Conventions
 
 ### Organization
@@ -343,7 +437,7 @@ describe('EnhanceButton', () => {
 - Place all components in `src/components/`.
 - Shared/reusable UI components go to `src/components/common/`.
 - Feature-specific components go to `src/components/<feature>/`.
-- One component per file (exception: tightly coupled sub-components).
+- Keep one component per file.
 
 ### Component Structure
 
@@ -372,7 +466,7 @@ describe('EnhanceButton', () => {
 
 - Components: PascalCase (e.g., `EnhanceButton`)
 - Props interfaces: `ComponentNameProps`
-- Event handlers: `handleEventName` (e.g., `handleClick`)
+- Event handlers: `handleEventName` (e.g., `handleClick`), better to use meaningful names like `onDelete`, `onSubmit`.
 - Boolean props: `isLoading`, `hasError`, `showModal`
 - Callback props: `onEventName` (e.g., `onClick`, `onSubmit`)
 
@@ -415,10 +509,7 @@ export function EnhanceButton({
       onClick={onClick}
       disabled={disabled || isLoading}
       className={cn(
-        'rounded-lg px-4 py-2',
-        'bg-blue-600 text-white',
-        'hover:bg-blue-700',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
+        //... Tailwind classes ...
         className,
       )}
     >
@@ -447,7 +538,7 @@ Organize imports in the following order with blank lines between groups:
 3. Internal absolute imports (@/) types
 4. Internal absolute imports (@/) components
 5. Internal absolute imports (@/) libs utilities
-6. Relative imports (./)
+6. Relative imports (./) (all except constants)
 7. CSS/Style imports
 8. Constant imports
 
@@ -477,19 +568,60 @@ import { formatDate } from './utils'
 - Prefer absolute imports over relative imports for better maintainability.
 - Use relative imports only for tightly coupled files in the same directory.
 
-## 10. Copilot Behavior Ruless
+## 10. Copilot Behavior Rules
+
+### Planning Requirement (IMPORTANT)
+
+Before writing or modifying code for any feature, Copilot must:
+
+1. Propose a clear implementation plan that includes:
+   - Files to be created or updated
+   - Data flow and component hierarchy
+   - Whether Server or Client Components will be used and why
+   - State management approach (local state, context, or server actions)
+   - Error, loading, and empty-state handling
+   - Performance and accessibility considerations
+
+2. Wait for user approval before writing any code.
+
+Plans must be **concise, structured, and actionable**. Do not generate code until the plan is approved.
 
 ### Core Principles
 
-- Never create a new project from scratch.
 - Never change existing project structure unless explicitly asked.
-- Never remove or modify ESLint, TSConfig, or Tailwind config rules.
+- Never remove ESLint, TSConfig, or Tailwind config rules. Modify only if absolutely necessary and with justification.
 - Always write clean, production-ready, modern code at Senior Frontend Developer level.
 - Always follow best practices and industry standards.
 - Always use the project's existing dependencies (don't add new ones without asking).
 - Think about scalability, maintainability, and future extensibility.
 - Consider performance implications of every implementation.
 - Write code that other senior developers would approve in code review.
+
+### Architectural Change Restrictions
+
+Copilot must not modify the project's core architectural elements unless explicitly approved by the user.
+
+This includes:
+
+- Project structure and folder organization
+- Routing structure within `src/app/**`
+- Global providers and root layout (`layout.tsx`)
+- Next.js configuration (`next.config.js`)
+- TypeScript / ESLint / Prettier / Tailwind / Husky configuration files
+- Shared utilities in `src/lib/**`
+- Authentication or global state logic
+- Base UI tokens, themes, or CSS resets
+
+Refactoring or reorganizing existing code is only allowed when:
+
+1. The user explicitly requests the change, and
+2. Copilot presents a detailed plan and receives approval
+
+If Copilot determines refactoring is beneficial, it must:
+
+- Explain the justification clearly
+- Propose a short, risk-assessed plan
+- Wait for user confirmation before executing
 
 ### Code Generation Workflow
 
@@ -499,13 +631,13 @@ When user asks to "create X" or "implement Y", always:
 2. **Plan** - Determine correct file locations and dependencies.
 3. **Implement** - Write production-ready code following all rules.
 4. **Test** - Create comprehensive tests for new functionality.
-5. **Validate** - Run linting, type checking, and tests after changes:
-   - `npm run lint` - Check for ESLint errors
-   - `npm run type-check` - Verify TypeScript types
-   - `npm run test` - Run all tests
-6. **Document** - Add JSDoc comments and update relevant docs.
+5. **Validate** - Run linting, type checking, and tests after changes.
+6. **Review** - Self-review code for quality, edge cases, and best practices.
+7. **Document** - Add JSDoc comments and update relevant docs.
 
 ### Validation Requirements
+
+If any code was generated without prior approved planning, stop and request planning approval.
 
 **CRITICAL**: After making any code changes, you MUST run the following commands to ensure code quality:
 
@@ -539,48 +671,11 @@ Before suggesting code, ask yourself:
 - Is this accessible and performant?
 - Is this secure and maintainable?
 - Does this follow the project's patterns?
+- Does it break any existing functionality?
 
-## 11. Git and Commit Conventions
+## 11. Internationalization (i18n)
 
-### Commit Messages
-
-Follow conventional commits format:
-
-```
-type(scope): description
-
-[optional body]
-
-[optional footer]
-```
-
-Types:
-
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting, no logic change)
-- `refactor`: Code refactoring
-- `perf`: Performance improvements
-- `test`: Adding or updating tests
-- `chore`: Maintenance tasks
-
-Examples:
-
-```
-feat(enhance): add prompt validation with character limits
-fix(api): handle timeout errors in OpenAI requests
-docs(readme): update installation instructions
-refactor(components): extract shared button logic to hook
-test(enhance): add unit tests for prompt enhancer
-```
-
-### Best Practices
-
-- Write clear, descriptive commit messages.
-- Keep commits atomic (one logical change per commit).
-- Don't commit commented-out code.
-- Don't commit console.logs or debugging code.
-- Ensure all tests pass before committing.
-- Run linters before committing (handled by Husky).
-- **Always run validation commands after changes** (lint, type-check, test).
+- Structure: TBD when implemented
+- Use consistent key naming conventions
+- Extract all user-facing strings
+- Test with different languages/locales
