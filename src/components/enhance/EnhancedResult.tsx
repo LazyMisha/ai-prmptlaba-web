@@ -18,7 +18,6 @@ export interface EnhancedResultProps {
 
 /**
  * Display component for the enhanced prompt result.
- * Shows success state with copy functionality or error state with details.
  */
 export default function EnhancedResult({
   enhanced,
@@ -48,35 +47,58 @@ export default function EnhancedResult({
         role="alert"
         aria-live="polite"
         className={cn(
-          // border
+          // Spacing
+          'p-5',
+          'mt-6',
+          // Background - subtle red tint
+          'bg-red-50/80',
+          'backdrop-blur-sm',
+          // Border
           'border',
-          'border-red-300',
-          // border radius
-          'rounded',
-          // padding
-          'p-4',
-          // margin top
-          'mt-4',
-          // background
-          'bg-red-50',
+          'border-red-200',
+          'rounded-2xl',
+          // Shadow
+          'shadow-sm',
           className,
         )}
       >
-        <h3
-          className={cn(
-            // font size
-            'text-lg',
-            // font weight
-            'font-semibold',
-            // text color
-            'text-red-800',
-            // margin bottom
-            'mb-2',
-          )}
-        >
-          Enhancement Failed
-        </h3>
-        <p className={cn('text-red-700')}>{error}</p>
+        <div className="flex items-start gap-3">
+          {/* Error icon */}
+          <div
+            className={cn(
+              'flex-shrink-0',
+              'w-8',
+              'h-8',
+              'flex',
+              'items-center',
+              'justify-center',
+              'bg-red-100',
+              'rounded-full',
+            )}
+          >
+            <svg
+              className="w-4 h-4 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <h3 className={cn('text-base', 'font-semibold', 'text-red-900', 'mb-1')}>
+              Enhancement Failed
+            </h3>
+            <p className={cn('text-sm', 'font-light', 'text-red-700')}>{error}</p>
+          </div>
+        </div>
       </div>
     )
   }
@@ -91,169 +113,253 @@ export default function EnhancedResult({
       aria-label="Enhanced prompt result"
       aria-live="polite"
       className={cn(
-        // border
+        // Spacing
+        'mt-6',
+        // Background - subtle success tint with frosted effect
+        'bg-gradient-to-b',
+        'from-emerald-50/80',
+        'to-white/80',
+        'backdrop-blur-sm',
+        // Border
         'border',
-        'border-green-300',
-        // border radius
-        'rounded',
-        // padding
-        'p-4',
-        // margin top
-        'mt-4',
-        // background
-        'bg-green-50',
+        'border-emerald-200',
+        'rounded-2xl',
+        // Shadow
+        'shadow-sm',
+        // Overflow
+        'overflow-hidden',
         className,
       )}
     >
+      {/* Header */}
       <div
         className={cn(
-          // flex
           'flex',
-          // justify between
           'justify-between',
-          // items center
           'items-center',
-          // margin bottom
-          'mb-2',
+          'px-5',
+          'py-4',
+          'border-b',
+          'border-emerald-100',
         )}
       >
-        <h3
-          className={cn(
-            // font size
-            'text-lg',
-            // font weight
-            'font-semibold',
-            // text color
-            'text-green-800',
-          )}
-        >
-          Enhanced Prompt
-        </h3>
+        <div className="flex items-center gap-2">
+          {/* Success icon */}
+          <div
+            className={cn(
+              'w-6',
+              'h-6',
+              'flex',
+              'items-center',
+              'justify-center',
+              'bg-emerald-100',
+              'rounded-full',
+            )}
+          >
+            <svg
+              className="w-3.5 h-3.5 text-emerald-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <h3 className={cn('text-base', 'font-semibold', 'text-emerald-900')}>Enhanced Prompt</h3>
+        </div>
+
         <button
-          className={cn(
-            // text small
-            'text-sm',
-            // text blue
-            'text-blue-600',
-            // hover underline
-            'hover:underline',
-            // focus styles
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-blue-500',
-            'focus:ring-offset-2',
-            'rounded',
-            'px-2',
-            'py-1',
-          )}
           type="button"
           onClick={handleCopy}
           aria-label={copied ? 'Copied to clipboard' : 'Copy enhanced prompt to clipboard'}
-          aria-live="polite"
+          className={cn(
+            // Sizing
+            'px-3',
+            'py-1.5',
+            // Typography
+            'text-sm',
+            'font-medium',
+            copied ? 'text-emerald-600' : 'text-gray-600',
+            // Background
+            copied ? 'bg-emerald-100' : 'bg-gray-100',
+            // Border
+            'rounded-lg',
+            // Transition
+            'transition-all',
+            'duration-200',
+            // Hover
+            !copied && 'hover:bg-gray-200',
+            !copied && 'hover:text-gray-900',
+            // Focus
+            'focus:outline-none',
+            'focus-visible:ring-2',
+            'focus-visible:ring-blue-500/50',
+            'focus-visible:ring-offset-2',
+          )}
         >
-          {copied ? '✓ Copied!' : 'Copy'}
+          <span className="flex items-center gap-1.5">
+            {copied ? (
+              <>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                Copied
+              </>
+            ) : (
+              <>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+                Copy
+              </>
+            )}
+          </span>
         </button>
       </div>
 
-      <div
-        className={cn(
-          // background color
-          'bg-white',
-          // padding
-          'p-4',
-          // border
-          'border',
-          'border-gray-200',
-          // border radius
-          'rounded',
-          // margin bottom
-          'mb-4',
-        )}
-      >
-        <p
+      {/* Enhanced prompt content */}
+      <div className="p-5">
+        <div
           className={cn(
-            // whitespace pre-wrap
-            'whitespace-pre-wrap',
-            // font family
-            'font-mono',
-            // text align
+            // Background
+            'bg-white',
+            // Spacing
+            'p-4',
+            // Border
+            'border',
+            'border-gray-200',
+            'rounded-xl',
+            // Alignment
             'text-left',
-            // text color
-            'text-gray-900',
           )}
-          aria-label="Enhanced prompt text"
         >
-          {enhanced}
-        </p>
-      </div>
+          <p
+            className={cn(
+              'whitespace-pre-wrap',
+              'font-mono',
+              'text-sm',
+              'text-gray-900',
+              'leading-relaxed',
+            )}
+          >
+            {enhanced}
+          </p>
+        </div>
 
-      {originalPrompt && (
-        <details
-          className={cn(
-            // text small
-            'text-sm',
-            // text gray
-            'text-gray-700',
-          )}
-        >
-          <summary
-            className={cn(
-              // cursor pointer
-              'cursor-pointer',
-              // margin bottom
-              'mb-2',
-              // focus styles
-              'focus:outline-none',
-              'focus:ring-2',
-              'focus:ring-blue-500',
-              'rounded',
-              'px-2',
-              'py-1',
-              'inline-block',
-            )}
-            aria-label="Toggle original prompt visibility"
-          >
-            <span
+        {/* Original prompt collapsible */}
+        {originalPrompt && (
+          <details className="mt-4 group">
+            <summary
               className={cn(
-                // text underline
-                'underline',
+                // Layout
+                'flex',
+                'items-center',
+                'gap-2',
+                // Typography
+                'text-sm',
+                'font-medium',
+                'text-gray-500',
+                // Cursor
+                'cursor-pointer',
+                // Transition
+                'transition-colors',
+                'duration-200',
+                // Hover
+                'hover:text-gray-700',
+                // Focus
+                'focus:outline-none',
+                'focus-visible:ring-2',
+                'focus-visible:ring-blue-500/50',
+                'rounded-lg',
+                'px-2',
+                'py-1',
+                '-ml-2',
+                // Hide default marker
+                'list-none',
+                '[&::-webkit-details-marker]:hidden',
               )}
             >
-              View Original Prompt
-            </span>
-          </summary>
-          <div
-            className={cn(
-              // background color
-              'bg-gray-50',
-              // padding
-              'p-4',
-              // border
-              'border',
-              'border-gray-200',
-              // border radius
-              'rounded',
-            )}
-            role="region"
-            aria-label="Original prompt text"
-          >
-            <p
+              <svg
+                className={cn(
+                  'w-4',
+                  'h-4',
+                  'transition-transform',
+                  'duration-200',
+                  'group-open:rotate-90',
+                )}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+              View original prompt
+            </summary>
+
+            <div
               className={cn(
-                // whitespace pre-wrap
-                'whitespace-pre-wrap',
-                // font family
-                'font-mono',
-                // text align
+                // Spacing
+                'mt-3',
+                'p-4',
+                // Background
+                'bg-gray-50',
+                // Border
+                'border',
+                'border-gray-200',
+                'rounded-xl',
+                // Alignment
                 'text-left',
-                // text color
-                'text-gray-900',
               )}
             >
-              {originalPrompt}
-            </p>
-          </div>
-        </details>
-      )}
+              <p
+                className={cn(
+                  'whitespace-pre-wrap',
+                  'font-mono',
+                  'text-sm',
+                  'text-gray-600',
+                  'leading-relaxed',
+                )}
+              >
+                {originalPrompt}
+              </p>
+            </div>
+          </details>
+        )}
+      </div>
     </div>
   )
 }

@@ -123,10 +123,11 @@ export default function EnhanceForm() {
   }
 
   /**
-   * Handle Enter key in textarea (Shift+Enter for new line, Enter to submit)
+   * Handle keyboard shortcuts in textarea.
+   * ⌘+Enter (Mac) or Ctrl+Enter (Windows/Linux) to submit.
    */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault()
       handleEnhance()
     }

@@ -17,7 +17,7 @@ interface PageHeadingProps {
 }
 
 /**
- * A reusable page heading component following Apple design principles.
+ * A reusable page heading component.
  * Provides standardized h1 styling with clean, elegant typography.
  */
 export function PageHeading({ children, className, id }: PageHeadingProps) {

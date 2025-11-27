@@ -3,6 +3,7 @@
 import type { EnhancementTarget } from '@/types/enhance'
 import { TOOL_CATEGORY_LIST } from '@/constants/tool-categories'
 import { cn } from '@/lib/utils'
+import ChevronDownIcon from '@/components/common/ChevronDownIcon'
 
 export interface TargetSelectorProps {
   /** Currently selected enhancement target */
@@ -17,7 +18,6 @@ export interface TargetSelectorProps {
 
 /**
  * Dropdown selector for choosing the enhancement target platform.
- * Includes accessibility features for keyboard navigation and screen readers.
  */
 export default function TargetSelector({
   value,
@@ -28,69 +28,105 @@ export default function TargetSelector({
   return (
     <div className={className}>
       <label
-        className={cn(
-          // font weight
-          'font-medium',
-          // margin bottom
-          'mb-2',
-          // display block
-          'block',
-          // text alignment
-          'text-left',
-        )}
         htmlFor="target-selector"
-      >
-        Target:
-      </label>
-      <select
         className={cn(
-          // width full
-          'w-full',
-          // padding
-          'p-2',
-          // border
-          'border',
-          'border-gray-300',
-          // border radius
-          'rounded',
-          // Focus styles for keyboard navigation
-          'focus:outline-none',
-          'focus:ring-2',
-          'focus:ring-blue-500',
-          'focus:border-transparent',
-          // Disabled state
-          disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+          // Typography
+          'text-sm',
+          'font-medium',
+          'text-gray-700',
+          // Layout
+          'block',
+          // Spacing
+          'mb-2',
         )}
-        id="target-selector"
-        value={value}
-        onChange={(e) => onChange(e.target.value as EnhancementTarget)}
-        disabled={disabled}
-        aria-describedby="target-helper-text"
-        aria-label="Select target platform for prompt enhancement"
       >
-        {TOOL_CATEGORY_LIST.map(({ value: categoryValue, label }) => (
-          <option key={categoryValue} value={categoryValue}>
-            {label}
-          </option>
-        ))}
-      </select>
-      <div
+        Target Platform
+      </label>
+
+      <div className="relative">
+        <select
+          id="target-selector"
+          value={value}
+          onChange={(e) => onChange(e.target.value as EnhancementTarget)}
+          disabled={disabled}
+          aria-describedby="target-helper-text"
+          className={cn(
+            // Sizing
+            'w-full',
+            // Spacing
+            'px-4',
+            'py-3',
+            'pr-10',
+            // Typography
+            'text-base',
+            'font-normal',
+            'text-gray-900',
+            // Background - subtle frosted effect
+            'bg-white/80',
+            'backdrop-blur-sm',
+            // Border
+            'border',
+            'border-gray-200',
+            'rounded-xl',
+            // Shadow - subtle depth
+            'shadow-sm',
+            // Appearance - hide default arrow
+            'appearance-none',
+            // Transition
+            'transition-all',
+            'duration-200',
+            // Focus
+            'focus:outline-none',
+            'focus:ring-2',
+            'focus:ring-blue-500/40',
+            'focus:border-blue-500',
+            'focus:bg-white',
+            // Hover
+            'hover:border-gray-300',
+            'hover:bg-white',
+            // Disabled state
+            disabled && 'opacity-50 cursor-not-allowed',
+            !disabled && 'cursor-pointer',
+          )}
+        >
+          {TOOL_CATEGORY_LIST.map(({ value: categoryValue, label }) => (
+            <option key={categoryValue} value={categoryValue}>
+              {label}
+            </option>
+          ))}
+        </select>
+
+        {/* Custom dropdown arrow */}
+        <div
+          className={cn(
+            // Position
+            'absolute',
+            'right-3',
+            'top-1/2',
+            '-translate-y-1/2',
+            // Pointer events - allow clicks to pass through to select
+            'pointer-events-none',
+            // Color
+            'text-gray-400',
+          )}
+        >
+          <ChevronDownIcon className="w-5 h-5" />
+        </div>
+      </div>
+
+      <p
         id="target-helper-text"
         className={cn(
-          // margin top
-          'mt-1',
-          // flex container
-          'flex',
-          // justify content
-          'justify-center',
-          // text small
-          'text-sm',
-          // text gray
-          'text-gray-600',
+          // Typography
+          'text-xs',
+          'font-light',
+          'text-gray-500',
+          // Spacing
+          'mt-2',
         )}
       >
-        <span>Choose the context for prompt optimization</span>
-      </div>
+        Choose the AI tool or context for optimized results
+      </p>
     </div>
   )
 }

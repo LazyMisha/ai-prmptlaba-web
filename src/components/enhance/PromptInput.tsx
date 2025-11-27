@@ -18,8 +18,7 @@ export interface PromptInputProps {
 }
 
 /**
- * Textarea input for the user's raw prompt with validation feedback.
- * Includes character counting and accessibility features.
+ * Textarea input for the user's raw prompt.
  */
 export default function PromptInput({
   value,
@@ -39,42 +38,22 @@ export default function PromptInput({
   return (
     <div className={className}>
       <label
-        className={cn(
-          // font weight
-          'font-medium',
-          // margin bottom
-          'mb-2',
-          // display block
-          'block',
-          // text alignment
-          'text-left',
-        )}
         htmlFor="prompt-input"
-      >
-        Your Prompt:
-      </label>
-      <textarea
         className={cn(
-          // width full
-          'w-full',
-          // padding
-          'p-2',
-          // border
-          'border',
-          // border color based on error state
-          hasError ? 'border-red-500' : 'border-gray-300',
-          // border radius
-          'rounded',
-          // font family
-          'font-sans',
-          // min height
-          'min-h-[120px]',
-          // Focus styles for keyboard navigation
-          'focus:outline-none',
-          'focus:ring-2',
-          hasError ? 'focus:ring-red-500' : 'focus:ring-blue-500',
-          'focus:border-transparent',
+          // Typography
+          'text-sm',
+          'font-medium',
+          'text-gray-700',
+          // Layout
+          'block',
+          // Spacing
+          'mb-2',
         )}
+      >
+        Your Prompt
+      </label>
+
+      <textarea
         id="prompt-input"
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -85,43 +64,100 @@ export default function PromptInput({
         aria-describedby="prompt-char-count prompt-helper-text prompt-error"
         aria-invalid={hasError ? true : undefined}
         aria-required="true"
+        className={cn(
+          // Sizing
+          'w-full',
+          'min-h-[140px]',
+          // Spacing
+          'px-4',
+          'py-3',
+          // Typography
+          'text-base',
+          'font-normal',
+          'text-gray-900',
+          'placeholder:text-gray-400',
+          'placeholder:font-light',
+          // Background - subtle frosted effect
+          'bg-white/80',
+          'backdrop-blur-sm',
+          // Border
+          'border',
+          hasError ? 'border-red-400' : 'border-gray-200',
+          'rounded-xl',
+          // Shadow - subtle depth
+          'shadow-sm',
+          // Resize
+          'resize-y',
+          // Transition
+          'transition-all',
+          'duration-200',
+          // Focus
+          'focus:outline-none',
+          'focus:ring-2',
+          hasError ? 'focus:ring-red-500/40' : 'focus:ring-blue-500/40',
+          hasError ? 'focus:border-red-400' : 'focus:border-blue-500',
+          'focus:bg-white',
+          // Hover
+          !hasError && 'hover:border-gray-300',
+          'hover:bg-white',
+          // Disabled state
+          disabled && 'opacity-50 cursor-not-allowed',
+        )}
       />
+
+      {/* Footer with helper text and character count */}
       <div
         className={cn(
-          // margin top
-          'mt-1',
-          // flex container
+          // Layout
           'flex',
-          // justify between
           'justify-between',
-          // text small
-          'text-sm',
-          // text gray
-          'text-gray-600',
+          'items-center',
+          // Spacing
+          'mt-2',
+          // Typography
+          'text-xs',
+          'font-light',
         )}
       >
-        <span id="prompt-helper-text">
+        <span
+          id="prompt-helper-text"
+          className={cn(
+            charCount < minChars && charCount > 0
+              ? 'text-amber-600'
+              : isOverMaximum
+                ? 'text-red-500'
+                : 'text-gray-500',
+          )}
+        >
           {charCount < minChars && charCount > 0
-            ? `At least ${minChars - charCount} more character${minChars - charCount === 1 ? '' : 's'} required`
-            : charCount > maxChars
-              ? `${charCount - maxChars} character${charCount - maxChars === 1 ? '' : 's'} over limit`
-              : 'Enter your prompt to enhance'}
+            ? `${minChars - charCount} more character${minChars - charCount === 1 ? '' : 's'} needed`
+            : isOverMaximum
+              ? `${charCount - maxChars} over limit`
+              : 'Press ⌘/Ctrl + Enter to enhance'}
         </span>
-        <span id="prompt-char-count" aria-live="polite" aria-atomic="true">
-          {charCount} / {maxChars}
+
+        <span
+          id="prompt-char-count"
+          aria-live="polite"
+          aria-atomic="true"
+          className={cn('tabular-nums', isOverMaximum ? 'text-red-500' : 'text-gray-400')}
+        >
+          {charCount.toLocaleString()} / {maxChars.toLocaleString()}
         </span>
       </div>
+
+      {/* Error message */}
       {error && (
         <p
           id="prompt-error"
           role="alert"
           className={cn(
-            // margin top
+            // Spacing
             'mt-2',
-            // text red
-            'text-red-600',
-            // text small
+            // Typography
             'text-sm',
+            'font-light',
+            'text-red-500',
           )}
         >
           {error}
