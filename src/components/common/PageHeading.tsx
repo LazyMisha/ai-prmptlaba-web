@@ -2,28 +2,45 @@ import { cn } from '@/lib/utils'
 import type { ReactNode } from 'react'
 
 /**
- * Reusable page heading component with consistent typography.
- * Provides standardized h1 styling across all pages.
+ * Props for the PageHeading component.
  */
 interface PageHeadingProps {
   /** Heading text or content */
   children: ReactNode
   /** Additional CSS classes to apply */
   className?: string
+  /**
+   * HTML id attribute for accessibility.
+   * Useful for anchor links or when referenced by aria-labelledby.
+   */
+  id?: string
 }
 
-export function PageHeading({ children, className }: PageHeadingProps) {
+/**
+ * A reusable page heading component following Apple design principles.
+ * Provides standardized h1 styling with clean, elegant typography.
+ */
+export function PageHeading({ children, className, id }: PageHeadingProps) {
   return (
     <h1
+      id={id}
       className={cn(
         // Typography
-        'text-4xl',
         'font-light',
+        // Letter spacing
         'tracking-tight',
-        'text-gray-600',
+        // Color
+        'text-gray-900',
         // Rendering
         'antialiased',
-        'leading-tight',
+        // Responsive text sizing - scales from mobile to desktop
+        // (includes appropriate line-height via Tailwind defaults)
+        'text-3xl',
+        'sm:text-4xl',
+        'md:text-5xl',
+        // Spacing
+        'mb-4',
+        // Custom classes
         className,
       )}
     >

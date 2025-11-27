@@ -15,13 +15,11 @@ export const metadata: Metadata = {
 export default function EnhancePage() {
   return (
     <PageContainer>
-      <div>
-        <PageHeading>Prompt Enhancer</PageHeading>
-        <PageDescription className="text-gray-700">
-          Transform your basic prompts into professional, effective AI instructions optimized for
-          your target context.
-        </PageDescription>
-      </div>
+      <PageHeading>Prompt Enhancer</PageHeading>
+      <PageDescription>
+        Transform your basic prompts into professional, effective AI instructions optimized for your
+        target context.
+      </PageDescription>
       <EnhanceForm />
     </PageContainer>
   )

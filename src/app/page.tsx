@@ -16,7 +16,7 @@ export default function HomePage() {
   return (
     <PageContainer>
       <PageHeading>AI Prompt Laba</PageHeading>
-      <PageDescription className="leading-relaxed">
+      <PageDescription>
         Your hub for smart prompt creation and management. Transform basic ideas into professional,
         effective AI instructions with ease.
       </PageDescription>
