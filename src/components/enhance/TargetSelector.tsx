@@ -3,7 +3,7 @@
 import type { EnhancementTarget } from '@/types/enhance'
 import { TOOL_CATEGORY_LIST } from '@/constants/tool-categories'
 import { cn } from '@/lib/utils'
-import ChevronDownIcon from '@/components/common/ChevronDownIcon'
+import ChevronIcon from '@/components/common/ChevronIcon'
 
 export interface TargetSelectorProps {
   /** Currently selected enhancement target */
@@ -110,7 +110,13 @@ export default function TargetSelector({
             'text-gray-400',
           )}
         >
-          <ChevronDownIcon className="w-5 h-5" />
+          <ChevronIcon
+            className={cn(
+              // Sizing
+              'w-5',
+              'h-5',
+            )}
+          />
         </div>
       </div>
 

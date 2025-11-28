@@ -2,6 +2,10 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import CloseIcon from '@/components/common/CloseIcon'
+import CheckIcon from '@/components/common/CheckIcon'
+import CopyIcon from '@/components/common/CopyIcon'
+import ChevronIcon from '@/components/common/ChevronIcon'
 
 export interface EnhancedResultProps {
   /** The enhanced prompt text */
@@ -76,20 +80,7 @@ export default function EnhancedResult({
               'rounded-full',
             )}
           >
-            <svg
-              className="w-4 h-4 text-red-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <CloseIcon className="w-4 h-4 text-red-600" />
           </div>
 
           <div className="flex-1 min-w-0">
@@ -156,20 +147,7 @@ export default function EnhancedResult({
               'rounded-full',
             )}
           >
-            <svg
-              className="w-3.5 h-3.5 text-emerald-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
+            <CheckIcon className="w-3.5 h-3.5 text-emerald-600" strokeWidth={2.5} />
           </div>
           <h3 className={cn('text-base', 'font-semibold', 'text-emerald-900')}>Enhanced Prompt</h3>
         </div>
@@ -206,38 +184,12 @@ export default function EnhancedResult({
           <span className="flex items-center gap-1.5">
             {copied ? (
               <>
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                <CheckIcon className="w-4 h-4" />
                 Copied
               </>
             ) : (
               <>
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
+                <CopyIcon className="w-4 h-4" />
                 Copy
               </>
             )}
@@ -307,26 +259,16 @@ export default function EnhancedResult({
                 '[&::-webkit-details-marker]:hidden',
               )}
             >
-              <svg
+              <ChevronIcon
                 className={cn(
+                  // Sizing
                   'w-4',
                   'h-4',
-                  'transition-transform',
-                  'duration-200',
-                  'group-open:rotate-90',
+                  // Rotation - starts pointing right, rotates to down when open
+                  '-rotate-90',
+                  'group-open:rotate-0',
                 )}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              />
               View original prompt
             </summary>
 

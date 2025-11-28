@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import type { PromptHistoryEntry } from '@/types/history'
-import ChevronDownIcon from '@/components/common/ChevronDownIcon'
+import ChevronIcon from '@/components/common/ChevronIcon'
 
 interface HistoryItemProps {
   entry: PromptHistoryEntry
@@ -142,7 +142,7 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
               Delete
             </button>
           )}
-          <ChevronDownIcon isRotated={isExpanded} />
+          <ChevronIcon isRotated={isExpanded} />
         </div>
       </header>
 
