@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils'
 import NavLink from './NavLink'
 
 /**
- * Mobile menu component with hamburger button and dropdown.
- * Handles all client-side interactivity including menu toggle and click-outside detection.
+ * Mobile menu component with clean dropdown.
+ * Features smooth animations and refined interaction patterns.
  */
 export default function MobileMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -43,7 +43,7 @@ export default function MobileMenu() {
 
   return (
     <div className={cn('relative', 'md:hidden')}>
-      {/* Menu Button */}
+      {/* Menu Button - minimal design */}
       <button
         ref={buttonRef}
         type="button"
@@ -55,69 +55,79 @@ export default function MobileMenu() {
           'justify-center',
           'items-center',
           // Sizing
-          'w-10',
-          'h-10',
+          'w-11',
+          'h-11',
           // Spacing
           'gap-1.5',
           // Colors
-          'text-gray-600',
+          'text-[#1d1d1f]',
+          // Rounded
+          'rounded-full',
+          // Hover state
+          'transition-colors',
+          'duration-200',
+          'hover:bg-black/[0.04]',
+          // Active state
+          'active:bg-black/[0.08]',
           // Focus styles
           'focus:outline-none',
-          'focus:ring-2',
-          'focus:ring-blue-500',
-          'focus:ring-offset-2',
-          'rounded',
+          'focus-visible:ring-2',
+          'focus-visible:ring-[#007aff]',
+          'focus-visible:ring-offset-2',
         )}
         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isMenuOpen}
         aria-controls="mobile-menu"
       >
-        {/* Hamburger Icon */}
+        {/* Hamburger Icon - Refined bars */}
         <span
           className={cn(
             // Bar styling
-            'w-6',
-            'h-0.5',
-            'bg-gray-600',
+            'w-[18px]',
+            'h-[1.5px]',
+            'bg-[#1d1d1f]',
             'rounded-full',
-            // Transition
+            // Smooth transition
             'transition-all',
             'duration-300',
+            'ease-out',
             // Transform when open
-            isMenuOpen && 'rotate-45 translate-y-2',
+            isMenuOpen && 'rotate-45 translate-y-[7px]',
           )}
         />
         <span
           className={cn(
             // Bar styling
-            'w-6',
-            'h-0.5',
-            'bg-gray-600',
+            'w-[18px]',
+            'h-[1.5px]',
+            'bg-[#1d1d1f]',
             'rounded-full',
-            // Transition
+            // Smooth transition
             'transition-all',
             'duration-300',
+            'ease-out',
             // Hide middle bar when open
-            isMenuOpen && 'opacity-0',
+            isMenuOpen && 'opacity-0 scale-0',
           )}
         />
         <span
           className={cn(
             // Bar styling
-            'w-6',
-            'h-0.5',
-            'bg-gray-600',
+            'w-[18px]',
+            'h-[1.5px]',
+            'bg-[#1d1d1f]',
             'rounded-full',
-            // Transition
+            // Smooth transition
             'transition-all',
             'duration-300',
+            'ease-out',
             // Transform when open
-            isMenuOpen && '-rotate-45 -translate-y-2',
+            isMenuOpen && '-rotate-45 -translate-y-[7px]',
           )}
         />
       </button>
 
-      {/* Menu Dropdown */}
+      {/* Menu Dropdown - Clean solid background */}
       {isMenuOpen && (
         <div
           ref={menuRef}
@@ -127,21 +137,25 @@ export default function MobileMenu() {
             'absolute',
             'top-full',
             'right-0',
-            'mt-2',
+            'mt-3',
             // Sizing
-            'w-48',
-            // Colors
+            'w-56',
+            // Solid white background - no transparency
             'bg-white',
+            // Border
             'border',
-            'border-gray-200',
-            // Effects
-            'rounded-lg',
-            'shadow-lg',
+            'border-black/[0.08]',
+            // Effects - elevated shadow
+            'rounded-2xl',
+            'shadow-xl',
             // Z-index
-            'z-20',
+            'z-50',
+            // Padding
+            'py-2',
             // Animation
             'animate-in',
-            'fade-in',
+            'fade-in-0',
+            'zoom-in-95',
             'slide-in-from-top-2',
             'duration-200',
           )}
@@ -155,20 +169,29 @@ export default function MobileMenu() {
             className={cn(
               // Display
               'block',
+              'w-full',
               // Spacing
               'px-4',
               'py-3',
               // Typography
-              'text-base',
-              // Hover
-              'hover:bg-gray-50',
-              // First item
-              'rounded-t-lg',
+              'text-[15px]',
+              'font-normal',
+              // Reset hover from NavLink
+              'hover:opacity-100',
+              // Hover background
+              'hover:bg-black/[0.04]',
+              // Active state
+              'active:bg-black/[0.08]',
+              // Rounded
+              'rounded-none',
               // Focus styles
-              'focus:bg-gray-100',
+              'focus:bg-black/[0.04]',
+              // Transition
+              'transition-colors',
+              'duration-150',
             )}
           >
-            Enhance Prompt
+            Enhance
           </NavLink>
           <NavLink
             href="/history"
@@ -178,20 +201,29 @@ export default function MobileMenu() {
             className={cn(
               // Display
               'block',
+              'w-full',
               // Spacing
               'px-4',
               'py-3',
               // Typography
-              'text-base',
-              // Hover
-              'hover:bg-gray-50',
-              // Last item
-              'rounded-b-lg',
+              'text-[15px]',
+              'font-normal',
+              // Reset hover from NavLink
+              'hover:opacity-100',
+              // Hover background
+              'hover:bg-black/[0.04]',
+              // Active state
+              'active:bg-black/[0.08]',
+              // Rounded
+              'rounded-none',
               // Focus styles
-              'focus:bg-gray-100',
+              'focus:bg-black/[0.04]',
+              // Transition
+              'transition-colors',
+              'duration-150',
             )}
           >
-            Recent Prompts
+            History
           </NavLink>
         </div>
       )}

@@ -17,29 +17,31 @@ interface PageHeadingProps {
 }
 
 /**
- * A reusable page heading component.
- * Provides standardized h1 styling with clean, elegant typography.
+ * Page heading component with bold typography.
+ * Features impactful typography with tight letter spacing.
  */
 export function PageHeading({ children, className, id }: PageHeadingProps) {
   return (
     <h1
       id={id}
       className={cn(
-        // Typography
-        'font-light',
-        // Letter spacing
+        // Typography - headline style
+        'font-semibold',
+        // Tight letter spacing for headlines
         'tracking-tight',
-        // Color
-        'text-gray-900',
+        // Leading for large text
+        'leading-[1.05]',
+        // Primary text color
+        'text-[#1d1d1f]',
         // Rendering
         'antialiased',
-        // Responsive text sizing - scales from mobile to desktop
-        // (includes appropriate line-height via Tailwind defaults)
-        'text-3xl',
-        'sm:text-4xl',
-        'md:text-5xl',
-        // Spacing
-        'mb-4',
+        // Responsive text sizing - hero scale
+        'text-4xl',
+        'sm:text-5xl',
+        'md:text-6xl',
+        'lg:text-7xl',
+        // Balanced text wrap for headings
+        'text-balance',
         // Custom classes
         className,
       )}

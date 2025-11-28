@@ -36,11 +36,11 @@ describe('PageDescription', () => {
       const { container } = render(<PageDescription>Description</PageDescription>)
       const paragraph = container.querySelector('p')
 
-      expect(paragraph).toHaveClass('font-light')
-      expect(paragraph).toHaveClass('text-gray-600')
-      expect(paragraph).toHaveClass('tracking-normal')
-      expect(paragraph).toHaveClass('text-base')
-      expect(paragraph).toHaveClass('sm:text-lg')
+      expect(paragraph).toHaveClass('font-normal')
+      expect(paragraph).toHaveClass('text-[#86868b]')
+      expect(paragraph).toHaveClass('tracking-tight')
+      expect(paragraph).toHaveClass('text-lg')
+      expect(paragraph).toHaveClass('sm:text-xl')
     })
 
     it('applies max-width constraint for readability', () => {
@@ -54,8 +54,9 @@ describe('PageDescription', () => {
       const { container } = render(<PageDescription>Description</PageDescription>)
       const paragraph = container.querySelector('p')
 
-      expect(paragraph).toHaveClass('text-base')
-      expect(paragraph).toHaveClass('sm:text-lg')
+      expect(paragraph).toHaveClass('text-lg')
+      expect(paragraph).toHaveClass('sm:text-xl')
+      expect(paragraph).toHaveClass('md:text-2xl')
     })
 
     it('applies additional className when provided', () => {
@@ -65,8 +66,8 @@ describe('PageDescription', () => {
       const paragraph = container.querySelector('p')
 
       expect(paragraph).toHaveClass('custom-class')
-      expect(paragraph).toHaveClass('font-light') // Still has default classes
-      expect(paragraph).toHaveClass('text-gray-600')
+      expect(paragraph).toHaveClass('font-normal') // Still has default classes
+      expect(paragraph).toHaveClass('text-[#86868b]')
     })
 
     it('allows overriding default classes with className', () => {

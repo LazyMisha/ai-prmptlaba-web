@@ -26,7 +26,7 @@ describe('HistoryPage', () => {
 
   it('uses PageContainer layout', () => {
     const { container } = render(<HistoryPage />)
-    // PageContainer adds max-w-3xl class
-    expect(container.querySelector('.max-w-3xl')).toBeInTheDocument()
+    // PageContainer adds max-w-4xl class
+    expect(container.querySelector('.max-w-4xl')).toBeInTheDocument()
   })
 })

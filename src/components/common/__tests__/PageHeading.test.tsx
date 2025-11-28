@@ -30,9 +30,9 @@ describe('PageHeading', () => {
       render(<PageHeading>Heading</PageHeading>)
       const heading = screen.getByRole('heading', { level: 1 })
 
-      expect(heading).toHaveClass('font-light')
+      expect(heading).toHaveClass('font-semibold')
       expect(heading).toHaveClass('tracking-tight')
-      expect(heading).toHaveClass('text-gray-900')
+      expect(heading).toHaveClass('text-[#1d1d1f]')
       expect(heading).toHaveClass('antialiased')
     })
 
@@ -40,16 +40,17 @@ describe('PageHeading', () => {
       render(<PageHeading>Heading</PageHeading>)
       const heading = screen.getByRole('heading', { level: 1 })
 
-      expect(heading).toHaveClass('text-3xl')
-      expect(heading).toHaveClass('sm:text-4xl')
-      expect(heading).toHaveClass('md:text-5xl')
+      expect(heading).toHaveClass('text-4xl')
+      expect(heading).toHaveClass('sm:text-5xl')
+      expect(heading).toHaveClass('md:text-6xl')
+      expect(heading).toHaveClass('lg:text-7xl')
     })
 
-    it('applies bottom margin for visual separation', () => {
+    it('applies text balance for headings', () => {
       render(<PageHeading>Heading</PageHeading>)
       const heading = screen.getByRole('heading', { level: 1 })
 
-      expect(heading).toHaveClass('mb-4')
+      expect(heading).toHaveClass('text-balance')
     })
 
     it('applies additional className when provided', () => {
@@ -57,7 +58,7 @@ describe('PageHeading', () => {
       const heading = screen.getByRole('heading', { level: 1 })
 
       expect(heading).toHaveClass('custom-class')
-      expect(heading).toHaveClass('font-light') // Still has default classes
+      expect(heading).toHaveClass('font-semibold') // Still has default classes
     })
 
     it('allows overriding default classes with className', () => {

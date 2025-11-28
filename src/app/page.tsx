@@ -11,10 +11,11 @@ export const metadata: Metadata = {
 
 /**
  * Home page (Server Component)
+ * Hero section with bold typography and clear messaging.
  */
 export default function HomePage() {
   return (
-    <PageContainer>
+    <PageContainer centered>
       <PageHeading>AI Prompt Laba</PageHeading>
       <PageDescription>
         Your hub for smart prompt creation and management. Transform basic ideas into professional,

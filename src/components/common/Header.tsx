@@ -4,33 +4,47 @@ import { cn } from '@/lib/utils'
 import MobileMenu from './MobileMenu'
 import NavLink from './NavLink'
 
+/**
+ * Header component with frosted glass effect.
+ * Features smooth backdrop blur and refined typography.
+ */
 export default function Header() {
   return (
     <header
       className={cn(
-        // Sticky position
+        // Sticky positioning
         'sticky',
-        // Position at top
         'top-0',
         // Full width
         'w-full',
-        // Add padding
-        'p-4',
-        // Background color
-        'bg-gray-100',
+        // Padding - generous spacing
+        'px-6',
+        'py-4',
+        'md:px-10',
+        // Frosted glass effect
+        'bg-white/72',
+        'backdrop-blur-xl',
+        'backdrop-saturate-150',
+        // Subtle bottom border
+        'border-b',
+        'border-black/[0.08]',
         // Z-index to stay above content
-        'z-10',
+        'z-50',
+        // Smooth transition for scroll effects
+        'transition-all',
+        'duration-300',
       )}
       role="banner"
     >
       <nav
         className={cn(
-          // Flexbox
+          // Flexbox layout
           'flex',
-          // Justify between
           'justify-between',
-          // Items center
           'items-center',
+          // Max width for large screens
+          'max-w-6xl',
+          'mx-auto',
           // Relative positioning for menu
           'relative',
         )}
@@ -39,21 +53,26 @@ export default function Header() {
       >
         <Link
           className={cn(
-            // Typography
+            // Typography - brand styling
             'text-xl',
-            'font-light',
+            'font-semibold',
             'tracking-tight',
-            'text-gray-600',
+            'text-[#1d1d1f]',
             // Rendering
             'antialiased',
+            // Smooth hover transition
+            'transition-opacity',
+            'duration-200',
+            'hover:opacity-60',
             // Focus styles
             'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-blue-500',
-            'focus:ring-offset-2',
-            'rounded',
+            'focus-visible:ring-2',
+            'focus-visible:ring-[#007aff]',
+            'focus-visible:ring-offset-2',
+            'rounded-lg',
             'px-2',
             'py-1',
+            '-ml-2',
           )}
           href="/"
           aria-label="Go to home page"
@@ -69,14 +88,16 @@ export default function Header() {
             // Visible on md and up
             'md:flex',
             // Gap between items
-            'gap-4',
+            'gap-8',
+            // Center items
+            'items-center',
           )}
         >
           <NavLink href="/enhance" ariaLabel="Go to prompt enhancer page">
-            Enhance Prompt
+            Enhance
           </NavLink>
           <NavLink href="/history" ariaLabel="Go to prompt history page">
-            Recent Prompts
+            History
           </NavLink>
         </div>
 

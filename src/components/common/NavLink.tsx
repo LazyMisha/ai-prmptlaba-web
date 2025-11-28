@@ -17,8 +17,8 @@ interface NavLinkProps {
 }
 
 /**
- * Reusable navigation link component with consistent styling.
- * Used in both desktop navigation and mobile menu.
+ * Navigation link component with smooth hover transitions.
+ * Features refined typography and subtle interaction feedback.
  */
 export default function NavLink({
   href,
@@ -34,21 +34,25 @@ export default function NavLink({
       onClick={onClick}
       role={role}
       className={cn(
-        // Typography
-        'text-lg',
-        'font-light',
+        // Typography - navigation style
+        'text-sm',
+        'font-normal',
         'tracking-tight',
-        'text-gray-600',
+        'text-[#1d1d1f]',
         // Rendering
         'antialiased',
+        // Smooth hover transition
+        'transition-opacity',
+        'duration-200',
+        'hover:opacity-60',
         // Focus styles
         'focus:outline-none',
-        'focus:ring-2',
-        'focus:ring-blue-500',
-        'focus:ring-offset-2',
-        'rounded',
-        'px-2',
-        'py-1',
+        'focus-visible:ring-2',
+        'focus-visible:ring-[#007aff]',
+        'focus-visible:ring-offset-2',
+        'rounded-lg',
+        'px-3',
+        'py-2',
         className,
       )}
       aria-label={ariaLabel}

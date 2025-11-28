@@ -22,11 +22,11 @@ describe('PageContainer', () => {
     )
 
     const containerDiv = container.firstChild as HTMLElement
-    expect(containerDiv).toHaveClass('max-w-3xl')
+    expect(containerDiv).toHaveClass('max-w-4xl')
     expect(containerDiv).toHaveClass('mx-auto')
-    expect(containerDiv).toHaveClass('text-center')
-    expect(containerDiv).toHaveClass('space-y-6')
-    expect(containerDiv).toHaveClass('p-4')
+    expect(containerDiv).toHaveClass('px-6')
+    expect(containerDiv).toHaveClass('py-12')
+    expect(containerDiv).toHaveClass('space-y-8')
   })
 
   it('applies additional className when provided', () => {
@@ -38,7 +38,22 @@ describe('PageContainer', () => {
 
     const containerDiv = container.firstChild as HTMLElement
     expect(containerDiv).toHaveClass('custom-class')
-    expect(containerDiv).toHaveClass('max-w-3xl') // Still has default classes
+    expect(containerDiv).toHaveClass('max-w-4xl') // Still has default classes
+  })
+
+  it('applies centered layout when centered prop is true', () => {
+    const { container } = render(
+      <PageContainer centered>
+        <div>Content</div>
+      </PageContainer>,
+    )
+
+    const containerDiv = container.firstChild as HTMLElement
+    expect(containerDiv).toHaveClass('flex')
+    expect(containerDiv).toHaveClass('flex-col')
+    expect(containerDiv).toHaveClass('items-center')
+    expect(containerDiv).toHaveClass('justify-center')
+    expect(containerDiv).toHaveClass('text-center')
   })
 
   it('renders multiple children', () => {

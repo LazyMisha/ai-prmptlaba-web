@@ -17,26 +17,32 @@ interface PageDescriptionProps {
 }
 
 /**
- * A reusable page description component.
- * Provides standardized typography with clean, readable styling.
+ * Page description component with refined typography.
+ * Features secondary typography with optimal readability.
  */
 export function PageDescription({ children, className, id }: PageDescriptionProps) {
   return (
     <p
       id={id}
       className={cn(
-        // Typography
-        'font-light',
-        // Color - Muted for visual hierarchy
-        'text-gray-600',
-        // Spacing - Subtle letter spacing for elegance
-        'tracking-normal',
-        // Max width - Optimal reading length
+        // Typography - subhead style
+        'font-normal',
+        // Leading for comfortable reading
+        'leading-relaxed',
+        // Secondary text color
+        'text-[#86868b]',
+        // Subtle letter spacing
+        'tracking-tight',
+        // Max width - Optimal reading length (65-75 characters)
         'max-w-2xl',
-        // Responsive text sizing - base on mobile, lg on tablet+
-        // (includes appropriate line-height via Tailwind defaults)
-        'text-base',
-        'sm:text-lg',
+        // Responsive text sizing
+        'text-lg',
+        'sm:text-xl',
+        'md:text-2xl',
+        // Pretty text wrap
+        'text-pretty',
+        // Rendering
+        'antialiased',
         // Custom classes
         className,
       )}
