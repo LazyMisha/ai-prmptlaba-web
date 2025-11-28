@@ -226,7 +226,8 @@ Follow Apple's design principles for all UI components:
 - Use TailwindCSS utility classes for all styling.
 - Avoid custom CSS unless absolutely necessary.
 - Group related classes logically (layout, spacing, colors, typography).
-- Use `cn()` utility from src/lib/utils.ts for conditional classNames.
+- **ALWAYS use `cn()` utility from src/lib/utils.ts for ALL className attributes with multiple classes** - not just conditional ones.
+- **ALWAYS add grouped comments** (e.g., `// Layout`, `// Spacing`, `// Colors`) to organize classes within `cn()`.
 - Add inline comments to explain complex class combinations.
 - **Always write mobile styles first**, then add responsive prefixes for larger screens.
 - Leverage Tailwind's dark mode utilities when needed.
