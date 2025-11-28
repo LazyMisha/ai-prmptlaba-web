@@ -185,6 +185,25 @@ it must:
 
 ### Design Philosophy
 
+**MOBILE-FIRST APPROACH**
+
+All UI must be designed and implemented mobile-first. This means:
+
+1. **Design for mobile screens first** - Start with the smallest viewport (320px) and progressively enhance for larger screens
+2. **Base styles are mobile** - Write base CSS/Tailwind classes for mobile, then use responsive prefixes (`sm:`, `md:`, `lg:`, `xl:`) to adapt for larger screens
+3. **Touch-friendly by default** - Minimum touch target size of 44x44px for interactive elements
+4. **Performance on mobile** - Optimize for slower mobile networks and less powerful devices
+5. **Test on real devices** - Verify UI looks and works great on both mobile and desktop
+
+**Responsive Breakpoints (use progressively):**
+
+- Base (no prefix): 0px+ (mobile phones)
+- `sm:`: 640px+ (large phones / small tablets)
+- `md:`: 768px+ (tablets)
+- `lg:`: 1024px+ (laptops / desktops)
+- `xl:`: 1280px+ (large desktops)
+- `2xl:`: 1536px+ (extra large screens)
+
 Follow Apple's design principles for all UI components:
 
 - **Clarity** - Text is legible, icons are precise, adornments are subtle and appropriate
@@ -209,18 +228,28 @@ Follow Apple's design principles for all UI components:
 - Group related classes logically (layout, spacing, colors, typography).
 - Use `cn()` utility from src/lib/utils.ts for conditional classNames.
 - Add inline comments to explain complex class combinations.
-- Use Tailwind's responsive prefixes (sm:, md:, lg:, xl:) for responsive design.
+- **Always write mobile styles first**, then add responsive prefixes for larger screens.
 - Leverage Tailwind's dark mode utilities when needed.
+
+### Mobile-First Best Practices
+
+- **Start small, scale up** - Base classes define mobile appearance, responsive prefixes enhance for larger screens.
+- **Fluid typography** - Use responsive text sizes (e.g., `text-sm md:text-base lg:text-lg`).
+- **Flexible layouts** - Use `flex-col` on mobile, `md:flex-row` on larger screens.
+- **Appropriate spacing** - Smaller padding/margins on mobile (`p-4`), larger on desktop (`md:p-6 lg:p-8`).
+- **Touch-friendly buttons** - Minimum height of `h-11` (44px) for touch targets.
+- **Hidden/shown elements** - Use `hidden md:block` or `block md:hidden` to show/hide content appropriately.
+- **Stack on mobile, side-by-side on desktop** - Common pattern for forms, cards, and content sections.
 
 ### Best Practices
 
 - Keep className lists readable - break into logical groups with comments.
 - Use semantic spacing (consistent margins and paddings).
-- Follow mobile-first responsive design approach.
+- **Mobile-first is mandatory** - Never write desktop-first styles.
 - Maintain consistent color palette using Tailwind's color system.
 - Use Tailwind's built-in accessibility features.
 
-### Example
+### Example (Mobile-First)
 
 ```tsx
 import { cn } from '@/lib/utils'
@@ -253,12 +282,6 @@ import { cn } from '@/lib/utils'
 ```
 
 ## 6. API Rules
-
-### Structure
-
-- Place all API routes under `src/app/api/<endpoint>/route.ts`.
-- Use Next.js Route Handlers (GET, POST, PUT, DELETE, PATCH).
-- Export named functions for each HTTP method.
 
 ### Input Validation
 
