@@ -12,13 +12,13 @@ interface HistoryLabelProps {
 }
 
 /**
- * Reusable label-value pair component for history items.
- * Labels have consistent width for vertical alignment.
+ * Label-value pair component for history items.
+ * Features consistent spacing and refined typography.
  */
 export default function HistoryLabel({
   label,
   value,
-  valueColor = 'text-gray-700',
+  valueColor = 'text-[#1d1d1f]',
   truncate = true,
   showBorder = false,
 }: HistoryLabelProps) {
@@ -27,21 +27,22 @@ export default function HistoryLabel({
       className={cn(
         // Layout
         'flex',
-        'items-center',
+        'items-baseline',
         // Spacing
-        'gap-2',
+        'gap-3',
+        'py-1.5',
         // Sizing
         'w-full',
         // Border
-        showBorder ? ['border-t', 'border-gray-200'] : ['border-t', 'border-transparent'],
+        showBorder && ['border-t', 'border-black/[0.06]', 'pt-3', 'mt-2'],
       )}
     >
       <span
         className={cn(
           // Typography
           'text-xs',
-          'font-light',
-          'text-gray-500',
+          'font-medium',
+          'text-[#86868b]',
           'uppercase',
           'tracking-wide',
           // Sizing
@@ -51,13 +52,14 @@ export default function HistoryLabel({
           'text-left',
         )}
       >
-        {label}:
+        {label}
       </span>
       <span
         className={cn(
           // Typography
           'text-sm',
-          'font-light',
+          'font-normal',
+          'leading-relaxed',
           valueColor,
           // Truncate or wrap
           truncate ? 'truncate' : 'break-words',

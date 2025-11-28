@@ -78,15 +78,16 @@ export default function HistoryList() {
           'items-center',
           'justify-center',
           // Spacing
-          'py-16',
+          'py-20',
         )}
       >
         <p
           className={cn(
             // Typography
-            'text-lg',
-            'font-light',
-            'text-gray-500',
+            'text-base',
+            'font-normal',
+            'text-[#86868b]',
+            'tracking-tight',
           )}
         >
           Loading history...
@@ -105,16 +106,17 @@ export default function HistoryList() {
           'items-center',
           'justify-center',
           // Spacing
-          'py-16',
-          'gap-4',
+          'py-20',
+          'gap-5',
         )}
       >
         <p
           className={cn(
             // Typography
-            'text-lg',
-            'font-light',
-            'text-red-500',
+            'text-base',
+            'font-normal',
+            'text-[#ff3b30]',
+            'tracking-tight',
           )}
         >
           {error}
@@ -125,21 +127,22 @@ export default function HistoryList() {
           className={cn(
             // Typography
             'text-sm',
-            'font-light',
+            'font-medium',
             // Colors
-            'text-blue-600',
-            'hover:text-blue-700',
+            'text-[#007aff]',
+            'hover:opacity-70',
             // Spacing
-            'px-4',
-            'py-2',
+            'px-5',
+            'py-2.5',
             // Effects
-            'transition-colors',
+            'transition-opacity',
+            'duration-200',
             // Focus
             'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-blue-500',
-            'focus:ring-offset-2',
-            'rounded',
+            'focus-visible:ring-2',
+            'focus-visible:ring-[#007aff]',
+            'focus-visible:ring-offset-2',
+            'rounded-lg',
           )}
         >
           Try again
@@ -159,7 +162,7 @@ export default function HistoryList() {
         'flex',
         'flex-col',
         // Spacing
-        'gap-4',
+        'gap-6',
       )}
     >
       {/* Header with clear button */}
@@ -169,16 +172,15 @@ export default function HistoryList() {
           'flex',
           'justify-between',
           'items-center',
-          // Spacing
-          'mb-2',
         )}
       >
         <p
           className={cn(
             // Typography
             'text-sm',
-            'font-light',
-            'text-gray-500',
+            'font-normal',
+            'text-[#86868b]',
+            'tracking-tight',
           )}
         >
           {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
@@ -189,21 +191,22 @@ export default function HistoryList() {
           className={cn(
             // Typography
             'text-sm',
-            'font-light',
-            'text-gray-400',
+            'font-normal',
+            'text-[#86868b]',
             // Hover
-            'hover:text-red-500',
+            'hover:text-[#ff3b30]',
             // Spacing
-            'px-3',
-            'py-1',
+            'px-4',
+            'py-2',
             // Effects
             'transition-colors',
+            'duration-200',
             // Focus
             'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-red-500',
-            'focus:ring-offset-1',
-            'rounded',
+            'focus-visible:ring-2',
+            'focus-visible:ring-[#ff3b30]',
+            'focus-visible:ring-offset-2',
+            'rounded-lg',
           )}
         >
           Clear all
@@ -217,7 +220,7 @@ export default function HistoryList() {
           'flex',
           'flex-col',
           // Spacing
-          'gap-3',
+          'gap-4',
         )}
       >
         {entries.map((entry) => (

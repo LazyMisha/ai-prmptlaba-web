@@ -52,17 +52,20 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
         'flex',
         'flex-col',
         // Spacing
-        'p-4',
-        'gap-1',
-        // Border and background
-        'border',
-        'border-gray-200',
+        'p-5',
+        'gap-2',
+        // Background and border
         'bg-white',
-        'rounded-lg',
+        'border',
+        'border-black/[0.08]',
+        'rounded-2xl',
+        // Shadow
+        'shadow-sm',
         // Hover effect
-        'hover:shadow-sm',
+        'hover:shadow-md',
+        'hover:border-black/[0.12]',
         'transition-all',
-        'duration-300',
+        'duration-200',
         'ease-out',
         // Cursor
         'cursor-pointer',
@@ -103,8 +106,9 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
             className={cn(
               // Typography
               'text-xs',
-              'font-light',
-              'text-gray-400',
+              'font-normal',
+              'text-[#86868b]',
+              'tracking-tight',
             )}
           >
             {formattedDate}
@@ -119,18 +123,18 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
               <HistoryLabel
                 label="Original"
                 value={entry.originalPrompt}
-                valueColor="text-gray-600"
+                valueColor="text-[#86868b]"
               />
               <HistoryLabel
                 label="Enhanced"
                 value={entry.enhancedPrompt}
-                valueColor="text-gray-800"
+                valueColor="text-[#1d1d1f]"
               />
             </>
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {onDelete && (
             <button
               type="button"
@@ -138,21 +142,22 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
               className={cn(
                 // Typography
                 'text-xs',
-                'font-light',
-                'text-gray-400',
+                'font-medium',
+                'text-[#86868b]',
                 // Hover
-                'hover:text-red-500',
+                'hover:text-[#ff3b30]',
                 // Spacing
-                'px-2',
-                'py-1',
+                'px-3',
+                'py-1.5',
                 // Effects
                 'transition-colors',
+                'duration-200',
                 // Focus
                 'focus:outline-none',
-                'focus:ring-2',
-                'focus:ring-red-500',
-                'focus:ring-offset-1',
-                'rounded',
+                'focus-visible:ring-2',
+                'focus-visible:ring-[#ff3b30]',
+                'focus-visible:ring-offset-2',
+                'rounded-lg',
               )}
               aria-label="Delete this history entry"
             >
@@ -189,14 +194,14 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
           <HistoryLabel
             label="Original"
             value={entry.originalPrompt}
-            valueColor="text-gray-700"
+            valueColor="text-[#86868b]"
             truncate={false}
             showBorder
           />
           <HistoryLabel
             label="Enhanced"
             value={entry.enhancedPrompt}
-            valueColor="text-gray-900"
+            valueColor="text-[#1d1d1f]"
             truncate={false}
             showBorder
           />

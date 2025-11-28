@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * Empty state component displayed when no history entries are found.
+ * Features subtle visual styling with centered content.
  */
 export default function EmptyHistoryState() {
   return (
@@ -13,22 +14,25 @@ export default function EmptyHistoryState() {
         'items-center',
         'justify-center',
         // Spacing
-        'py-16',
-        'px-4',
+        'py-20',
+        'px-6',
         // Border
         'border',
-        'border-gray-200',
         'border-dashed',
-        'rounded-lg',
+        'border-black/[0.12]',
+        'rounded-2xl',
+        // Background
+        'bg-[#f5f5f7]/50',
       )}
     >
       <p
         className={cn(
           // Typography
           'text-lg',
-          'font-light',
-          'text-gray-500',
+          'font-medium',
+          'text-[#1d1d1f]',
           'text-center',
+          'tracking-tight',
           // Spacing
           'mb-2',
         )}
@@ -39,9 +43,10 @@ export default function EmptyHistoryState() {
         className={cn(
           // Typography
           'text-sm',
-          'font-light',
-          'text-gray-400',
+          'font-normal',
+          'text-[#86868b]',
           'text-center',
+          'tracking-tight',
         )}
       >
         Your enhanced prompts will appear here
