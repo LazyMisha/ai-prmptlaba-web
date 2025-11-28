@@ -45,7 +45,7 @@ src/
 │ ├── not-found.tsx # 404 page
 │ ├── api/ # API routes
 ├── components/ # React components
-│ ├── common/ # Shared components
+│ ├── common/ # Shared components and reusable icons (e.g., ChevronIcon.tsx, CloseIcon.tsx)
 ├── lib/ # Utility functions
 │ ├── utils.ts # cn() utility for className merging
 │ ├── utils/ # General utilities
@@ -114,6 +114,17 @@ All new components or APIs must be placed in the appropriate folder.
 - Maintain proper heading hierarchy.
 - Provide alt text for images.
 - Ensure sufficient color contrast.
+
+### Icons and SVG
+
+- **NEVER add inline SVG code directly in components** - always use reusable icon components.
+- All SVG icons must be extracted into reusable components in `src/components/common/`.
+- Icon components should accept `className` prop for sizing and styling.
+- Icon components should include `aria-hidden="true"` for decorative icons.
+- Use consistent naming: `IconNameIcon.tsx` (e.g., `ChevronIcon.tsx`, `CloseIcon.tsx`).
+- Icon components should use `cn()` utility for className merging.
+- Provide configurable props when needed (e.g., `direction`, `strokeWidth`).
+- Add JSDoc comments documenting the icon's purpose and usage.
 
 ### Security
 
