@@ -232,6 +232,42 @@ Follow Apple's design principles for all UI components:
 - Frosted glass effects (backdrop-blur) where appropriate
 - Focus on content over chrome
 
+**Apple Design Tokens (MUST USE):**
+
+Colors:
+
+- Primary text: `text-[#1d1d1f]`
+- Secondary text: `text-[#86868b]`
+- Blue (links/buttons): `bg-[#007aff]`, hover: `hover:bg-[#0071e3]`
+- Red (destructive): `text-[#ff3b30]}` or `bg-[#ff3b30]`
+- Green (success): `text-[#34c759]` or `bg-[#34c759]`
+- Borders: `border-black/[0.08]` or `border-black/[0.12]`
+
+Typography:
+
+- Body text: `text-[17px]` with `tracking-[-0.01em]`
+- Small text: `text-[15px]`
+- Captions: `text-xs` (12px)
+- Font weights: `font-normal` (body), `font-medium` (emphasis), `font-semibold` (headings/buttons)
+
+Buttons:
+
+- Primary: `bg-[#007aff] text-white rounded-xl px-7 py-3.5 text-[17px] font-semibold`
+- Hover: `hover:bg-[#0071e3]`
+- Active: `active:opacity-80 active:scale-[0.98]`
+- Min height: `min-h-[50px]` for primary CTAs, `min-h-[44px]` for secondary
+
+Border radius:
+
+- Large (cards, modals): `rounded-2xl`
+- Medium (buttons, inputs): `rounded-xl`
+- Small (tags, badges): `rounded-lg`
+
+Transitions:
+
+- Duration: `duration-200` or `duration-300`
+- Easing: `ease-out`
+
 ### TailwindCSS
 
 - Use TailwindCSS utility classes for all styling.
