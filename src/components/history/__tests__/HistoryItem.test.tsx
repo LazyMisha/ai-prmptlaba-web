@@ -14,20 +14,19 @@ describe('HistoryItem', () => {
   it('renders collapsed by default', () => {
     const { container } = render(<HistoryItem entry={mockEntry} />)
 
-    // Should show preview in collapsed state (text-gray-600 is for original in collapsed state)
+    // Should show preview in collapsed state with truncate class
     const collapsedElements = container.querySelectorAll('.truncate')
+    expect(collapsedElements.length).toBeGreaterThan(0)
+
+    // Original and enhanced prompts should be truncated when collapsed
     const originalPreview = Array.from(collapsedElements).find((el) =>
       el.textContent?.includes('Test original prompt'),
     )
     expect(originalPreview).toBeInTheDocument()
 
-    // Expanded content should exist but be hidden with grid-rows-[0fr]
-    const expandedContainer = container.querySelector('.grid-rows-\\[0fr\\]')
-    expect(expandedContainer).toBeInTheDocument()
-
-    // Should have opacity-0 when collapsed
-    const hiddenContent = container.querySelector('.opacity-0')
-    expect(hiddenContent).toBeInTheDocument()
+    // aria-expanded should be false
+    const article = container.querySelector('article')
+    expect(article).toHaveAttribute('aria-expanded', 'false')
   })
 
   it('expands when clicked', () => {

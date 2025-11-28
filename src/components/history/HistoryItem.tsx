@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import type { PromptHistoryEntry } from '@/types/history'
-import HistoryLabel from './HistoryLabel'
 import ChevronDownIcon from '@/components/common/ChevronDownIcon'
 
 interface HistoryItemProps {
@@ -52,8 +51,9 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
         'flex',
         'flex-col',
         // Spacing
-        'p-5',
-        'gap-2',
+        'p-4',
+        'sm:p-5',
+        'gap-3',
         // Background and border
         'bg-white',
         'border',
@@ -77,64 +77,41 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
       aria-expanded={isExpanded}
       aria-label={`History entry from ${formattedDate}. Click to ${isExpanded ? 'collapse' : 'expand'}`}
     >
-      {/* Header with target and timestamp */}
+      {/* Top row: Date on left, Delete + Arrow on right */}
       <header
         className={cn(
           // Layout
           'flex',
+          'items-center',
           'justify-between',
-          'items-start',
           // Spacing
           'gap-2',
         )}
       >
+        <time
+          dateTime={date.toISOString()}
+          className={cn(
+            // Typography
+            'text-xs',
+            'font-normal',
+            'text-[#86868b]',
+            'tracking-tight',
+          )}
+        >
+          {formattedDate}
+        </time>
+
         <div
           className={cn(
             // Layout
             'flex',
-            'flex-col',
-            'items-start',
+            'items-center',
             // Spacing
-            'gap-1',
-            // Sizing
-            'flex-1',
-            'min-w-0',
+            'gap-2',
+            // Responsive
+            'sm:gap-3',
           )}
         >
-          <time
-            dateTime={date.toISOString()}
-            className={cn(
-              // Typography
-              'text-xs',
-              'font-normal',
-              'text-[#86868b]',
-              'tracking-tight',
-            )}
-          >
-            {formattedDate}
-          </time>
-
-          {/* Target */}
-          <HistoryLabel label="Target" value={entry.target} />
-
-          {/* Preview when collapsed */}
-          {!isExpanded && (
-            <>
-              <HistoryLabel
-                label="Original"
-                value={entry.originalPrompt}
-                valueColor="text-[#86868b]"
-              />
-              <HistoryLabel
-                label="Enhanced"
-                value={entry.enhancedPrompt}
-                valueColor="text-[#1d1d1f]"
-              />
-            </>
-          )}
-        </div>
-
-        <div className="flex items-center gap-3">
           {onDelete && (
             <button
               type="button"
@@ -147,7 +124,8 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
                 // Hover
                 'hover:text-[#ff3b30]',
                 // Spacing
-                'px-3',
+                'px-2',
+                'sm:px-3',
                 'py-1.5',
                 // Effects
                 'transition-colors',
@@ -164,47 +142,140 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
               Delete
             </button>
           )}
-          {/* Expand/Collapse indicator */}
           <ChevronDownIcon isRotated={isExpanded} />
         </div>
       </header>
 
-      {/* Full content when expanded */}
+      {/* Content rows: Label on left, Value on right */}
       <div
         className={cn(
-          // Grid for smooth height animation
-          'grid',
-          'transition-[grid-template-rows]',
-          'duration-300',
-          'ease-out',
-          isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
+          // Layout
+          'flex',
+          'flex-col',
+          // Spacing
+          'gap-2',
         )}
       >
+        {/* Target */}
         <div
           className={cn(
-            // Overflow hidden for smooth animation
-            'overflow-hidden',
-            // Fade in/out effect
-            'transition-opacity',
-            'duration-300',
-            'ease-out',
-            isExpanded ? 'opacity-100' : 'opacity-0',
+            // Layout
+            'flex',
+            'items-baseline',
+            // Spacing
+            'gap-4',
           )}
         >
-          <HistoryLabel
-            label="Original"
-            value={entry.originalPrompt}
-            valueColor="text-[#86868b]"
-            truncate={false}
-            showBorder
-          />
-          <HistoryLabel
-            label="Enhanced"
-            value={entry.enhancedPrompt}
-            valueColor="text-[#1d1d1f]"
-            truncate={false}
-            showBorder
-          />
+          <span
+            className={cn(
+              // Typography
+              'text-xs',
+              'font-medium',
+              'text-[#86868b]',
+              'uppercase',
+              'tracking-wide',
+              // Sizing
+              'w-20',
+              'shrink-0',
+            )}
+          >
+            Target
+          </span>
+          <span
+            className={cn(
+              // Typography
+              'text-sm',
+              'font-normal',
+              'text-[#1d1d1f]',
+              // Sizing
+              'flex-1',
+            )}
+          >
+            {entry.target}
+          </span>
+        </div>
+
+        {/* Original */}
+        <div
+          className={cn(
+            // Layout
+            'flex',
+            'items-baseline',
+            // Spacing
+            'gap-4',
+          )}
+        >
+          <span
+            className={cn(
+              // Typography
+              'text-xs',
+              'font-medium',
+              'text-[#86868b]',
+              'uppercase',
+              'tracking-wide',
+              // Sizing
+              'w-20',
+              'shrink-0',
+            )}
+          >
+            Original
+          </span>
+          <span
+            className={cn(
+              // Typography
+              'text-sm',
+              'font-normal',
+              'text-[#86868b]',
+              // Sizing
+              'flex-1',
+              // Conditional
+              !isExpanded && 'truncate',
+            )}
+          >
+            {entry.originalPrompt}
+          </span>
+        </div>
+
+        {/* Enhanced */}
+        <div
+          className={cn(
+            // Layout
+            'flex',
+            'items-baseline',
+            // Spacing
+            'gap-4',
+          )}
+        >
+          <span
+            className={cn(
+              // Typography
+              'text-xs',
+              'font-medium',
+              'text-[#86868b]',
+              'uppercase',
+              'tracking-wide',
+              // Sizing
+              'w-20',
+              'shrink-0',
+            )}
+          >
+            Enhanced
+          </span>
+          <span
+            className={cn(
+              // Typography
+              'text-sm',
+              'font-normal',
+              'text-[#1d1d1f]',
+              'leading-relaxed',
+              // Sizing
+              'flex-1',
+              // Conditional
+              !isExpanded && 'truncate',
+            )}
+          >
+            {entry.enhancedPrompt}
+          </span>
         </div>
       </div>
     </article>
