@@ -113,7 +113,20 @@ All new components or APIs must be placed in the appropriate folder.
 - Ensure keyboard navigation works.
 - Maintain proper heading hierarchy.
 - Provide alt text for images.
-- Ensure sufficient color contrast.
+- Ensure sufficient color contrast (WCAG 2.1 AA: 4.5:1 for text, 3:1 for UI components).
+
+**Focus States:**
+
+- Always add visible focus indicators for keyboard users
+- Use `focus:outline-none` with `focus-visible:ring-2` pattern
+- Focus ring: `focus-visible:ring-2 focus-visible:ring-[#007aff] focus-visible:ring-offset-2`
+- Ensure focus ring has sufficient contrast against background
+
+**Touch Targets:**
+
+- Minimum touch target size: 44x44px (WCAG 2.5.5)
+- Use `min-h-[44px]` or `min-h-[50px]` for buttons and links
+- Add adequate spacing between interactive elements
 
 ### Icons and SVG
 
@@ -256,6 +269,7 @@ Buttons:
 - Hover: `hover:bg-[#0071e3]`
 - Active: `active:opacity-80 active:scale-[0.98]`
 - Min height: `min-h-[50px]` for primary CTAs, `min-h-[44px]` for secondary
+- Focus: `focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007aff] focus-visible:ring-offset-2`
 
 Border radius:
 
