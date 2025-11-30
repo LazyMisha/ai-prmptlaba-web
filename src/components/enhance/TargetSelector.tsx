@@ -1,9 +1,10 @@
 'use client'
 
 import type { EnhancementTarget } from '@/types/enhance'
-import { TOOL_CATEGORY_LIST } from '@/constants/tool-categories'
 import { cn } from '@/lib/utils'
-import ChevronIcon from '@/components/common/ChevronIcon'
+import SelectorIcon from '@/components/common/SelectorIcon'
+
+import { TOOL_CATEGORY_LIST } from '@/constants/tool-categories'
 
 export interface TargetSelectorProps {
   /** Currently selected enhancement target */
@@ -96,7 +97,6 @@ export default function TargetSelector({
           ))}
         </select>
 
-        {/* Custom dropdown arrow */}
         <div
           className={cn(
             // Position
@@ -110,7 +110,7 @@ export default function TargetSelector({
             'text-gray-400',
           )}
         >
-          <ChevronIcon
+          <SelectorIcon
             className={cn(
               // Sizing
               'w-5',
