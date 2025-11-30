@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import CloseIcon from '@/components/common/CloseIcon'
 import CheckIcon from '@/components/common/CheckIcon'
-import CopyIcon from '@/components/common/CopyIcon'
 import ChevronIcon from '@/components/common/ChevronIcon'
+import CopyButton from '@/components/common/CopyButton'
 
 export interface EnhancedResultProps {
   /** The enhanced prompt text */
@@ -30,16 +29,6 @@ export default function EnhancedResult({
   isLoading,
   className,
 }: EnhancedResultProps) {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = async () => {
-    if (enhanced) {
-      await navigator.clipboard.writeText(enhanced)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    }
-  }
-
   // Don't show previous results while loading
   if (isLoading) {
     return null
@@ -152,49 +141,7 @@ export default function EnhancedResult({
           <h3 className={cn('text-base', 'font-semibold', 'text-emerald-900')}>Enhanced Prompt</h3>
         </div>
 
-        <button
-          type="button"
-          onClick={handleCopy}
-          aria-label={copied ? 'Copied to clipboard' : 'Copy enhanced prompt to clipboard'}
-          className={cn(
-            // Sizing
-            'px-3',
-            'py-1.5',
-            // Typography
-            'text-sm',
-            'font-medium',
-            copied ? 'text-emerald-600' : 'text-gray-600',
-            // Background
-            copied ? 'bg-emerald-100' : 'bg-gray-100',
-            // Border
-            'rounded-lg',
-            // Transition
-            'transition-all',
-            'duration-200',
-            // Hover
-            !copied && 'hover:bg-gray-200',
-            !copied && 'hover:text-gray-900',
-            // Focus
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-blue-500/50',
-            'focus-visible:ring-offset-2',
-          )}
-        >
-          <span className="flex items-center gap-1.5">
-            {copied ? (
-              <>
-                <CheckIcon className="w-4 h-4" />
-                Copied
-              </>
-            ) : (
-              <>
-                <CopyIcon className="w-4 h-4" />
-                Copy
-              </>
-            )}
-          </span>
-        </button>
+        <CopyButton text={enhanced} variant="default" />
       </div>
 
       {/* Enhanced prompt content */}

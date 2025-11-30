@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import type { PromptHistoryEntry } from '@/types/history'
 import ChevronIcon from '@/components/common/ChevronIcon'
+import CopyButton from '@/components/common/CopyButton'
 
 interface HistoryItemProps {
   entry: PromptHistoryEntry
@@ -112,6 +113,16 @@ export default function HistoryItem({ entry, onDelete }: HistoryItemProps) {
             'sm:gap-3',
           )}
         >
+          <CopyButton
+            text={entry.enhancedPrompt}
+            variant="subtle"
+            label="Copy enhanced"
+            className={cn(
+              // Responsive label visibility
+              '[&>span]:hidden',
+              '[&>span]:sm:inline',
+            )}
+          />
           {onDelete && (
             <button
               type="button"

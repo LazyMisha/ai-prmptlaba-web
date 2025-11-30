@@ -1,6 +1,14 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import HistoryItem from '../HistoryItem'
 import type { PromptHistoryEntry } from '@/types/history'
+
+// Mock clipboard API
+const mockWriteText = jest.fn()
+Object.assign(navigator, {
+  clipboard: {
+    writeText: mockWriteText,
+  },
+})
 
 const mockEntry: PromptHistoryEntry = {
   id: 'test-id-123',
@@ -188,5 +196,89 @@ describe('HistoryItem', () => {
     const enhancedLabels = screen.getAllByText(/enhanced/i)
     expect(originalLabels.length).toBeGreaterThan(0)
     expect(enhancedLabels.length).toBeGreaterThan(0)
+  })
+
+  describe('Copy functionality', () => {
+    beforeEach(() => {
+      mockWriteText.mockClear()
+      mockWriteText.mockResolvedValue(undefined)
+    })
+
+    it('renders copy button', () => {
+      render(<HistoryItem entry={mockEntry} />)
+
+      const copyButton = screen.getByRole('button', {
+        name: /copy to clipboard/i,
+      })
+      expect(copyButton).toBeInTheDocument()
+    })
+
+    it('copies enhanced prompt to clipboard when copy button is clicked', async () => {
+      render(<HistoryItem entry={mockEntry} />)
+
+      const copyButton = screen.getByRole('button', {
+        name: /copy to clipboard/i,
+      })
+
+      await act(async () => {
+        fireEvent.click(copyButton)
+      })
+
+      expect(mockWriteText).toHaveBeenCalledTimes(1)
+      expect(mockWriteText).toHaveBeenCalledWith('Test enhanced prompt')
+    })
+
+    it('shows success state after copying', async () => {
+      render(<HistoryItem entry={mockEntry} />)
+
+      const copyButton = screen.getByRole('button', {
+        name: /copy to clipboard/i,
+      })
+
+      await act(async () => {
+        fireEvent.click(copyButton)
+      })
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /copied to clipboard/i })).toBeInTheDocument()
+      })
+    })
+
+    it('does not expand when copy button is clicked', async () => {
+      const { container } = render(<HistoryItem entry={mockEntry} />)
+
+      const copyButton = screen.getByRole('button', {
+        name: /copy to clipboard/i,
+      })
+
+      await act(async () => {
+        fireEvent.click(copyButton)
+      })
+
+      // Should remain collapsed
+      const article = container.querySelector('article')
+      expect(article).toHaveAttribute('aria-expanded', 'false')
+    })
+
+    it('handles clipboard error gracefully', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      mockWriteText.mockRejectedValue(new Error('Clipboard error'))
+
+      render(<HistoryItem entry={mockEntry} />)
+
+      const copyButton = screen.getByRole('button', {
+        name: /copy to clipboard/i,
+      })
+
+      await act(async () => {
+        fireEvent.click(copyButton)
+      })
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith('Failed to copy:', expect.any(Error))
+      })
+
+      consoleSpy.mockRestore()
+    })
   })
 })
