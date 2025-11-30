@@ -138,6 +138,7 @@ All new components or APIs must be placed in the appropriate folder.
 - Icon components should use `cn()` utility for className merging.
 - Provide configurable props when needed (e.g., `direction`, `strokeWidth`).
 - Add JSDoc comments documenting the icon's purpose and usage.
+- **Every new icon component MUST have a corresponding test file** in `__tests__/` folder.
 
 ### Security
 
@@ -717,6 +718,8 @@ When user asks to "create X" or "implement Y", always:
 2. **Plan** - Determine correct file locations and dependencies.
 3. **Implement** - Write production-ready code following all rules.
 4. **Test** - Create comprehensive tests for new functionality.
+   - **MANDATORY**: Every new component/utility file MUST have a corresponding test file.
+   - Test file must be created in the same task, not deferred.
 5. **Validate** - Run linting, type checking, and tests after changes.
 6. **Review** - Self-review code for quality, edge cases, and best practices.
 7. **Document** - Add JSDoc comments and update relevant docs.
