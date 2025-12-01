@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { PageContainer } from '@/components/common/PageContainer'
@@ -13,11 +14,31 @@ export const metadata: Metadata = {
 
 /**
  * Home page (Server Component)
- * Hero section with bold typography and clear messaging.
  */
 export default function HomePage() {
   return (
     <PageContainer centered>
+      <Image
+        src="/logo.webp"
+        alt="AI Prompt Laba - AI-powered prompt enhancement tool"
+        aria-hidden="true" // Screen readers skip (heading has brand name)
+        width={160}
+        height={160}
+        priority
+        className={cn(
+          // Sizing - responsive (larger for hero impact)
+          'w-28',
+          'h-28',
+          'md:w-36',
+          'md:h-36',
+          'lg:w-40',
+          'lg:h-40',
+          // Shadow for depth
+          'drop-shadow-lg',
+          // Rounded corners
+          'rounded-[22%]',
+        )}
+      />
       <PageHeading>AI Prompt Laba</PageHeading>
       <PageDescription>
         Your hub for smart prompt creation and management. Transform basic ideas into professional,
