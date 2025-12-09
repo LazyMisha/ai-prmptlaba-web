@@ -4,8 +4,8 @@ import { useRef, useEffect } from 'react'
 
 import { cn } from '@/lib/utils'
 import { COLLECTION_COLORS, DEFAULT_COLLECTION_COLOR } from '@/constants/saved-prompts'
-import CheckIcon from '@/components/common/CheckIcon'
-import ChevronIcon from '@/components/common/ChevronIcon'
+import CheckIcon from '@/components/icons/CheckIcon'
+import ChevronIcon from '@/components/icons/ChevronIcon'
 
 import type { CollectionColor } from '@/constants/saved-prompts'
 

@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import type { Collection } from '@/types/saved-prompts'
 import CreateCollectionButton from '@/components/common/CreateCollectionButton'
-import PencilIcon from '@/components/common/PencilIcon'
-import SelectorIcon from '@/components/common/SelectorIcon'
-import TrashIcon from '@/components/common/TrashIcon'
+import PencilIcon from '@/components/icons/PencilIcon'
+import SelectorIcon from '@/components/icons/SelectorIcon'
+import TrashIcon from '@/components/icons/TrashIcon'
 import ManageCollectionsSheet from './ManageCollectionsSheet'
 
 interface CollectionSidebarProps {

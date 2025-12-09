@@ -3,8 +3,8 @@
 import { cn } from '@/lib/utils'
 import type { Collection } from '@/types/saved-prompts'
 import MobileSheet from '@/components/common/MobileSheet'
-import PencilIcon from '@/components/common/PencilIcon'
-import TrashIcon from '@/components/common/TrashIcon'
+import PencilIcon from '@/components/icons/PencilIcon'
+import TrashIcon from '@/components/icons/TrashIcon'
 
 interface ManageCollectionsSheetProps {
   /** Whether the sheet is open */

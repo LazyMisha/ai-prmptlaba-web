@@ -2,7 +2,7 @@
 
 import type { EnhancementTarget } from '@/types/enhance'
 import { cn } from '@/lib/utils'
-import SelectorIcon from '@/components/common/SelectorIcon'
+import SelectorIcon from '@/components/icons/SelectorIcon'
 
 import { TOOL_CATEGORY_LIST } from '@/constants/tool-categories'
 

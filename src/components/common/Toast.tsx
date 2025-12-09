@@ -3,9 +3,9 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
-import CheckIcon from '@/components/common/CheckIcon'
-import CloseIcon from '@/components/common/CloseIcon'
-import InfoIcon from '@/components/common/InfoIcon'
+import CheckIcon from '@/components/icons/CheckIcon'
+import CloseIcon from '@/components/icons/CloseIcon'
+import InfoIcon from '@/components/icons/InfoIcon'
 
 export type ToastType = 'success' | 'error' | 'info'
 

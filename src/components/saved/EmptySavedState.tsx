@@ -3,7 +3,7 @@
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
-import BookmarkIcon from '@/components/common/BookmarkIcon'
+import BookmarkIcon from '@/components/icons/BookmarkIcon'
 
 /**
  * EmptySavedState displays a friendly empty state when no prompts are saved.

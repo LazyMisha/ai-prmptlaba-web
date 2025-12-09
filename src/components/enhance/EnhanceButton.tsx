@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import SpinnerIcon from '@/components/common/SpinnerIcon'
+import SpinnerIcon from '@/components/icons/SpinnerIcon'
 
 export interface EnhanceButtonProps {
   /** Callback fired when button is clicked */

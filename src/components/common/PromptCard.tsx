@@ -3,12 +3,12 @@
 import { useState } from 'react'
 
 import { cn } from '@/lib/utils'
-import CheckIcon from '@/components/common/CheckIcon'
-import ChevronIcon from '@/components/common/ChevronIcon'
-import CopyIcon from '@/components/common/CopyIcon'
-import FolderMoveIcon from '@/components/common/FolderMoveIcon'
+import CheckIcon from '@/components/icons/CheckIcon'
+import ChevronIcon from '@/components/icons/ChevronIcon'
+import CopyIcon from '@/components/icons/CopyIcon'
+import FolderMoveIcon from '@/components/icons/FolderMoveIcon'
 import IconTextButton from '@/components/common/IconTextButton'
-import TrashIcon from '@/components/common/TrashIcon'
+import TrashIcon from '@/components/icons/TrashIcon'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
 export interface PromptCardProps {

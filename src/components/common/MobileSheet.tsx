@@ -3,7 +3,7 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
-import CloseIcon from '@/components/common/CloseIcon'
+import CloseIcon from '@/components/icons/CloseIcon'
 
 interface MobileSheetProps {
   /** Whether the sheet is open */

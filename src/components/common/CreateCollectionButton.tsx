@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import FolderPlusIcon from '@/components/common/FolderPlusIcon'
+import FolderPlusIcon from '@/components/icons/FolderPlusIcon'
 
 /**
  * Props for the CreateCollectionButton component.

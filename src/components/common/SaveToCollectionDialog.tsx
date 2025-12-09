@@ -11,12 +11,12 @@ import {
   getOrCreateDefaultCollection,
 } from '@/lib/db/saved-prompts'
 import { showToast } from '@/components/common/Toast'
-import CheckIcon from '@/components/common/CheckIcon'
-import CloseIcon from '@/components/common/CloseIcon'
+import CheckIcon from '@/components/icons/CheckIcon'
+import CloseIcon from '@/components/icons/CloseIcon'
 import CreateCollectionButton from '@/components/common/CreateCollectionButton'
 import CreateCollectionForm from '@/components/common/CreateCollectionForm'
-import FolderIcon from '@/components/common/FolderIcon'
-import SpinnerIcon from '@/components/common/SpinnerIcon'
+import FolderIcon from '@/components/icons/FolderIcon'
+import SpinnerIcon from '@/components/icons/SpinnerIcon'
 import type { CollectionWithCount } from '@/types/saved-prompts'
 import type { CollectionColor } from '@/constants/saved-prompts'
 
