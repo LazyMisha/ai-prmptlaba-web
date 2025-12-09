@@ -79,6 +79,18 @@ All new components or APIs must be placed in the appropriate folder.
 - Implement proper loading and error states for all async operations.
 - Use Suspense boundaries for async components.
 
+**React Compiler (Automatic Memoization):**
+
+This project has React Compiler enabled, which automatically handles memoization. Therefore:
+
+- **DO NOT use `useCallback`** - React Compiler auto-memoizes functions
+- **DO NOT use `useMemo`** - React Compiler auto-memoizes computed values
+- **DO NOT use `React.memo()`** - React Compiler optimizes component re-renders automatically
+- Only use `useState`, `useEffect`, `useRef`, `useContext`, and other non-memoization hooks
+- If you need stable references for event listeners (e.g., `document.addEventListener`), use `useRef` to store mutable values that the listener needs to access
+
+**Exception:** When adding event listeners to `document` or `window` that need access to current state values, use a ref to track the current value (since the listener closure would otherwise capture stale values).
+
 ### Code Quality
 
 - Use named exports unless a file is a single-purpose default component.
