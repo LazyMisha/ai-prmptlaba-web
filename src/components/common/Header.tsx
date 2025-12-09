@@ -6,7 +6,6 @@ import NavLink from './NavLink'
 
 /**
  * Header component with frosted glass effect.
- * Features smooth backdrop blur and refined typography.
  */
 export default function Header() {
   return (
@@ -95,6 +94,9 @@ export default function Header() {
         >
           <NavLink href="/enhance" ariaLabel="Go to prompt enhancer page">
             Enhance
+          </NavLink>
+          <NavLink href="/saved" ariaLabel="Go to saved prompts page">
+            Saved
           </NavLink>
           <NavLink href="/history" ariaLabel="Go to prompt history page">
             History

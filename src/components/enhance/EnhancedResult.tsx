@@ -1,10 +1,15 @@
 'use client'
 
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import CloseIcon from '@/components/common/CloseIcon'
 import CheckIcon from '@/components/common/CheckIcon'
 import ChevronIcon from '@/components/common/ChevronIcon'
-import CopyButton from '@/components/common/CopyButton'
+import CopyIcon from '@/components/common/CopyIcon'
+import IconTextButton from '@/components/common/IconTextButton'
+import BookmarkIcon from '@/components/common/BookmarkIcon'
+import SaveToCollectionDialog from '@/components/common/SaveToCollectionDialog'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
 export interface EnhancedResultProps {
   /** The enhanced prompt text */
@@ -13,6 +18,8 @@ export interface EnhancedResultProps {
   error: string | null
   /** Original prompt for comparison */
   originalPrompt: string
+  /** The target tool category used for enhancement */
+  target: string
   /** Whether enhancement is in progress */
   isLoading?: boolean
   /** Additional CSS classes */
@@ -26,9 +33,23 @@ export default function EnhancedResult({
   enhanced,
   error,
   originalPrompt,
+  target,
   isLoading,
   className,
 }: EnhancedResultProps) {
+  const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
+  // Store the prompt that was saved, so we can check if current prompt matches
+  const [savedPrompt, setSavedPrompt] = useState<string | null>(null)
+  const { copied, copy } = useCopyToClipboard()
+
+  // Check if the current enhanced prompt has been saved
+  const isCurrentlySaved = savedPrompt !== null && savedPrompt === enhanced
+
+  // Update saved prompt when saving
+  const handleSaved = () => {
+    setSavedPrompt(enhanced)
+  }
+
   // Don't show previous results while loading
   if (isLoading) {
     return null
@@ -117,8 +138,11 @@ export default function EnhancedResult({
           'flex',
           'justify-between',
           'items-center',
-          'px-5',
-          'py-4',
+          'gap-3',
+          'px-4',
+          'sm:px-5',
+          'py-3',
+          'sm:py-4',
           'border-b',
           'border-emerald-100',
         )}
@@ -138,11 +162,49 @@ export default function EnhancedResult({
           >
             <CheckIcon className="w-3.5 h-3.5 text-emerald-600" strokeWidth={2.5} />
           </div>
-          <h3 className={cn('text-base', 'font-semibold', 'text-emerald-900')}>Enhanced Prompt</h3>
+          <h3
+            className={cn(
+              'text-sm',
+              'sm:text-base',
+              'font-semibold',
+              'text-emerald-900',
+              'whitespace-nowrap',
+            )}
+          >
+            Enhanced Prompt
+          </h3>
         </div>
 
-        <CopyButton text={enhanced} variant="default" />
+        <div className={cn('flex', 'items-center', 'gap-2', 'shrink-0')}>
+          {/* Save button */}
+          <IconTextButton
+            icon={<BookmarkIcon className="w-4 h-4" filled={isCurrentlySaved} />}
+            label={isCurrentlySaved ? 'Saved' : 'Save'}
+            onClick={() => !isCurrentlySaved && setIsSaveDialogOpen(true)}
+            disabled={isCurrentlySaved}
+            variant={isCurrentlySaved ? 'primary' : 'default'}
+            ariaLabel={isCurrentlySaved ? 'Prompt saved' : 'Save prompt to collection'}
+          />
+
+          <IconTextButton
+            icon={copied ? <CheckIcon className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
+            label={copied ? 'Copied' : 'Copy'}
+            onClick={() => copy(enhanced)}
+            variant={copied ? 'success' : 'default'}
+            ariaLabel={copied ? 'Copied to clipboard' : 'Copy to clipboard'}
+          />
+        </div>
       </div>
+
+      {/* Save to Collection Dialog */}
+      <SaveToCollectionDialog
+        isOpen={isSaveDialogOpen}
+        onClose={() => setIsSaveDialogOpen(false)}
+        onSaved={handleSaved}
+        originalPrompt={originalPrompt}
+        enhancedPrompt={enhanced}
+        target={target}
+      />
 
       {/* Enhanced prompt content */}
       <div className="p-5">

@@ -194,6 +194,38 @@ export default function MobileMenu() {
             Enhance
           </NavLink>
           <NavLink
+            href="/saved"
+            onClick={closeMenu}
+            ariaLabel="Go to saved prompts page"
+            role="menuitem"
+            className={cn(
+              // Display
+              'block',
+              'w-full',
+              // Spacing
+              'px-4',
+              'py-3',
+              // Typography
+              'text-[15px]',
+              'font-normal',
+              // Reset hover from NavLink
+              'hover:opacity-100',
+              // Hover background
+              'hover:bg-black/[0.04]',
+              // Active state
+              'active:bg-black/[0.08]',
+              // Rounded
+              'rounded-none',
+              // Focus styles
+              'focus:bg-black/[0.04]',
+              // Transition
+              'transition-colors',
+              'duration-150',
+            )}
+          >
+            Saved
+          </NavLink>
+          <NavLink
             href="/history"
             onClick={closeMenu}
             ariaLabel="Go to prompt history page"

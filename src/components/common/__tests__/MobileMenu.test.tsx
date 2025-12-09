@@ -132,15 +132,15 @@ describe('MobileMenu', () => {
     expect(historyLink).toHaveAttribute('href', '/history')
   })
 
-  it('renders both menu items when open', () => {
+  it('renders all menu items when open', () => {
     render(<MobileMenu />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Open menu
     fireEvent.click(menuButton)
 
-    // Check both links are present
+    // Check all links are present (Enhance, Saved, History)
     const menuItems = screen.getAllByRole('menuitem')
-    expect(menuItems).toHaveLength(2)
+    expect(menuItems).toHaveLength(3)
   })
 })

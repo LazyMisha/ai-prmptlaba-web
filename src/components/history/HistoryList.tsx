@@ -9,7 +9,7 @@ import {
   clearAllPromptHistory,
 } from '@/lib/db/prompt-history'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
-import HistoryItem from './HistoryItem'
+import PromptCard from '@/components/common/PromptCard'
 import EmptyHistoryState from './EmptyHistoryState'
 
 /**
@@ -224,7 +224,15 @@ export default function HistoryList() {
         )}
       >
         {entries.map((entry) => (
-          <HistoryItem key={entry.id} entry={entry} onDelete={handleDelete} />
+          <PromptCard
+            key={entry.id}
+            id={entry.id}
+            originalPrompt={entry.originalPrompt}
+            enhancedPrompt={entry.enhancedPrompt}
+            target={entry.target}
+            timestamp={entry.timestamp}
+            onDelete={handleDelete}
+          />
         ))}
       </div>
 

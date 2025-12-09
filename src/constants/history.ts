@@ -2,12 +2,8 @@
  * IndexedDB database configuration for prompt history.
  */
 export const PROMPT_HISTORY_DB = {
-  /** Name of the IndexedDB database */
-  DB_NAME: 'PromptLabaDB',
   /** Name of the object store for prompt history */
   STORE_NAME: 'promptHistory',
-  /** Current database version */
-  VERSION: 1,
 } as const
 
 /**

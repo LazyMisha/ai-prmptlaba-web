@@ -1,5 +1,6 @@
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
+import { ToastContainer } from '@/components/common/Toast'
 import { cn } from '@/lib/utils'
 import './globals.css'
 
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <ToastContainer />
       </body>
     </html>
   )

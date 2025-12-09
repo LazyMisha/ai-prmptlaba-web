@@ -167,6 +167,7 @@ export default function EnhanceForm() {
           enhanced={enhanced}
           error={error && enhanced ? error : null}
           originalPrompt={prompt}
+          target={TOOL_CATEGORY_NAMES[target]}
           isLoading={isLoading}
         />
       </div>

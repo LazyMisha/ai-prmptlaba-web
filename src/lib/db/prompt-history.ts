@@ -1,4 +1,6 @@
+import { DB_NAME, DB_VERSION } from '@/constants/db'
 import { PROMPT_HISTORY_DB, MAX_HISTORY_ITEMS } from '@/constants/history'
+import { SAVED_PROMPTS_DB } from '@/constants/saved-prompts'
 import type { PromptHistoryEntry, SavePromptHistoryRequest } from '@/types/history'
 
 /**
@@ -12,7 +14,7 @@ function openDatabase(): Promise<IDBDatabase> {
       return
     }
 
-    const request = indexedDB.open(PROMPT_HISTORY_DB.DB_NAME, PROMPT_HISTORY_DB.VERSION)
+    const request = indexedDB.open(DB_NAME, DB_VERSION)
 
     request.onerror = () => {
       reject(new Error('Failed to open IndexedDB database'))
@@ -24,14 +26,38 @@ function openDatabase(): Promise<IDBDatabase> {
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result
+      const oldVersion = event.oldVersion
 
-      // Create object store if it doesn't exist
+      // Create prompt history store if it doesn't exist (v1)
       if (!db.objectStoreNames.contains(PROMPT_HISTORY_DB.STORE_NAME)) {
         const objectStore = db.createObjectStore(PROMPT_HISTORY_DB.STORE_NAME, {
           keyPath: 'id',
         })
         // Create index for sorting by timestamp
         objectStore.createIndex('timestamp', 'timestamp', { unique: false })
+      }
+
+      // Create v2/v3 stores for collections and saved prompts
+      if (oldVersion < 3) {
+        // Collections store
+        if (!db.objectStoreNames.contains(SAVED_PROMPTS_DB.COLLECTIONS_STORE)) {
+          const collectionsStore = db.createObjectStore(SAVED_PROMPTS_DB.COLLECTIONS_STORE, {
+            keyPath: 'id',
+          })
+          collectionsStore.createIndex('sortOrder', 'sortOrder', { unique: false })
+          collectionsStore.createIndex('isDefault', 'isDefault', { unique: false })
+          collectionsStore.createIndex('createdAt', 'createdAt', { unique: false })
+        }
+
+        // Saved prompts store
+        if (!db.objectStoreNames.contains(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)) {
+          const savedPromptsStore = db.createObjectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE, {
+            keyPath: 'id',
+          })
+          savedPromptsStore.createIndex('collectionId', 'collectionId', { unique: false })
+          savedPromptsStore.createIndex('target', 'target', { unique: false })
+          savedPromptsStore.createIndex('createdAt', 'createdAt', { unique: false })
+        }
       }
     }
   })

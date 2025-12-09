@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
+import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
 
 /**
@@ -23,12 +24,28 @@ interface ConfirmDialogProps {
   cancelText?: string
   /** Whether the action is destructive (shows red confirm button) */
   isDestructive?: boolean
+  /** Z-index for the dialog (default: 100) */
+  zIndex?: number
+}
+
+// For SSR-safe portal rendering
+function subscribeToNothing() {
+  return () => {}
+}
+
+function getIsMounted() {
+  return true
+}
+
+function getServerSnapshot() {
+  return false
 }
 
 /**
  * A user-friendly confirmation dialog component.
  * Features frosted glass effect, smooth animations, keyboard support,
  * and proper accessibility attributes.
+ * Uses portal for proper stacking context.
  */
 export default function ConfirmDialog({
   isOpen,
@@ -39,39 +56,32 @@ export default function ConfirmDialog({
   confirmText = 'Confirm',
   cancelText = 'Cancel',
   isDestructive = false,
+  zIndex = 100,
 }: ConfirmDialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
-  const confirmButtonRef = useRef<HTMLButtonElement>(null)
   const cancelButtonRef = useRef<HTMLButtonElement>(null)
-
-  // Handle escape key to close dialog
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose()
-      }
-    },
-    [onClose],
-  )
 
   // Focus management and keyboard listener
   useEffect(() => {
-    if (isOpen) {
-      // Focus the cancel button when dialog opens (safer default)
-      cancelButtonRef.current?.focus()
+    if (!isOpen) return
 
-      // Add escape key listener
-      document.addEventListener('keydown', handleKeyDown)
+    // Focus the cancel button when dialog opens (safer default)
+    cancelButtonRef.current?.focus()
 
-      // Prevent body scroll when dialog is open
-      document.body.style.overflow = 'hidden'
-
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown)
-        document.body.style.overflow = ''
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
       }
     }
-  }, [isOpen, handleKeyDown])
+
+    document.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [isOpen, onClose])
 
   // Handle backdrop click
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -80,17 +90,19 @@ export default function ConfirmDialog({
     }
   }
 
-  if (!isOpen) {
+  // SSR-safe portal
+  const isMounted = useSyncExternalStore(subscribeToNothing, getIsMounted, getServerSnapshot)
+
+  if (!isOpen || !isMounted) {
     return null
   }
 
-  return (
+  const dialogContent = (
     <div
       className={cn(
         // Position
         'fixed',
         'inset-0',
-        'z-50',
         // Layout
         'flex',
         'items-center',
@@ -98,7 +110,7 @@ export default function ConfirmDialog({
         // Spacing
         'p-4',
         // Background overlay
-        'bg-black/30',
+        'bg-black/50',
         'backdrop-blur-sm',
         // Animation
         'animate-in',
@@ -107,6 +119,7 @@ export default function ConfirmDialog({
       )}
       onClick={handleBackdropClick}
       role="presentation"
+      style={{ zIndex }}
     >
       <div
         ref={dialogRef}
@@ -195,7 +208,6 @@ export default function ConfirmDialog({
           )}
         >
           <button
-            ref={confirmButtonRef}
             type="button"
             onClick={onConfirm}
             className={cn(
@@ -259,4 +271,6 @@ export default function ConfirmDialog({
       </div>
     </div>
   )
+
+  return createPortal(dialogContent, document.body)
 }
