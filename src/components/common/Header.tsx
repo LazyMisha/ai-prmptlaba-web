@@ -1,13 +1,27 @@
 import Link from 'next/link'
 import { APP_NAME } from '@/constants/app'
 import { cn } from '@/lib/utils'
+import { HeaderLogo } from './HeaderLogo'
 import MobileMenu from './MobileMenu'
 import NavLink from './NavLink'
 
 /**
- * Header component with frosted glass effect.
+ * Props for the Header component.
  */
-export default function Header() {
+interface HeaderProps {
+  /** Whether to show logo instead of text brand name */
+  showLogo?: boolean
+  /** Page title to display in the center of the header */
+  pageTitle?: string
+}
+
+/**
+ * Header component with frosted glass effect.
+ * Supports two modes:
+ * - Default: Shows brand name text on left, navigation on right (for home page)
+ * - Inner page: Shows logo on left, page title in center, navigation on right
+ */
+export default function Header({ showLogo = false, pageTitle }: HeaderProps) {
   return (
     <header
       className={cn(
@@ -50,34 +64,66 @@ export default function Header() {
         role="navigation"
         aria-label="Main navigation"
       >
-        <Link
-          className={cn(
-            // Typography - brand styling
-            'text-xl',
-            'font-semibold',
-            'tracking-tight',
-            'text-[#1d1d1f]',
-            // Rendering
-            'antialiased',
-            // Smooth hover transition
-            'transition-opacity',
-            'duration-200',
-            'hover:opacity-60',
-            // Focus styles
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
-            'focus-visible:ring-offset-2',
-            'rounded-lg',
-            'px-2',
-            'py-1',
-            '-ml-2',
-          )}
-          href="/"
-          aria-label="Go to home page"
-        >
-          {APP_NAME}
-        </Link>
+        {/* Left side - Logo or Brand name */}
+        {showLogo ? (
+          <HeaderLogo />
+        ) : (
+          <Link
+            className={cn(
+              // Typography - brand styling
+              'text-xl',
+              'font-semibold',
+              'tracking-tight',
+              'text-[#1d1d1f]',
+              // Rendering
+              'antialiased',
+              // Smooth hover transition
+              'transition-opacity',
+              'duration-200',
+              'hover:opacity-60',
+              // Focus styles
+              'focus:outline-none',
+              'focus-visible:ring-2',
+              'focus-visible:ring-[#007aff]',
+              'focus-visible:ring-offset-2',
+              'rounded-lg',
+              'px-2',
+              'py-1',
+              '-ml-2',
+            )}
+            href="/"
+            aria-label="Go to home page"
+          >
+            {APP_NAME}
+          </Link>
+        )}
+
+        {/* Center - Page Title (only on inner pages) */}
+        {pageTitle && (
+          <h1
+            className={cn(
+              // Absolute positioning to center regardless of siblings
+              'absolute',
+              'left-1/2',
+              '-translate-x-1/2',
+              // Typography
+              'text-lg',
+              'md:text-xl',
+              'font-semibold',
+              'tracking-tight',
+              'text-[#1d1d1f]',
+              // Rendering
+              'antialiased',
+              // Prevent text wrapping
+              'whitespace-nowrap',
+              // Hide on very small screens if needed
+              'max-w-[50%]',
+              'truncate',
+            )}
+          >
+            {pageTitle}
+          </h1>
+        )}
 
         {/* Desktop Navigation - Hidden on mobile */}
         <div

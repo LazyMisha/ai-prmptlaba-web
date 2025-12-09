@@ -22,15 +22,14 @@ export function PageContainer({ children, className, centered = false }: PageCon
         'max-w-4xl',
         // Center horizontally
         'mx-auto',
-        // Generous padding - spacious layout
+        // Consistent padding
         'px-6',
-        'py-12',
+        'py-6',
         'md:px-10',
-        'md:py-20',
-        'lg:py-24',
-        // Vertical spacing between children
-        'space-y-8',
-        'md:space-y-12',
+        'md:py-8',
+        // Consistent vertical spacing between children
+        'space-y-6',
+        'md:space-y-8',
         // Optional centering
         centered && [
           'flex',

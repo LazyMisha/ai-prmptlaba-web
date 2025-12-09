@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import EnhanceForm from '@/components/enhance/EnhanceForm'
 import { PageContainer } from '@/components/common/PageContainer'
-import { PageHeading } from '@/components/common/PageHeading'
 import { PageDescription } from '@/components/common/PageDescription'
 
 export const metadata: Metadata = {
@@ -11,11 +10,11 @@ export const metadata: Metadata = {
 
 /**
  * Prompt enhancement page (Server Component)
+ * Page title is displayed in the Header via layout.
  */
 export default function EnhancePage() {
   return (
     <PageContainer>
-      <PageHeading>Prompt Enhancer</PageHeading>
       <PageDescription>
         Transform your basic prompts into professional, effective AI instructions optimized for your
         target context.

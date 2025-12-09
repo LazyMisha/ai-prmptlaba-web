@@ -1,5 +1,3 @@
-import Header from '@/components/common/Header'
-import Footer from '@/components/common/Footer'
 import { ToastContainer } from '@/components/common/Toast'
 import { cn } from '@/lib/utils'
 import './globals.css'
@@ -14,6 +12,7 @@ export const metadata: Metadata = {
 /**
  * Root layout with clean structure.
  * Features smooth transitions and elegant spacing.
+ * Header is rendered in child layouts to support different modes.
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -31,21 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           'antialiased',
         )}
       >
-        <Header />
-        <main
-          className={cn(
-            // Full width
-            'w-full',
-            // Grow to fill available space
-            'flex-grow',
-            // Smooth content transitions
-            'transition-opacity',
-            'duration-300',
-          )}
-        >
-          {children}
-        </main>
-        <Footer />
+        {children}
         <ToastContainer />
       </body>
     </html>

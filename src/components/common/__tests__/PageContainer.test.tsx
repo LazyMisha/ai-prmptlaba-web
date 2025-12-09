@@ -25,8 +25,8 @@ describe('PageContainer', () => {
     expect(containerDiv).toHaveClass('max-w-4xl')
     expect(containerDiv).toHaveClass('mx-auto')
     expect(containerDiv).toHaveClass('px-6')
-    expect(containerDiv).toHaveClass('py-12')
-    expect(containerDiv).toHaveClass('space-y-8')
+    expect(containerDiv).toHaveClass('py-6')
+    expect(containerDiv).toHaveClass('space-y-6')
   })
 
   it('applies additional className when provided', () => {
