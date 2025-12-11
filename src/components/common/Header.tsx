@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { APP_NAME } from '@/constants/app'
 import { cn } from '@/lib/utils'
+import type { Locale } from '@/i18n/locales'
 import { HeaderLogo } from './HeaderLogo'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import MobileMenu from './MobileMenu'
 import NavLink from './NavLink'
 
@@ -13,6 +15,8 @@ interface HeaderProps {
   showLogo?: boolean
   /** Page title to display in the center of the header */
   pageTitle?: string
+  /** Current locale for language switcher */
+  locale?: Locale
 }
 
 /**
@@ -21,7 +25,7 @@ interface HeaderProps {
  * - Default: Shows brand name text on left, navigation on right (for home page)
  * - Inner page: Shows logo on left, page title in center, navigation on right
  */
-export default function Header({ showLogo = false, pageTitle }: HeaderProps) {
+export default function Header({ showLogo = false, pageTitle, locale = 'en' }: HeaderProps) {
   return (
     <header
       className={cn(
@@ -66,7 +70,7 @@ export default function Header({ showLogo = false, pageTitle }: HeaderProps) {
       >
         {/* Left side - Logo or Brand name */}
         {showLogo ? (
-          <HeaderLogo />
+          <HeaderLogo locale={locale} />
         ) : (
           <Link
             className={cn(
@@ -91,7 +95,7 @@ export default function Header({ showLogo = false, pageTitle }: HeaderProps) {
               'py-1',
               '-ml-2',
             )}
-            href="/"
+            href={`/${locale}`}
             aria-label="Go to home page"
           >
             {APP_NAME}
@@ -125,32 +129,46 @@ export default function Header({ showLogo = false, pageTitle }: HeaderProps) {
           </h1>
         )}
 
-        {/* Desktop Navigation - Hidden on mobile */}
+        {/* Right side - Navigation and Language Switcher */}
         <div
           className={cn(
-            // Hidden on mobile
-            'hidden',
-            // Visible on md and up
-            'md:flex',
-            // Gap between items
-            'gap-8',
-            // Center items
+            // Flexbox layout
+            'flex',
             'items-center',
+            'gap-4',
+            'md:gap-8',
           )}
         >
-          <NavLink href="/enhance" ariaLabel="Go to prompt enhancer page">
-            Enhance
-          </NavLink>
-          <NavLink href="/saved" ariaLabel="Go to saved prompts page">
-            Saved
-          </NavLink>
-          <NavLink href="/history" ariaLabel="Go to prompt history page">
-            History
-          </NavLink>
-        </div>
+          {/* Desktop Navigation - Hidden on mobile and tablet */}
+          <div
+            className={cn(
+              // Hidden on mobile and tablet
+              'hidden',
+              // Visible on lg and up
+              'lg:flex',
+              // Gap between items
+              'gap-8',
+              // Center items
+              'items-center',
+            )}
+          >
+            <NavLink href={`/${locale}/enhance`} ariaLabel="Go to prompt enhancer page">
+              Enhance
+            </NavLink>
+            <NavLink href={`/${locale}/saved`} ariaLabel="Go to saved prompts page">
+              Saved
+            </NavLink>
+            <NavLink href={`/${locale}/history`} ariaLabel="Go to prompt history page">
+              History
+            </NavLink>
+          </div>
 
-        {/* Mobile Menu - Hidden on desktop */}
-        <MobileMenu />
+          {/* Language Switcher - Desktop only */}
+          <LanguageSwitcher currentLocale={locale} className="hidden lg:inline-flex" />
+
+          {/* Mobile Menu - Hidden on desktop */}
+          <MobileMenu locale={locale} />
+        </div>
       </nav>
     </header>
   )

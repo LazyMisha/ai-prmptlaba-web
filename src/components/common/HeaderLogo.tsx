@@ -1,16 +1,25 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import type { Locale } from '@/i18n/locales'
+
+/**
+ * Props for the HeaderLogo component.
+ */
+interface HeaderLogoProps {
+  /** Current locale for the home link */
+  locale: Locale
+}
 
 /**
  * Header logo component that links to home page.
  * Displays the app logo spanning the full height of the header.
  * Uses negative margins to extend beyond header padding.
  */
-export function HeaderLogo() {
+export function HeaderLogo({ locale }: HeaderLogoProps) {
   return (
     <Link
-      href="/"
+      href={`/${locale}`}
       aria-label="Go to home page"
       className={cn(
         // Negative margins to extend to full header height

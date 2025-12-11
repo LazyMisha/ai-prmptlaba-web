@@ -2,13 +2,23 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
+import type { Locale } from '@/i18n/locales'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import NavLink from './NavLink'
+
+/**
+ * Props for the MobileMenu component.
+ */
+interface MobileMenuProps {
+  /** Current locale for navigation links */
+  locale: Locale
+}
 
 /**
  * Mobile menu component with clean dropdown.
  * Features smooth animations and refined interaction patterns.
  */
-export default function MobileMenu() {
+export default function MobileMenu({ locale }: MobileMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -42,7 +52,7 @@ export default function MobileMenu() {
   }, [isMenuOpen])
 
   return (
-    <div className={cn('relative', 'md:hidden')}>
+    <div className={cn('relative', 'lg:hidden')}>
       {/* Menu Button - minimal design */}
       <button
         ref={buttonRef}
@@ -162,7 +172,7 @@ export default function MobileMenu() {
           role="menu"
         >
           <NavLink
-            href="/enhance"
+            href={`/${locale}/enhance`}
             onClick={closeMenu}
             ariaLabel="Go to prompt enhancer page"
             role="menuitem"
@@ -194,7 +204,7 @@ export default function MobileMenu() {
             Enhance
           </NavLink>
           <NavLink
-            href="/saved"
+            href={`/${locale}/saved`}
             onClick={closeMenu}
             ariaLabel="Go to saved prompts page"
             role="menuitem"
@@ -226,7 +236,7 @@ export default function MobileMenu() {
             Saved
           </NavLink>
           <NavLink
-            href="/history"
+            href={`/${locale}/history`}
             onClick={closeMenu}
             ariaLabel="Go to prompt history page"
             role="menuitem"
@@ -257,6 +267,14 @@ export default function MobileMenu() {
           >
             History
           </NavLink>
+
+          {/* Divider */}
+          <div className={cn('my-2', 'mx-4', 'h-px', 'bg-black/[0.08]')} role="separator" />
+
+          {/* Language Switcher */}
+          <div className={cn('px-4', 'py-2')}>
+            <LanguageSwitcher currentLocale={locale} />
+          </div>
         </div>
       )}
     </div>

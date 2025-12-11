@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { PageContainer } from '@/components/common/PageContainer'
 import { PageHeading } from '@/components/common/PageHeading'
 import { PageDescription } from '@/components/common/PageDescription'
+import { getDictionary } from '@/i18n/dictionaries'
+import { hasLocale, type Locale } from '@/i18n/locales'
 
 export const metadata: Metadata = {
   title: 'AI Prompt Laba | Smart Prompt Creation & Management',
@@ -13,15 +16,32 @@ export const metadata: Metadata = {
 }
 
 /**
- * Home page (Server Component)
+ * Props for the home page.
  */
-export default function HomePage() {
+interface HomePageProps {
+  params: Promise<{ lang: string }>
+}
+
+/**
+ * Home page (Server Component)
+ * Displays translated content based on the current locale.
+ */
+export default async function HomePage({ params }: HomePageProps) {
+  const { lang } = await params
+
+  if (!hasLocale(lang)) {
+    notFound()
+  }
+
+  const locale = lang as Locale
+  const dict = await getDictionary(locale)
+
   return (
     <PageContainer centered>
       <Image
         src="/logo.webp"
         alt="AI Prompt Laba - AI-powered prompt enhancement tool"
-        aria-hidden="true" // Screen readers skip (heading has brand name)
+        aria-hidden="true"
         width={160}
         height={160}
         priority
@@ -40,13 +60,10 @@ export default function HomePage() {
         )}
       />
       <PageHeading>AI Prompt Laba</PageHeading>
-      <PageDescription>
-        Your hub for smart prompt creation and management. Transform basic ideas into professional,
-        effective AI instructions with ease.
-      </PageDescription>
+      <PageDescription>{dict.home.description}</PageDescription>
 
       <Link
-        href="/enhance"
+        href={`/${locale}/enhance`}
         className={cn(
           // Layout
           'inline-flex',

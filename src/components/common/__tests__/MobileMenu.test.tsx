@@ -3,13 +3,13 @@ import MobileMenu from '../MobileMenu'
 
 describe('MobileMenu', () => {
   it('renders menu button', () => {
-    render(<MobileMenu />)
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
     expect(menuButton).toBeInTheDocument()
   })
 
   it('opens menu when button is clicked', () => {
-    render(<MobileMenu />)
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Menu should not be visible initially
@@ -23,7 +23,7 @@ describe('MobileMenu', () => {
   })
 
   it('closes menu when menu item is clicked', () => {
-    render(<MobileMenu />)
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Open menu
@@ -40,7 +40,7 @@ describe('MobileMenu', () => {
   })
 
   it('closes menu when clicking outside', () => {
-    render(<MobileMenu />)
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Open menu
@@ -55,7 +55,7 @@ describe('MobileMenu', () => {
   })
 
   it('does not close menu when clicking inside the menu', () => {
-    render(<MobileMenu />)
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Open menu
@@ -71,7 +71,7 @@ describe('MobileMenu', () => {
   })
 
   it('toggles menu button aria-label when opened and closed', () => {
-    render(<MobileMenu />)
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Initial state
@@ -87,7 +87,7 @@ describe('MobileMenu', () => {
   })
 
   it('sets correct aria-expanded attribute on menu button', () => {
-    render(<MobileMenu />)
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Initial state
@@ -102,8 +102,8 @@ describe('MobileMenu', () => {
     expect(menuButton).toHaveAttribute('aria-expanded', 'false')
   })
 
-  it('renders Enhance Prompt link in menu', () => {
-    render(<MobileMenu />)
+  it('renders Enhance Prompt link in menu with locale', () => {
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Open menu
@@ -114,11 +114,11 @@ describe('MobileMenu', () => {
       name: /go to prompt enhancer page/i,
     })
     expect(enhanceLink).toBeInTheDocument()
-    expect(enhanceLink).toHaveAttribute('href', '/enhance')
+    expect(enhanceLink).toHaveAttribute('href', '/en/enhance')
   })
 
-  it('renders Recent Prompts link in menu', () => {
-    render(<MobileMenu />)
+  it('renders Recent Prompts link in menu with locale', () => {
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Open menu
@@ -129,11 +129,11 @@ describe('MobileMenu', () => {
       name: /go to prompt history page/i,
     })
     expect(historyLink).toBeInTheDocument()
-    expect(historyLink).toHaveAttribute('href', '/history')
+    expect(historyLink).toHaveAttribute('href', '/en/history')
   })
 
   it('renders all menu items when open', () => {
-    render(<MobileMenu />)
+    render(<MobileMenu locale="en" />)
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Open menu
@@ -142,5 +142,19 @@ describe('MobileMenu', () => {
     // Check all links are present (Enhance, Saved, History)
     const menuItems = screen.getAllByRole('menuitem')
     expect(menuItems).toHaveLength(3)
+  })
+
+  it('renders links with Ukrainian locale', () => {
+    render(<MobileMenu locale="uk" />)
+    const menuButton = screen.getByRole('button', { name: /open menu/i })
+
+    // Open menu
+    fireEvent.click(menuButton)
+
+    // Check for link with Ukrainian locale
+    const enhanceLink = screen.getByRole('menuitem', {
+      name: /go to prompt enhancer page/i,
+    })
+    expect(enhanceLink).toHaveAttribute('href', '/uk/enhance')
   })
 })

@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 /**
  * Root layout with clean structure.
  * Features smooth transitions and elegant spacing.
- * Header is rendered in child layouts to support different modes.
+ * Language-specific layouts handle Header rendering.
  */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
         className={cn(
           // Flexbox column layout

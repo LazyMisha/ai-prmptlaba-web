@@ -1,6 +1,7 @@
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
 import { cn } from '@/lib/utils'
+import type { Locale } from '@/i18n/locales'
 
 /**
  * Props for the PageLayout component.
@@ -12,16 +13,18 @@ interface PageLayoutProps {
   showLogo?: boolean
   /** Page title to display in header center */
   pageTitle?: string
+  /** Current locale for navigation */
+  locale: Locale
 }
 
 /**
  * Shared page layout component with Header and Footer.
  * Used by route group layouts to provide consistent structure.
  */
-export function PageLayout({ children, showLogo = false, pageTitle }: PageLayoutProps) {
+export function PageLayout({ children, showLogo = false, pageTitle, locale }: PageLayoutProps) {
   return (
     <>
-      <Header showLogo={showLogo} pageTitle={pageTitle} />
+      <Header showLogo={showLogo} pageTitle={pageTitle} locale={locale} />
       <main
         className={cn(
           // Full width
