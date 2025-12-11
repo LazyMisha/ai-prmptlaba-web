@@ -32,32 +32,16 @@ The project structure is fully established and must not be recreated. Copilot mu
 
 ## 3. Project Structure (must always be respected)
 
-.github/ # Copilot and GitHub configurations
-.husky/ # Git hooks for linting and tests
-├── pre-commit # Run linting and tests before each commit
-src/
-├── app/ # Next.js app router pages
-│ ├── layout.tsx # Root layout
-│ ├── page.tsx # Home page
-│ ├── globals.css # Global styles with Tailwind imports
-│ ├── error.tsx # Error boundary
-│ ├── loading.tsx # Loading UI
-│ ├── not-found.tsx # 404 page
-│ ├── api/ # API routes
-├── components/ # React components
-│ ├── common/ # Shared components and reusable icons (e.g., ChevronIcon.tsx, CloseIcon.tsx)
-├── lib/ # Utility functions
-│ ├── utils.ts # cn() utility for className merging
-│ ├── utils/ # General utilities
-│ ├── api/ # API utilities
-├── types/ # TypeScript type definitions
-├── constants/ # App-wide constants
-└── hooks/ # Custom React hooks (not existing yet)
-└── i18n/ # Internationalization (not existing yet)
-├── .env.example # Environment variable template
-├── .env.local # Local environment variables (not committed)
+**IMPORTANT**: Before implementing any feature, always check the `README.md` file for the current project structure. The README contains the authoritative, up-to-date project structure that must be followed.
 
-All new components or APIs must be placed in the appropriate folder.
+Key principles:
+
+- All new components or APIs must be placed in the appropriate folder as defined in README
+- Check existing patterns in similar files before creating new ones
+- Icons go in `src/components/icons/`
+- Shared UI components go in `src/components/common/`
+- Feature-specific components go in `src/components/<feature>/`
+- All user-facing strings must be extracted to translation files in `src/i18n/dictionaries/`
 
 ## 4. Coding Rules
 
@@ -422,11 +406,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ data: result }, { status: 201 })
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: 'Validation failed', details: err.errors }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Validation failed', details: err.errors },
+        { status: 400 },
+      )
     }
     console.error('Enhance API error:', err)
 
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 },
+    )
   }
 }
 ```
@@ -726,15 +716,16 @@ If Copilot determines refactoring is beneficial, it must:
 
 When user asks to "create X" or "implement Y", always:
 
-1. **Analyze** - Review project structure and existing patterns.
-2. **Plan** - Determine correct file locations and dependencies.
-3. **Implement** - Write production-ready code following all rules.
-4. **Test** - Create comprehensive tests for new functionality.
+1. **Check README** - Read `README.md` Project Structure section to understand current file organization.
+2. **Analyze** - Review existing patterns in similar files.
+3. **Plan** - Determine correct file locations and dependencies.
+4. **Implement** - Write production-ready code following all rules.
+5. **Test** - Create comprehensive tests for new functionality.
    - **MANDATORY**: Every new component/utility file MUST have a corresponding test file.
    - Test file must be created in the same task, not deferred.
-5. **Validate** - Run linting, type checking, and tests after changes.
-6. **Review** - Self-review code for quality, edge cases, and best practices.
-7. **Document** - Add JSDoc comments and update relevant docs.
+6. **Validate** - Run linting, type checking, and tests after changes.
+7. **Review** - Self-review code for quality, edge cases, and best practices.
+8. **Document** - Add JSDoc comments and update relevant docs.
 
 ### Validation Requirements
 
@@ -776,7 +767,96 @@ Before suggesting code, ask yourself:
 
 ## 11. Internationalization (i18n)
 
-- Structure: TBD when implemented
-- Use consistent key naming conventions
-- Extract all user-facing strings
-- Test with different languages/locales
+This project uses a custom i18n implementation with dictionary-based translations.
+
+### Structure
+
+```
+src/i18n/
+├── index.ts           # Exports and types
+├── locales.ts         # Supported locales: 'en', 'pl', 'uk'
+├── dictionaries.ts    # Dictionary loader (getDictionary function)
+└── dictionaries/      # Translation JSON files
+    ├── en.json        # English (default)
+    ├── pl.json        # Polish
+    └── uk.json        # Ukrainian
+```
+
+### URL Structure
+
+All routes use the `[lang]` dynamic segment:
+
+- `/en/enhance` - English
+- `/pl/enhance` - Polish
+- `/uk/enhance` - Ukrainian
+
+Locale validation is handled in `src/app/[lang]/layout.tsx` - child layouts/pages don't need to validate.
+
+### Usage in Server Components
+
+```tsx
+import { getDictionary } from '@/i18n/dictionaries'
+import type { Locale } from '@/i18n/locales'
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}) {
+  const { lang } = await params
+  const locale = lang as Locale
+  const dict = await getDictionary(locale)
+
+  return <h1>{dict.pageName.title}</h1>
+}
+```
+
+### Usage in Client Components
+
+Pass translations as props from Server Components:
+
+```tsx
+// Server Component (page.tsx)
+const dict = await getDictionary(locale)
+return <ClientComponent translations={{ title: dict.page.title }} />
+
+// Client Component
+interface Props {
+  translations: { title: string }
+}
+export default function ClientComponent({ translations }: Props) {
+  return <h1>{translations.title}</h1>
+}
+```
+
+### Translation File Structure
+
+Use nested objects with descriptive keys:
+
+```json
+{
+  "common": {
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
+  },
+  "enhance": {
+    "pageTitle": "Enhance Prompt",
+    "description": "Transform your prompts...",
+    "form": {
+      "placeholder": "Enter your prompt"
+    }
+  }
+}
+```
+
+### Rules
+
+- **All user-facing strings must be in translation files** - no hardcoded text in components
+- Keep all three language files in sync (en.json, pl.json, uk.json)
+- Use descriptive, hierarchical keys (e.g., `enhance.form.placeholder`)
+- Reuse common strings from `common` namespace
+- When adding new strings, add to ALL language files simultaneously
+- Type translations props explicitly in client components
