@@ -1,6 +1,6 @@
 import { PageLayout } from '@/components/common/PageLayout'
-import { hasLocale, type Locale } from '@/i18n/locales'
-import { notFound } from 'next/navigation'
+import type { Locale } from '@/i18n/locales'
+import { getDictionary } from '@/i18n/dictionaries'
 
 /**
  * Props for the saved layout.
@@ -14,17 +14,16 @@ interface SavedLayoutProps {
  * Layout for the Saved Prompts page.
  * Uses Header with logo and centered page title.
  */
-export default async function SavedLayout({ children, params }: SavedLayoutProps) {
+export default async function SavedLayout({
+  children,
+  params,
+}: SavedLayoutProps) {
   const { lang } = await params
-
-  if (!hasLocale(lang)) {
-    notFound()
-  }
-
   const locale = lang as Locale
+  const dict = await getDictionary(locale)
 
   return (
-    <PageLayout showLogo pageTitle="Saved Prompts" locale={locale}>
+    <PageLayout showLogo pageTitle={dict.saved.pageTitle} locale={locale}>
       {children}
     </PageLayout>
   )

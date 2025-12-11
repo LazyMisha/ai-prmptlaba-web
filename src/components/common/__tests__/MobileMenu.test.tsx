@@ -79,11 +79,15 @@ describe('MobileMenu', () => {
 
     // Open menu
     fireEvent.click(menuButton)
-    expect(screen.getByRole('button', { name: /close menu/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /close menu/i }),
+    ).toBeInTheDocument()
 
     // Close menu
     fireEvent.click(menuButton)
-    expect(screen.getByRole('button', { name: /open menu/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /open menu/i }),
+    ).toBeInTheDocument()
   })
 
   it('sets correct aria-expanded attribute on menu button', () => {

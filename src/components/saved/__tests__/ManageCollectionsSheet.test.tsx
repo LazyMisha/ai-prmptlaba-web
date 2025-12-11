@@ -76,22 +76,36 @@ describe('ManageCollectionsSheet', () => {
       const onEdit = jest.fn()
       render(<ManageCollectionsSheet {...defaultProps} onEdit={onEdit} />)
 
-      expect(screen.getByRole('button', { name: /rename chatgpt/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /rename my collection/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /rename chatgpt/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /rename my collection/i }),
+      ).toBeInTheDocument()
     })
 
     it('renders delete buttons when onDelete is provided', () => {
       const onDelete = jest.fn()
       render(<ManageCollectionsSheet {...defaultProps} onDelete={onDelete} />)
 
-      expect(screen.getByRole('button', { name: /delete chatgpt/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /delete my collection/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /delete chatgpt/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /delete my collection/i }),
+      ).toBeInTheDocument()
     })
 
     it('calls onEdit and closes sheet when rename is clicked', () => {
       const onEdit = jest.fn()
       const onClose = jest.fn()
-      render(<ManageCollectionsSheet {...defaultProps} onEdit={onEdit} onClose={onClose} />)
+      render(
+        <ManageCollectionsSheet
+          {...defaultProps}
+          onEdit={onEdit}
+          onClose={onClose}
+        />,
+      )
 
       fireEvent.click(screen.getByRole('button', { name: /rename chatgpt/i }))
 
@@ -102,9 +116,17 @@ describe('ManageCollectionsSheet', () => {
     it('calls onDelete and closes sheet when delete is clicked', () => {
       const onDelete = jest.fn()
       const onClose = jest.fn()
-      render(<ManageCollectionsSheet {...defaultProps} onDelete={onDelete} onClose={onClose} />)
+      render(
+        <ManageCollectionsSheet
+          {...defaultProps}
+          onDelete={onDelete}
+          onClose={onClose}
+        />,
+      )
 
-      fireEvent.click(screen.getByRole('button', { name: /delete my collection/i }))
+      fireEvent.click(
+        screen.getByRole('button', { name: /delete my collection/i }),
+      )
 
       expect(onDelete).toHaveBeenCalledWith('col-2')
       expect(onClose).toHaveBeenCalled()
@@ -147,7 +169,10 @@ describe('ManageCollectionsSheet', () => {
 
       const dialog = screen.getByRole('dialog')
       expect(dialog).toHaveAttribute('aria-modal', 'true')
-      expect(dialog).toHaveAttribute('aria-labelledby', 'mobile-sheet-title-manage-collections')
+      expect(dialog).toHaveAttribute(
+        'aria-labelledby',
+        'mobile-sheet-title-manage-collections',
+      )
     })
 
     it('has accessible close button', () => {
@@ -159,16 +184,20 @@ describe('ManageCollectionsSheet', () => {
     it('action buttons have accessible labels', () => {
       const onEdit = jest.fn()
       const onDelete = jest.fn()
-      render(<ManageCollectionsSheet {...defaultProps} onEdit={onEdit} onDelete={onDelete} />)
+      render(
+        <ManageCollectionsSheet
+          {...defaultProps}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />,
+      )
 
-      expect(screen.getByRole('button', { name: 'Rename ChatGPT' })).toHaveAttribute(
-        'aria-label',
-        'Rename ChatGPT',
-      )
-      expect(screen.getByRole('button', { name: 'Delete My Collection' })).toHaveAttribute(
-        'aria-label',
-        'Delete My Collection',
-      )
+      expect(
+        screen.getByRole('button', { name: 'Rename ChatGPT' }),
+      ).toHaveAttribute('aria-label', 'Rename ChatGPT')
+      expect(
+        screen.getByRole('button', { name: 'Delete My Collection' }),
+      ).toHaveAttribute('aria-label', 'Delete My Collection')
     })
   })
 })

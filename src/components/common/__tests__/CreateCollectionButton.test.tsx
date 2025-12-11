@@ -7,17 +7,25 @@ describe('CreateCollectionButton', () => {
     it('renders with default label', () => {
       render(<CreateCollectionButton onClick={() => {}} />)
 
-      expect(screen.getByRole('button', { name: /create new collection/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /create new collection/i }),
+      ).toBeInTheDocument()
     })
 
     it('renders with custom label', () => {
-      render(<CreateCollectionButton onClick={() => {}} label="Add Collection" />)
+      render(
+        <CreateCollectionButton onClick={() => {}} label="Add Collection" />,
+      )
 
-      expect(screen.getByRole('button', { name: /add collection/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /add collection/i }),
+      ).toBeInTheDocument()
     })
 
     it('renders folder plus icon', () => {
-      const { container } = render(<CreateCollectionButton onClick={() => {}} />)
+      const { container } = render(
+        <CreateCollectionButton onClick={() => {}} />,
+      )
 
       expect(container.querySelector('svg')).toBeInTheDocument()
     })
@@ -69,7 +77,9 @@ describe('CreateCollectionButton', () => {
     })
 
     it('applies custom className', () => {
-      render(<CreateCollectionButton onClick={() => {}} className="custom-class" />)
+      render(
+        <CreateCollectionButton onClick={() => {}} className="custom-class" />,
+      )
 
       expect(screen.getByRole('button')).toHaveClass('custom-class')
     })

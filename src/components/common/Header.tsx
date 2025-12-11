@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { APP_NAME } from '@/constants/app'
 import { cn } from '@/lib/utils'
 import type { Locale } from '@/i18n/locales'
+import { getDictionary } from '@/i18n/dictionaries'
 import { HeaderLogo } from './HeaderLogo'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import MobileMenu from './MobileMenu'
@@ -24,8 +25,17 @@ interface HeaderProps {
  * Supports two modes:
  * - Default: Shows brand name text on left, navigation on right (for home page)
  * - Inner page: Shows logo on left, page title in center, navigation on right
+ * This is a Server Component that loads its own translations.
  */
-export default function Header({ showLogo = false, pageTitle, locale = 'en' }: HeaderProps) {
+export default async function Header({
+  showLogo = false,
+  pageTitle,
+  locale = 'en',
+}: HeaderProps) {
+  // Load translations directly - cached by Next.js
+  const dict = await getDictionary(locale)
+  const t = dict.common.navigation
+
   return (
     <header
       className={cn(
@@ -70,7 +80,7 @@ export default function Header({ showLogo = false, pageTitle, locale = 'en' }: H
       >
         {/* Left side - Logo or Brand name */}
         {showLogo ? (
-          <HeaderLogo locale={locale} />
+          <HeaderLogo locale={locale} ariaLabel={t.goToHome} />
         ) : (
           <Link
             className={cn(
@@ -96,7 +106,7 @@ export default function Header({ showLogo = false, pageTitle, locale = 'en' }: H
               '-ml-2',
             )}
             href={`/${locale}`}
-            aria-label="Go to home page"
+            aria-label={t.goToHome}
           >
             {APP_NAME}
           </Link>
@@ -152,22 +162,25 @@ export default function Header({ showLogo = false, pageTitle, locale = 'en' }: H
               'items-center',
             )}
           >
-            <NavLink href={`/${locale}/enhance`} ariaLabel="Go to prompt enhancer page">
-              Enhance
+            <NavLink href={`/${locale}/enhance`} ariaLabel={t.goToEnhance}>
+              {t.enhance}
             </NavLink>
-            <NavLink href={`/${locale}/saved`} ariaLabel="Go to saved prompts page">
-              Saved
+            <NavLink href={`/${locale}/saved`} ariaLabel={t.goToSaved}>
+              {t.saved}
             </NavLink>
-            <NavLink href={`/${locale}/history`} ariaLabel="Go to prompt history page">
-              History
+            <NavLink href={`/${locale}/history`} ariaLabel={t.goToHistory}>
+              {t.history}
             </NavLink>
           </div>
 
           {/* Language Switcher - Desktop only */}
-          <LanguageSwitcher currentLocale={locale} className="hidden lg:inline-flex" />
+          <LanguageSwitcher
+            currentLocale={locale}
+            className="hidden lg:inline-flex"
+          />
 
           {/* Mobile Menu - Hidden on desktop */}
-          <MobileMenu locale={locale} />
+          <MobileMenu locale={locale} translations={t} />
         </div>
       </nav>
     </header>

@@ -21,9 +21,13 @@ export function proxy(request: NextRequest) {
   }
 
   // Get locale from cookie (user's previous selection)
-  const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value as Locale | undefined
+  const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value as
+    | Locale
+    | undefined
   if (cookieLocale && locales.includes(cookieLocale)) {
-    return NextResponse.redirect(new URL(`/${cookieLocale}${pathname}`, request.url))
+    return NextResponse.redirect(
+      new URL(`/${cookieLocale}${pathname}`, request.url),
+    )
   }
 
   // Detect locale from Accept-Language header
@@ -54,7 +58,9 @@ export function proxy(request: NextRequest) {
   }
 
   // Redirect to detected locale
-  return NextResponse.redirect(new URL(`/${detectedLocale}${pathname}`, request.url))
+  return NextResponse.redirect(
+    new URL(`/${detectedLocale}${pathname}`, request.url),
+  )
 }
 
 export const config = {

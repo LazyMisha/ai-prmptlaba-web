@@ -13,6 +13,8 @@ export interface TargetSelectorProps {
   onChange: (target: EnhancementTarget) => void
   /** Whether the selector is disabled */
   disabled?: boolean
+  /** Label text for the selector */
+  label?: string
   /** Additional CSS classes */
   className?: string
 }
@@ -24,6 +26,7 @@ export default function TargetSelector({
   value,
   onChange,
   disabled,
+  label = 'Target Platform',
   className,
 }: TargetSelectorProps) {
   return (
@@ -41,7 +44,7 @@ export default function TargetSelector({
           'mb-2',
         )}
       >
-        Target Platform
+        {label}
       </label>
 
       <div className="relative">

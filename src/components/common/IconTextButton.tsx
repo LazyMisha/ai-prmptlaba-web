@@ -21,29 +21,31 @@ interface IconTextButtonProps {
   className?: string
 }
 
-const variantStyles: Record<IconTextButtonVariant, { base: string; hover: string; focus: string }> =
-  {
-    default: {
-      base: 'text-[#86868b]',
-      hover: 'hover:text-[#007aff]',
-      focus: 'focus-visible:ring-[#007aff]',
-    },
-    destructive: {
-      base: 'text-[#86868b]',
-      hover: 'hover:text-[#ff3b30]',
-      focus: 'focus-visible:ring-[#ff3b30]',
-    },
-    success: {
-      base: 'text-[#34c759]',
-      hover: 'hover:text-[#34c759]',
-      focus: 'focus-visible:ring-[#34c759]',
-    },
-    primary: {
-      base: 'text-[#007aff]',
-      hover: 'hover:text-[#007aff]',
-      focus: 'focus-visible:ring-[#007aff]',
-    },
-  }
+const variantStyles: Record<
+  IconTextButtonVariant,
+  { base: string; hover: string; focus: string }
+> = {
+  default: {
+    base: 'text-[#86868b]',
+    hover: 'hover:text-[#007aff]',
+    focus: 'focus-visible:ring-[#007aff]',
+  },
+  destructive: {
+    base: 'text-[#86868b]',
+    hover: 'hover:text-[#ff3b30]',
+    focus: 'focus-visible:ring-[#ff3b30]',
+  },
+  success: {
+    base: 'text-[#34c759]',
+    hover: 'hover:text-[#34c759]',
+    focus: 'focus-visible:ring-[#34c759]',
+  },
+  primary: {
+    base: 'text-[#007aff]',
+    hover: 'hover:text-[#007aff]',
+    focus: 'focus-visible:ring-[#007aff]',
+  },
+}
 
 /**
  * Reusable button with icon and text label.

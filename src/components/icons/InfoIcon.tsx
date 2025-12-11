@@ -11,7 +11,10 @@ interface InfoIconProps {
  * Info icon (i in a circle) for informational messages and tooltips.
  * Used in toast notifications, alerts, and help indicators.
  */
-export default function InfoIcon({ className, strokeWidth = 2 }: InfoIconProps) {
+export default function InfoIcon({
+  className,
+  strokeWidth = 2,
+}: InfoIconProps) {
   return (
     <svg
       aria-hidden="true"

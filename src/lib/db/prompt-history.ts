@@ -1,7 +1,10 @@
 import { DB_NAME, DB_VERSION } from '@/constants/db'
 import { PROMPT_HISTORY_DB, MAX_HISTORY_ITEMS } from '@/constants/history'
 import { SAVED_PROMPTS_DB } from '@/constants/saved-prompts'
-import type { PromptHistoryEntry, SavePromptHistoryRequest } from '@/types/history'
+import type {
+  PromptHistoryEntry,
+  SavePromptHistoryRequest,
+} from '@/types/history'
 
 /**
  * Opens or creates the IndexedDB database for prompt history.
@@ -41,22 +44,40 @@ function openDatabase(): Promise<IDBDatabase> {
       if (oldVersion < 3) {
         // Collections store
         if (!db.objectStoreNames.contains(SAVED_PROMPTS_DB.COLLECTIONS_STORE)) {
-          const collectionsStore = db.createObjectStore(SAVED_PROMPTS_DB.COLLECTIONS_STORE, {
-            keyPath: 'id',
+          const collectionsStore = db.createObjectStore(
+            SAVED_PROMPTS_DB.COLLECTIONS_STORE,
+            {
+              keyPath: 'id',
+            },
+          )
+          collectionsStore.createIndex('sortOrder', 'sortOrder', {
+            unique: false,
           })
-          collectionsStore.createIndex('sortOrder', 'sortOrder', { unique: false })
-          collectionsStore.createIndex('isDefault', 'isDefault', { unique: false })
-          collectionsStore.createIndex('createdAt', 'createdAt', { unique: false })
+          collectionsStore.createIndex('isDefault', 'isDefault', {
+            unique: false,
+          })
+          collectionsStore.createIndex('createdAt', 'createdAt', {
+            unique: false,
+          })
         }
 
         // Saved prompts store
-        if (!db.objectStoreNames.contains(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)) {
-          const savedPromptsStore = db.createObjectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE, {
-            keyPath: 'id',
+        if (
+          !db.objectStoreNames.contains(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
+        ) {
+          const savedPromptsStore = db.createObjectStore(
+            SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE,
+            {
+              keyPath: 'id',
+            },
+          )
+          savedPromptsStore.createIndex('collectionId', 'collectionId', {
+            unique: false,
           })
-          savedPromptsStore.createIndex('collectionId', 'collectionId', { unique: false })
           savedPromptsStore.createIndex('target', 'target', { unique: false })
-          savedPromptsStore.createIndex('createdAt', 'createdAt', { unique: false })
+          savedPromptsStore.createIndex('createdAt', 'createdAt', {
+            unique: false,
+          })
         }
       }
     }
@@ -84,7 +105,10 @@ export async function savePromptHistory(
   }
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([PROMPT_HISTORY_DB.STORE_NAME], 'readwrite')
+    const transaction = db.transaction(
+      [PROMPT_HISTORY_DB.STORE_NAME],
+      'readwrite',
+    )
     const store = transaction.objectStore(PROMPT_HISTORY_DB.STORE_NAME)
 
     const addRequest = store.add(entry)
@@ -115,7 +139,10 @@ export async function getAllPromptHistory(): Promise<PromptHistoryEntry[]> {
     const db = await openDatabase()
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([PROMPT_HISTORY_DB.STORE_NAME], 'readonly')
+      const transaction = db.transaction(
+        [PROMPT_HISTORY_DB.STORE_NAME],
+        'readonly',
+      )
       const store = transaction.objectStore(PROMPT_HISTORY_DB.STORE_NAME)
       const index = store.index('timestamp')
 
@@ -158,7 +185,10 @@ export async function deletePromptHistory(id: string): Promise<void> {
   const db = await openDatabase()
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([PROMPT_HISTORY_DB.STORE_NAME], 'readwrite')
+    const transaction = db.transaction(
+      [PROMPT_HISTORY_DB.STORE_NAME],
+      'readwrite',
+    )
     const store = transaction.objectStore(PROMPT_HISTORY_DB.STORE_NAME)
 
     const deleteRequest = store.delete(id)
@@ -186,7 +216,10 @@ export async function clearAllPromptHistory(): Promise<void> {
   const db = await openDatabase()
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([PROMPT_HISTORY_DB.STORE_NAME], 'readwrite')
+    const transaction = db.transaction(
+      [PROMPT_HISTORY_DB.STORE_NAME],
+      'readwrite',
+    )
     const store = transaction.objectStore(PROMPT_HISTORY_DB.STORE_NAME)
 
     const clearRequest = store.clear()
@@ -212,7 +245,10 @@ export async function clearAllPromptHistory(): Promise<void> {
  */
 async function cleanupOldEntries(db: IDBDatabase): Promise<void> {
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([PROMPT_HISTORY_DB.STORE_NAME], 'readwrite')
+    const transaction = db.transaction(
+      [PROMPT_HISTORY_DB.STORE_NAME],
+      'readwrite',
+    )
     const store = transaction.objectStore(PROMPT_HISTORY_DB.STORE_NAME)
     const index = store.index('timestamp')
 
@@ -228,7 +264,10 @@ async function cleanupOldEntries(db: IDBDatabase): Promise<void> {
       } else {
         // If we have more than MAX_HISTORY_ITEMS, delete the oldest ones
         if (entries.length > MAX_HISTORY_ITEMS) {
-          const entriesToDelete = entries.slice(0, entries.length - MAX_HISTORY_ITEMS)
+          const entriesToDelete = entries.slice(
+            0,
+            entries.length - MAX_HISTORY_ITEMS,
+          )
           entriesToDelete.forEach((id) => {
             store.delete(id)
           })

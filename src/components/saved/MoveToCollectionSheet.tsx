@@ -4,6 +4,20 @@ import { cn } from '@/lib/utils'
 import type { Collection } from '@/types/saved-prompts'
 import ResponsiveDialog from '@/components/common/ResponsiveDialog'
 
+/**
+ * Translations for the MoveToCollectionSheet component.
+ */
+export interface MoveToCollectionSheetTranslations {
+  /** Dialog title */
+  title?: string
+  /** Cancel button text */
+  cancel?: string
+  /** Text shown when no collections available */
+  noCollectionsAvailable?: string
+  /** Text shown for current collection */
+  current?: string
+}
+
 interface MoveToCollectionSheetProps {
   /** Whether the sheet is open */
   isOpen: boolean
@@ -15,6 +29,8 @@ interface MoveToCollectionSheetProps {
   currentCollectionId?: string
   /** Callback when a collection is selected */
   onSelect: (collectionId: string) => void
+  /** Translations for UI strings */
+  translations?: MoveToCollectionSheetTranslations
 }
 
 /**
@@ -27,7 +43,17 @@ export default function MoveToCollectionSheet({
   collections,
   currentCollectionId,
   onSelect,
+  translations,
 }: MoveToCollectionSheetProps) {
+  // Default translations
+  const t = {
+    title: translations?.title ?? 'Move to Collection',
+    cancel: translations?.cancel ?? 'Cancel',
+    noCollectionsAvailable:
+      translations?.noCollectionsAvailable ?? 'No collections available',
+    current: translations?.current ?? 'Current',
+  }
+
   // Footer with cancel button (desktop only - handled by ResponsiveDialog)
   const footer = (
     <button
@@ -49,7 +75,7 @@ export default function MoveToCollectionSheet({
         'focus-visible:ring-[#007aff]',
       )}
     >
-      Cancel
+      {t.cancel}
     </button>
   )
 
@@ -57,15 +83,23 @@ export default function MoveToCollectionSheet({
     <ResponsiveDialog
       isOpen={isOpen}
       onClose={onClose}
-      title="Move to Collection"
+      title={t.title}
       breakpoint="lg"
       maxWidth="sm"
       footer={footer}
       contentClassName="p-0"
     >
       {collections.length === 0 ? (
-        <p className={cn('px-5', 'py-8', 'text-center', 'text-gray-500', 'text-sm')}>
-          No collections available
+        <p
+          className={cn(
+            'px-5',
+            'py-8',
+            'text-center',
+            'text-gray-500',
+            'text-sm',
+          )}
+        >
+          {t.noCollectionsAvailable}
         </p>
       ) : (
         <ul className="divide-y divide-gray-100">
@@ -121,7 +155,9 @@ export default function MoveToCollectionSheet({
                   </span>
                   {/* Current indicator */}
                   {isCurrentCollection && (
-                    <span className="text-sm font-medium text-[#007aff]">Current</span>
+                    <span className="text-sm font-medium text-[#007aff]">
+                      {t.current}
+                    </span>
                   )}
                 </button>
               </li>

@@ -2,6 +2,18 @@
 
 import { cn } from '@/lib/utils'
 
+/**
+ * Translations for PromptInput.
+ */
+interface PromptInputTranslations {
+  label: string
+  placeholder: string
+  helperText: string
+  moreCharNeeded: string
+  moreCharsNeeded: string
+  overLimit: string
+}
+
 export interface PromptInputProps {
   /** Current value of the textarea */
   value: string
@@ -13,6 +25,8 @@ export interface PromptInputProps {
   error?: string | null
   /** Callback for keydown events */
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
+  /** Translations for the component */
+  translations?: PromptInputTranslations
   /** Additional CSS classes */
   className?: string
 }
@@ -26,8 +40,19 @@ export default function PromptInput({
   disabled,
   error,
   onKeyDown,
+  translations,
   className,
 }: PromptInputProps) {
+  // Default translations
+  const t = translations ?? {
+    label: 'Your Prompt',
+    placeholder: 'e.g., write a post about my promotion',
+    helperText: 'Press ⌘/Ctrl + Enter to enhance',
+    moreCharNeeded: 'more character needed',
+    moreCharsNeeded: 'more characters needed',
+    overLimit: 'over limit',
+  }
+
   const charCount = value.length
   const minChars = 3
   const maxChars = 2000
@@ -50,7 +75,7 @@ export default function PromptInput({
           'mb-2',
         )}
       >
-        Your Prompt
+        {t.label}
       </label>
 
       <textarea
@@ -59,7 +84,7 @@ export default function PromptInput({
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={onKeyDown}
         disabled={disabled}
-        placeholder="e.g., write a post about my promotion"
+        placeholder={t.placeholder}
         rows={6}
         aria-describedby="prompt-char-count prompt-helper-text prompt-error"
         aria-invalid={hasError ? true : undefined}
@@ -130,17 +155,20 @@ export default function PromptInput({
           )}
         >
           {charCount < minChars && charCount > 0
-            ? `${minChars - charCount} more character${minChars - charCount === 1 ? '' : 's'} needed`
+            ? `${minChars - charCount} ${minChars - charCount === 1 ? t.moreCharNeeded : t.moreCharsNeeded}`
             : isOverMaximum
-              ? `${charCount - maxChars} over limit`
-              : 'Press ⌘/Ctrl + Enter to enhance'}
+              ? `${charCount - maxChars} ${t.overLimit}`
+              : t.helperText}
         </span>
 
         <span
           id="prompt-char-count"
           aria-live="polite"
           aria-atomic="true"
-          className={cn('tabular-nums', isOverMaximum ? 'text-red-500' : 'text-gray-400')}
+          className={cn(
+            'tabular-nums',
+            isOverMaximum ? 'text-red-500' : 'text-gray-400',
+          )}
         >
           {charCount.toLocaleString()} / {maxChars.toLocaleString()}
         </span>

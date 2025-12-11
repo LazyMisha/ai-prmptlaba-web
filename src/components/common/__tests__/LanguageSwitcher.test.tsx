@@ -79,7 +79,9 @@ describe('LanguageSwitcher', () => {
       fireEvent.click(button)
       expect(screen.getByRole('listbox')).toBeInTheDocument()
 
-      fireEvent.keyDown(screen.getByRole('listbox').parentElement!, { key: 'Escape' })
+      fireEvent.keyDown(screen.getByRole('listbox').parentElement!, {
+        key: 'Escape',
+      })
       expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
     })
 
@@ -202,7 +204,9 @@ describe('LanguageSwitcher', () => {
       render(<LanguageSwitcher currentLocale="en" />)
       const button = screen.getByRole('button')
       fireEvent.click(button)
-      expect(screen.getByRole('listbox', { name: /select language/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('listbox', { name: /select language/i }),
+      ).toBeInTheDocument()
     })
 
     it('options have proper option role', () => {

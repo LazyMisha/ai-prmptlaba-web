@@ -44,7 +44,9 @@ describe('ResponsiveDialog', () => {
         </ResponsiveDialog>,
       )
 
-      expect(screen.getByRole('button', { name: 'Action Button' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'Action Button' }),
+      ).toBeInTheDocument()
       expect(screen.getByText('Some text content')).toBeInTheDocument()
     })
 
@@ -62,7 +64,9 @@ describe('ResponsiveDialog', () => {
       )
 
       expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: 'Confirm' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'Confirm' }),
+      ).toBeInTheDocument()
     })
 
     it('renders drag handle for mobile', () => {
@@ -82,7 +86,9 @@ describe('ResponsiveDialog', () => {
     it('hides close button when showCloseButton is false', () => {
       render(<ResponsiveDialog {...defaultProps} showCloseButton={false} />)
 
-      expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: 'Close' }),
+      ).not.toBeInTheDocument()
     })
 
     it('calls onClose when close button is clicked', () => {

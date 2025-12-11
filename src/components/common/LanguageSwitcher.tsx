@@ -4,7 +4,12 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { locales, localeNames, localeFullNames, type Locale } from '@/i18n/locales'
+import {
+  locales,
+  localeNames,
+  localeFullNames,
+  type Locale,
+} from '@/i18n/locales'
 import ChevronIcon from '@/components/icons/ChevronIcon'
 
 /**
@@ -31,7 +36,10 @@ const setLocaleCookie = (locale: Locale): void => {
  * Mobile-first, accessibility support.
  * Scalable to support any number of languages.
  */
-export function LanguageSwitcher({ currentLocale, className }: LanguageSwitcherProps) {
+export function LanguageSwitcher({
+  currentLocale,
+  className,
+}: LanguageSwitcherProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -73,7 +81,10 @@ export function LanguageSwitcher({ currentLocale, className }: LanguageSwitcherP
    */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent): void => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false)
       }
     }

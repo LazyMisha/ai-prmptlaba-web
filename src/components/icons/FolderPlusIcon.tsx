@@ -10,7 +10,10 @@ interface FolderPlusIconProps {
 /**
  * Folder with plus icon for creating new collections.
  */
-export default function FolderPlusIcon({ className, strokeWidth = 1.5 }: FolderPlusIconProps) {
+export default function FolderPlusIcon({
+  className,
+  strokeWidth = 1.5,
+}: FolderPlusIconProps) {
   return (
     <svg
       aria-hidden="true"

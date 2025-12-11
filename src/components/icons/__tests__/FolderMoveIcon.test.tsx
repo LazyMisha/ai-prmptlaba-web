@@ -24,7 +24,9 @@ describe('FolderMoveIcon', () => {
   })
 
   it('applies custom className', () => {
-    const { container } = render(<FolderMoveIcon className="w-6 h-6 text-blue-500" />)
+    const { container } = render(
+      <FolderMoveIcon className="w-6 h-6 text-blue-500" />,
+    )
     const svg = container.querySelector('svg')
 
     expect(svg).toHaveClass('w-6', 'h-6', 'text-blue-500')

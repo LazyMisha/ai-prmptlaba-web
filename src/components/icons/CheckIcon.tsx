@@ -11,7 +11,10 @@ interface CheckIconProps {
  * Checkmark icon for success states and confirmations.
  * Used for success indicators and completed actions.
  */
-export default function CheckIcon({ className, strokeWidth = 2 }: CheckIconProps) {
+export default function CheckIcon({
+  className,
+  strokeWidth = 2,
+}: CheckIconProps) {
   return (
     <svg
       className={cn(

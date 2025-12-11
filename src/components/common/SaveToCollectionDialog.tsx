@@ -21,6 +21,51 @@ import type { CollectionWithCount } from '@/types/saved-prompts'
 import type { CollectionColor } from '@/constants/saved-prompts'
 
 /**
+ * Translations for the SaveToCollectionDialog component.
+ */
+export interface SaveToCollectionDialogTranslations {
+  /** Dialog title */
+  title?: string
+  /** Title for new collection mode */
+  newCollectionTitle?: string
+  /** Close dialog aria-label */
+  closeDialog?: string
+  /** Quick save button text prefix */
+  quickSaveTo?: string
+  /** Separator text "or choose collection" */
+  orChooseCollection?: string
+  /** Empty state message */
+  noCollectionsYet?: string
+  /** Singular "prompt" */
+  prompt?: string
+  /** Plural "prompts" */
+  prompts?: string
+  /** Create & Save button text */
+  createAndSave?: string
+  /** Save to Selected Collection button text */
+  saveToSelected?: string
+  /** Collection form translations */
+  collectionForm?: {
+    nameLabel?: string
+    namePlaceholder?: string
+    colorLabel?: string
+    backToCollections?: string
+    nameRequired?: string
+    nameTooLong?: string
+    nameExists?: string
+  }
+  /** Toast translations */
+  toast?: {
+    loadCollectionsFailed?: string
+    selectCollection?: string
+    promptSaved?: string
+    saveFailed?: string
+    savedTo?: string
+    createFailed?: string
+  }
+}
+
+/**
  * Props for the SaveToCollectionDialog component.
  */
 interface SaveToCollectionDialogProps {
@@ -36,6 +81,8 @@ interface SaveToCollectionDialogProps {
   enhancedPrompt: string
   /** The target tool category */
   target: string
+  /** Translations for UI strings */
+  translations?: SaveToCollectionDialogTranslations
 }
 
 type DialogMode = 'select' | 'create'
@@ -51,7 +98,58 @@ export default function SaveToCollectionDialog({
   originalPrompt,
   enhancedPrompt,
   target,
+  translations,
 }: SaveToCollectionDialogProps) {
+  // Default translations
+  const t = {
+    title: translations?.title ?? 'Save to Collection',
+    newCollectionTitle: translations?.newCollectionTitle ?? 'New Collection',
+    closeDialog: translations?.closeDialog ?? 'Close dialog',
+    quickSaveTo: translations?.quickSaveTo ?? 'Quick Save to',
+    orChooseCollection:
+      translations?.orChooseCollection ?? 'or choose collection',
+    noCollectionsYet:
+      translations?.noCollectionsYet ??
+      'No collections yet. Create your first one!',
+    prompt: translations?.prompt ?? 'prompt',
+    prompts: translations?.prompts ?? 'prompts',
+    createAndSave: translations?.createAndSave ?? 'Create & Save',
+    saveToSelected:
+      translations?.saveToSelected ?? 'Save to Selected Collection',
+    collectionForm: {
+      nameLabel: translations?.collectionForm?.nameLabel ?? 'Collection Name',
+      namePlaceholder:
+        translations?.collectionForm?.namePlaceholder ?? 'e.g., Work Projects',
+      colorLabel:
+        translations?.collectionForm?.colorLabel ?? 'Collection Color',
+      backToCollections:
+        translations?.collectionForm?.backToCollections ??
+        'Back to collections',
+      nameRequired:
+        translations?.collectionForm?.nameRequired ??
+        'Please enter a collection name',
+      nameTooLong:
+        translations?.collectionForm?.nameTooLong ??
+        'Name must be 50 characters or less',
+      nameExists:
+        translations?.collectionForm?.nameExists ??
+        'A collection with this name already exists',
+    },
+    toast: {
+      loadCollectionsFailed:
+        translations?.toast?.loadCollectionsFailed ??
+        'Failed to load collections',
+      selectCollection:
+        translations?.toast?.selectCollection ?? 'Please select a collection',
+      promptSaved:
+        translations?.toast?.promptSaved ?? 'Prompt saved successfully',
+      saveFailed: translations?.toast?.saveFailed ?? 'Failed to save prompt',
+      savedTo: translations?.toast?.savedTo ?? 'Saved to',
+      createFailed:
+        translations?.toast?.createFailed ?? 'Failed to create collection',
+    },
+  }
+
   const dialogRef = useRef<HTMLDivElement>(null)
   const modeRef = useRef<DialogMode>('select')
 
@@ -59,7 +157,9 @@ export default function SaveToCollectionDialog({
   const [collections, setCollections] = useState<CollectionWithCount[]>([])
   const [isLoadingCollections, setIsLoadingCollections] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
-  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null)
+  const [selectedCollectionId, setSelectedCollectionId] = useState<
+    string | null
+  >(null)
 
   // New collection form state
   const [newCollectionName, setNewCollectionName] = useState('')
@@ -78,7 +178,9 @@ export default function SaveToCollectionDialog({
       setCollections(data)
 
       // Auto-select the default collection for this target if it exists
-      const defaultForTarget = data.find((c) => c.isDefault && c.name === target)
+      const defaultForTarget = data.find(
+        (c) => c.isDefault && c.name === target,
+      )
 
       if (defaultForTarget) {
         setSelectedCollectionId(defaultForTarget.id)
@@ -88,7 +190,7 @@ export default function SaveToCollectionDialog({
     } catch (error) {
       console.error('Failed to load collections:', error)
 
-      showToast('error', 'Failed to load collections')
+      showToast('error', t.toast.loadCollectionsFailed)
     } finally {
       setIsLoadingCollections(false)
     }
@@ -145,7 +247,7 @@ export default function SaveToCollectionDialog({
   // Handle saving to selected collection
   const handleSaveToCollection = async () => {
     if (!selectedCollectionId) {
-      showToast('error', 'Please select a collection')
+      showToast('error', t.toast.selectCollection)
 
       return
     }
@@ -160,13 +262,13 @@ export default function SaveToCollectionDialog({
         collectionId: selectedCollectionId,
       })
 
-      showToast('success', 'Prompt saved successfully')
+      showToast('success', t.toast.promptSaved)
       onSaved?.()
       onClose()
     } catch (error) {
       console.error('Failed to save prompt:', error)
 
-      showToast('error', 'Failed to save prompt')
+      showToast('error', t.toast.saveFailed)
     } finally {
       setIsSaving(false)
     }
@@ -187,13 +289,13 @@ export default function SaveToCollectionDialog({
         collectionId: collection.id,
       })
 
-      showToast('success', `Saved to "${collection.name}"`)
+      showToast('success', `${t.toast.savedTo} "${collection.name}"`)
       onSaved?.()
       onClose()
     } catch (error) {
       console.error('Failed to quick save:', error)
 
-      showToast('error', 'Failed to save prompt')
+      showToast('error', t.toast.saveFailed)
     } finally {
       setIsSaving(false)
     }
@@ -204,20 +306,24 @@ export default function SaveToCollectionDialog({
     const trimmedName = newCollectionName.trim()
 
     if (!trimmedName) {
-      setNameError('Please enter a collection name')
+      setNameError(t.collectionForm.nameRequired)
 
       return
     }
 
     if (trimmedName.length > 50) {
-      setNameError('Name must be 50 characters or less')
+      setNameError(t.collectionForm.nameTooLong)
 
       return
     }
 
     // Check for duplicate names
-    if (collections.some((c) => c.name.toLowerCase() === trimmedName.toLowerCase())) {
-      setNameError('A collection with this name already exists')
+    if (
+      collections.some(
+        (c) => c.name.toLowerCase() === trimmedName.toLowerCase(),
+      )
+    ) {
+      setNameError(t.collectionForm.nameExists)
 
       return
     }
@@ -241,13 +347,13 @@ export default function SaveToCollectionDialog({
         collectionId: newCollection.id,
       })
 
-      showToast('success', `Saved to "${newCollection.name}"`)
+      showToast('success', `${t.toast.savedTo} "${newCollection.name}"`)
       onSaved?.()
       onClose()
     } catch (error) {
       console.error('Failed to create collection and save:', error)
 
-      showToast('error', 'Failed to create collection')
+      showToast('error', t.toast.createFailed)
     } finally {
       setIsSaving(false)
     }
@@ -257,7 +363,11 @@ export default function SaveToCollectionDialog({
   const subscribeToNothing = () => () => {}
   const getIsMounted = () => true
   const getServerSnapshot = () => false
-  const isMounted = useSyncExternalStore(subscribeToNothing, getIsMounted, getServerSnapshot)
+  const isMounted = useSyncExternalStore(
+    subscribeToNothing,
+    getIsMounted,
+    getServerSnapshot,
+  )
 
   if (!isOpen) {
     return null
@@ -340,13 +450,16 @@ export default function SaveToCollectionDialog({
             'flex-shrink-0',
           )}
         >
-          <h2 id="save-dialog-title" className={cn('text-lg', 'font-semibold', 'text-gray-900')}>
-            {mode === 'select' ? 'Save to Collection' : 'New Collection'}
+          <h2
+            id="save-dialog-title"
+            className={cn('text-lg', 'font-semibold', 'text-gray-900')}
+          >
+            {mode === 'select' ? t.title : t.newCollectionTitle}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close dialog"
+            aria-label={t.closeDialog}
             className={cn(
               'p-2',
               '-mr-2',
@@ -402,27 +515,48 @@ export default function SaveToCollectionDialog({
                 ) : (
                   <>
                     <CheckIcon className="w-5 h-5" strokeWidth={2} />
-                    Quick Save to &ldquo;{target}&rdquo;
+                    {t.quickSaveTo} &ldquo;{target}&rdquo;
                   </>
                 )}
               </button>
 
               <div className={cn('flex', 'items-center', 'gap-3', 'mb-4')}>
                 <div className={cn('flex-1', 'h-px', 'bg-gray-200')} />
-                <span className={cn('text-xs', 'text-gray-500', 'uppercase', 'tracking-wider')}>
-                  or choose collection
+                <span
+                  className={cn(
+                    'text-xs',
+                    'text-gray-500',
+                    'uppercase',
+                    'tracking-wider',
+                  )}
+                >
+                  {t.orChooseCollection}
                 </span>
                 <div className={cn('flex-1', 'h-px', 'bg-gray-200')} />
               </div>
 
               {/* Collections list */}
               {isLoadingCollections ? (
-                <div className={cn('flex', 'items-center', 'justify-center', 'py-8')}>
+                <div
+                  className={cn(
+                    'flex',
+                    'items-center',
+                    'justify-center',
+                    'py-8',
+                  )}
+                >
                   <SpinnerIcon className="w-6 h-6 text-gray-400 animate-spin" />
                 </div>
               ) : collections.length === 0 ? (
-                <div className={cn('text-center', 'py-8', 'text-gray-500', 'text-sm')}>
-                  No collections yet. Create your first one!
+                <div
+                  className={cn(
+                    'text-center',
+                    'py-8',
+                    'text-gray-500',
+                    'text-sm',
+                  )}
+                >
+                  {t.noCollectionsYet}
                 </div>
               ) : (
                 <div className={cn('space-y-2', 'mb-4')}>
@@ -465,16 +599,25 @@ export default function SaveToCollectionDialog({
                         />
                       </div>
                       <div className={cn('flex-1', 'text-left')}>
-                        <div className={cn('text-sm', 'font-medium', 'text-gray-900')}>
+                        <div
+                          className={cn(
+                            'text-sm',
+                            'font-medium',
+                            'text-gray-900',
+                          )}
+                        >
                           {collection.name}
                         </div>
                         <div className={cn('text-xs', 'text-gray-500')}>
                           {collection.promptCount}{' '}
-                          {collection.promptCount === 1 ? 'prompt' : 'prompts'}
+                          {collection.promptCount === 1 ? t.prompt : t.prompts}
                         </div>
                       </div>
                       {selectedCollectionId === collection.id && (
-                        <CheckIcon className="w-5 h-5 text-[#007aff]" strokeWidth={2.5} />
+                        <CheckIcon
+                          className="w-5 h-5 text-[#007aff]"
+                          strokeWidth={2.5}
+                        />
                       )}
                     </button>
                   ))}
@@ -509,6 +652,12 @@ export default function SaveToCollectionDialog({
                   setNameError(null)
                 }}
                 autoFocus
+                translations={{
+                  nameLabel: t.collectionForm.nameLabel,
+                  namePlaceholder: t.collectionForm.namePlaceholder,
+                  colorLabel: t.collectionForm.colorLabel,
+                  backToCollections: t.collectionForm.backToCollections,
+                }}
               />
             </div>
           )}
@@ -527,7 +676,9 @@ export default function SaveToCollectionDialog({
               'flex-shrink-0',
               'bg-gray-50/80',
             )}
-            style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}
+            style={{
+              paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))',
+            }}
           >
             {mode === 'create' ? (
               <button
@@ -557,7 +708,11 @@ export default function SaveToCollectionDialog({
                   'disabled:cursor-not-allowed',
                 )}
               >
-                {isSaving ? <SpinnerIcon className="w-5 h-5 animate-spin" /> : 'Create & Save'}
+                {isSaving ? (
+                  <SpinnerIcon className="w-5 h-5 animate-spin" />
+                ) : (
+                  t.createAndSave
+                )}
               </button>
             ) : (
               <button
@@ -592,7 +747,7 @@ export default function SaveToCollectionDialog({
                 ) : (
                   <>
                     <CheckIcon className="w-5 h-5" strokeWidth={2} />
-                    Save to Selected Collection
+                    {t.saveToSelected}
                   </>
                 )}
               </button>

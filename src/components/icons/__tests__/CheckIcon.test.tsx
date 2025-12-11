@@ -15,7 +15,9 @@ describe('CheckIcon', () => {
   })
 
   it('applies custom className', () => {
-    const { container } = render(<CheckIcon className="text-green-500 w-6 h-6" />)
+    const { container } = render(
+      <CheckIcon className="text-green-500 w-6 h-6" />,
+    )
     const svg = container.querySelector('svg')
     expect(svg).toHaveClass('text-green-500')
     expect(svg).toHaveClass('w-6')

@@ -7,14 +7,18 @@ describe('EmptySavedState', () => {
     it('renders the empty state message', () => {
       render(<EmptySavedState />)
 
-      expect(screen.getByRole('heading', { name: /no saved prompts yet/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { name: /no saved prompts yet/i }),
+      ).toBeInTheDocument()
     })
 
     it('renders the description text', () => {
       render(<EmptySavedState />)
 
       expect(
-        screen.getByText(/save your enhanced prompts to organize them into collections/i),
+        screen.getByText(
+          /save your enhanced prompts to organize them into collections/i,
+        ),
       ).toBeInTheDocument()
     })
 
@@ -55,7 +59,12 @@ describe('EmptySavedState', () => {
       const { container } = render(<EmptySavedState />)
 
       const wrapper = container.firstChild as HTMLElement
-      expect(wrapper).toHaveClass('flex', 'flex-col', 'items-center', 'justify-center')
+      expect(wrapper).toHaveClass(
+        'flex',
+        'flex-col',
+        'items-center',
+        'justify-center',
+      )
     })
 
     it('applies Apple design tokens to the button', () => {

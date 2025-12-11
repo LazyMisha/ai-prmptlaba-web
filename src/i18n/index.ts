@@ -8,7 +8,13 @@
  */
 
 // Client-safe exports (can be used in both Server and Client Components)
-export { locales, defaultLocale, localeNames, localeFullNames, hasLocale } from './locales'
+export {
+  locales,
+  defaultLocale,
+  localeNames,
+  localeFullNames,
+  hasLocale,
+} from './locales'
 export type { Locale } from './locales'
 
 // Server-only exports - import directly from '@/i18n/dictionaries' in Server Components

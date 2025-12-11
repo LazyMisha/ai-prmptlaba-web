@@ -54,7 +54,9 @@ describe('CollectionSidebar', () => {
     it('renders the navigation element for desktop', () => {
       render(<CollectionSidebar {...defaultProps} />)
 
-      expect(screen.getByRole('navigation', { name: /collections/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('navigation', { name: /collections/i }),
+      ).toBeInTheDocument()
     })
 
     it('renders mobile dropdown selector', () => {
@@ -79,9 +81,15 @@ describe('CollectionSidebar', () => {
     it('renders all collection buttons in desktop nav', () => {
       render(<CollectionSidebar {...defaultProps} />)
 
-      expect(screen.getByRole('button', { name: /chatgpt/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /midjourney/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /my custom collection/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /chatgpt/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /midjourney/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /my custom collection/i }),
+      ).toBeInTheDocument()
     })
 
     it('displays total count for "All" in desktop nav', () => {
@@ -124,7 +132,13 @@ describe('CollectionSidebar', () => {
 
     it('calls onSelect with null when "All" is clicked', () => {
       const onSelect = jest.fn()
-      render(<CollectionSidebar {...defaultProps} onSelect={onSelect} selectedId="chatgpt" />)
+      render(
+        <CollectionSidebar
+          {...defaultProps}
+          onSelect={onSelect}
+          selectedId="chatgpt"
+        />,
+      )
 
       fireEvent.click(screen.getByRole('button', { name: /all/i }))
 
@@ -147,14 +161,20 @@ describe('CollectionSidebar', () => {
       render(<CollectionSidebar {...defaultProps} onCreate={onCreate} />)
 
       // Mobile button has shorter label "Create", desktop has full label
-      expect(screen.getByRole('button', { name: /^create$/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /create new collection/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /^create$/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /create new collection/i }),
+      ).toBeInTheDocument()
     })
 
     it('does not render create buttons when onCreate is not provided', () => {
       render(<CollectionSidebar {...defaultProps} />)
 
-      expect(screen.queryByRole('button', { name: /^create$/i })).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: /^create$/i }),
+      ).not.toBeInTheDocument()
       expect(
         screen.queryByRole('button', { name: /create new collection/i }),
       ).not.toBeInTheDocument()
@@ -165,7 +185,9 @@ describe('CollectionSidebar', () => {
       render(<CollectionSidebar {...defaultProps} onCreate={onCreate} />)
 
       // Mobile button has shorter label "Create"
-      const mobileCreateButton = screen.getByRole('button', { name: /^create$/i })
+      const mobileCreateButton = screen.getByRole('button', {
+        name: /^create$/i,
+      })
       fireEvent.click(mobileCreateButton)
 
       expect(onCreate).toHaveBeenCalled()
@@ -176,7 +198,9 @@ describe('CollectionSidebar', () => {
       render(<CollectionSidebar {...defaultProps} onCreate={onCreate} />)
 
       // Desktop button has full label "Create New Collection"
-      const desktopCreateButton = screen.getByRole('button', { name: /create new collection/i })
+      const desktopCreateButton = screen.getByRole('button', {
+        name: /create new collection/i,
+      })
       fireEvent.click(desktopCreateButton)
 
       expect(onCreate).toHaveBeenCalled()
@@ -188,7 +212,9 @@ describe('CollectionSidebar', () => {
       const onEdit = jest.fn()
       render(<CollectionSidebar {...defaultProps} onEdit={onEdit} />)
 
-      const renameButton = screen.getByRole('button', { name: /rename chatgpt/i })
+      const renameButton = screen.getByRole('button', {
+        name: /rename chatgpt/i,
+      })
       expect(renameButton).toBeInTheDocument()
     })
 
@@ -196,7 +222,9 @@ describe('CollectionSidebar', () => {
       const onDelete = jest.fn()
       render(<CollectionSidebar {...defaultProps} onDelete={onDelete} />)
 
-      const deleteButton = screen.getByRole('button', { name: /delete my custom collection/i })
+      const deleteButton = screen.getByRole('button', {
+        name: /delete my custom collection/i,
+      })
       expect(deleteButton).toBeInTheDocument()
     })
 
@@ -205,14 +233,18 @@ describe('CollectionSidebar', () => {
       render(<CollectionSidebar {...defaultProps} onDelete={onDelete} />)
 
       // ChatGPT is a default collection - should still have delete button
-      expect(screen.getByRole('button', { name: /delete chatgpt/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /delete chatgpt/i }),
+      ).toBeInTheDocument()
     })
 
     it('calls onEdit when rename button is clicked', () => {
       const onEdit = jest.fn()
       render(<CollectionSidebar {...defaultProps} onEdit={onEdit} />)
 
-      const renameButton = screen.getByRole('button', { name: /rename chatgpt/i })
+      const renameButton = screen.getByRole('button', {
+        name: /rename chatgpt/i,
+      })
       fireEvent.click(renameButton)
 
       expect(onEdit).toHaveBeenCalledWith('chatgpt')
@@ -222,7 +254,9 @@ describe('CollectionSidebar', () => {
       const onDelete = jest.fn()
       render(<CollectionSidebar {...defaultProps} onDelete={onDelete} />)
 
-      const deleteButton = screen.getByRole('button', { name: /delete my custom collection/i })
+      const deleteButton = screen.getByRole('button', {
+        name: /delete my custom collection/i,
+      })
       fireEvent.click(deleteButton)
 
       expect(onDelete).toHaveBeenCalledWith('custom-1')
@@ -231,9 +265,17 @@ describe('CollectionSidebar', () => {
     it('does not select collection when clicking action buttons', () => {
       const onEdit = jest.fn()
       const onSelect = jest.fn()
-      render(<CollectionSidebar {...defaultProps} onEdit={onEdit} onSelect={onSelect} />)
+      render(
+        <CollectionSidebar
+          {...defaultProps}
+          onEdit={onEdit}
+          onSelect={onSelect}
+        />,
+      )
 
-      const renameButton = screen.getByRole('button', { name: /rename chatgpt/i })
+      const renameButton = screen.getByRole('button', {
+        name: /rename chatgpt/i,
+      })
       fireEvent.click(renameButton)
 
       expect(onEdit).toHaveBeenCalledWith('chatgpt')
@@ -245,7 +287,10 @@ describe('CollectionSidebar', () => {
     it('has proper aria-label on navigation', () => {
       render(<CollectionSidebar {...defaultProps} />)
 
-      expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Collections')
+      expect(screen.getByRole('navigation')).toHaveAttribute(
+        'aria-label',
+        'Collections',
+      )
     })
 
     it('has proper focus styles on buttons', () => {
@@ -265,15 +310,28 @@ describe('CollectionSidebar', () => {
     it('has accessible aria-labels on action buttons', () => {
       const onEdit = jest.fn()
       const onDelete = jest.fn()
-      render(<CollectionSidebar {...defaultProps} onEdit={onEdit} onDelete={onDelete} />)
+      render(
+        <CollectionSidebar
+          {...defaultProps}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />,
+      )
 
       // Rename button should have proper aria-label
-      const renameButton = screen.getByRole('button', { name: /rename chatgpt/i })
+      const renameButton = screen.getByRole('button', {
+        name: /rename chatgpt/i,
+      })
       expect(renameButton).toHaveAttribute('aria-label', 'Rename ChatGPT')
 
       // Delete button should have proper aria-label (for non-default collection)
-      const deleteButton = screen.getByRole('button', { name: /delete my custom collection/i })
-      expect(deleteButton).toHaveAttribute('aria-label', 'Delete My Custom Collection')
+      const deleteButton = screen.getByRole('button', {
+        name: /delete my custom collection/i,
+      })
+      expect(deleteButton).toHaveAttribute(
+        'aria-label',
+        'Delete My Custom Collection',
+      )
     })
   })
 
@@ -286,7 +344,9 @@ describe('CollectionSidebar', () => {
     })
 
     it('applies custom className to container', () => {
-      const { container } = render(<CollectionSidebar {...defaultProps} className="custom-class" />)
+      const { container } = render(
+        <CollectionSidebar {...defaultProps} className="custom-class" />,
+      )
 
       // className is applied to the outer div wrapper
       expect(container.firstChild).toHaveClass('custom-class')
@@ -298,7 +358,9 @@ describe('CollectionSidebar', () => {
 
       // Mobile button ("Create") and desktop button ("Create New Collection")
       const mobileButton = screen.getByRole('button', { name: /^create$/i })
-      const desktopButton = screen.getByRole('button', { name: /create new collection/i })
+      const desktopButton = screen.getByRole('button', {
+        name: /create new collection/i,
+      })
 
       ;[mobileButton, desktopButton].forEach((button) => {
         expect(button).toHaveClass('border-dashed')

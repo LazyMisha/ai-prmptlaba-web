@@ -9,6 +9,24 @@ import SelectorIcon from '@/components/icons/SelectorIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
 import ManageCollectionsSheet from './ManageCollectionsSheet'
 
+/**
+ * Translations for the CollectionSidebar component.
+ */
+export interface CollectionSidebarTranslations {
+  /** Label for the collection dropdown on mobile */
+  label?: string
+  /** "All" collection option */
+  all?: string
+  /** Create collection button text */
+  create?: string
+  /** Manage collections button text */
+  manage?: string
+  /** Manage collections sheet title */
+  manageTitle?: string
+  /** Text shown when no collections exist in manage sheet */
+  noCollectionsYet?: string
+}
+
 interface CollectionSidebarProps {
   /** List of collections to display */
   collections: Collection[]
@@ -26,6 +44,8 @@ interface CollectionSidebarProps {
   onCreate?: () => void
   /** Additional CSS classes for the container */
   className?: string
+  /** Translations for UI strings */
+  translations?: CollectionSidebarTranslations
 }
 
 /**
@@ -42,9 +62,23 @@ export function CollectionSidebar({
   onDelete,
   onCreate,
   className,
+  translations,
 }: CollectionSidebarProps) {
   const [isManageSheetOpen, setIsManageSheetOpen] = useState(false)
-  const totalCount = Object.values(promptCounts).reduce((sum, count) => sum + count, 0)
+  const totalCount = Object.values(promptCounts).reduce(
+    (sum, count) => sum + count,
+    0,
+  )
+
+  // Default translations
+  const t = {
+    label: translations?.label ?? 'Collection',
+    all: translations?.all ?? 'All',
+    create: translations?.create ?? 'Create',
+    manage: translations?.manage ?? 'Manage',
+    manageTitle: translations?.manageTitle ?? 'Manage Collections',
+    noCollectionsYet: translations?.noCollectionsYet ?? 'No collections yet',
+  }
 
   return (
     <div className={className}>
@@ -63,14 +97,16 @@ export function CollectionSidebar({
             'mb-2',
           )}
         >
-          Collection
+          {t.label}
         </label>
 
         <div className="relative">
           <select
             id="collection-selector"
             value={selectedId ?? 'all'}
-            onChange={(e) => onSelect(e.target.value === 'all' ? null : e.target.value)}
+            onChange={(e) =>
+              onSelect(e.target.value === 'all' ? null : e.target.value)
+            }
             className={cn(
               // Sizing
               'w-full',
@@ -108,7 +144,9 @@ export function CollectionSidebar({
               'hover:bg-white',
             )}
           >
-            <option value="all">All ({totalCount})</option>
+            <option value="all">
+              {t.all} ({totalCount})
+            </option>
             {collections.map((collection) => (
               <option key={collection.id} value={collection.id}>
                 {collection.name} ({promptCounts[collection.id] || 0})
@@ -136,7 +174,11 @@ export function CollectionSidebar({
         {/* Mobile action buttons */}
         <div className="flex gap-2 mt-3">
           {onCreate && (
-            <CreateCollectionButton onClick={onCreate} label="Create" className="flex-1" />
+            <CreateCollectionButton
+              onClick={onCreate}
+              label={t.create}
+              className="flex-1"
+            />
           )}
           {(onEdit || onDelete) && collections.length > 0 && (
             <button
@@ -173,7 +215,7 @@ export function CollectionSidebar({
               )}
             >
               <PencilIcon className="w-4 h-4" />
-              Manage
+              {t.manage}
             </button>
           )}
         </div>
@@ -185,6 +227,10 @@ export function CollectionSidebar({
           collections={collections}
           onEdit={onEdit}
           onDelete={onDelete}
+          translations={{
+            title: t.manageTitle,
+            noCollectionsYet: t.noCollectionsYet,
+          }}
         />
       </div>
 
@@ -240,7 +286,7 @@ export function CollectionSidebar({
             'focus-visible:ring-offset-2',
           )}
         >
-          <span>All</span>
+          <span>{t.all}</span>
           <span
             className={cn(
               'text-sm',
@@ -349,8 +395,16 @@ export function CollectionSidebar({
                           'transition-colors',
                           'duration-150',
                           selectedId === collection.id
-                            ? cn('text-white/70', 'hover:text-white', 'hover:bg-white/20')
-                            : cn('text-[#86868b]', 'hover:text-[#1d1d1f]', 'hover:bg-black/[0.06]'),
+                            ? cn(
+                                'text-white/70',
+                                'hover:text-white',
+                                'hover:bg-white/20',
+                              )
+                            : cn(
+                                'text-[#86868b]',
+                                'hover:text-[#1d1d1f]',
+                                'hover:bg-black/[0.06]',
+                              ),
                           'focus:outline-none',
                           'focus-visible:ring-2',
                           'focus-visible:ring-[#007aff]',
@@ -373,8 +427,16 @@ export function CollectionSidebar({
                           'transition-colors',
                           'duration-150',
                           selectedId === collection.id
-                            ? cn('text-white/70', 'hover:text-white', 'hover:bg-white/20')
-                            : cn('text-[#86868b]', 'hover:text-[#ff3b30]', 'hover:bg-[#ff3b30]/10'),
+                            ? cn(
+                                'text-white/70',
+                                'hover:text-white',
+                                'hover:bg-white/20',
+                              )
+                            : cn(
+                                'text-[#86868b]',
+                                'hover:text-[#ff3b30]',
+                                'hover:bg-[#ff3b30]/10',
+                              ),
                           'focus:outline-none',
                           'focus-visible:ring-2',
                           'focus-visible:ring-[#007aff]',
@@ -392,7 +454,9 @@ export function CollectionSidebar({
                     'text-sm',
                     'min-w-[1.5rem]',
                     'text-right',
-                    selectedId === collection.id ? 'text-white/80' : 'text-[#86868b]',
+                    selectedId === collection.id
+                      ? 'text-white/80'
+                      : 'text-[#86868b]',
                   )}
                 >
                   {promptCounts[collection.id] || 0}

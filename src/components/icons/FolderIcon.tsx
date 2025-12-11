@@ -13,7 +13,11 @@ interface FolderIconProps {
 /**
  * Folder icon for collection representation.
  */
-export default function FolderIcon({ className, strokeWidth = 1.5, style }: FolderIconProps) {
+export default function FolderIcon({
+  className,
+  strokeWidth = 1.5,
+  style,
+}: FolderIconProps) {
   return (
     <svg
       aria-hidden="true"

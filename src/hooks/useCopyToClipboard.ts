@@ -36,7 +36,8 @@ export function useCopyToClipboard(
       onCopy?.()
       setTimeout(() => setCopied(false), resetDelay)
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to copy to clipboard')
+      const error =
+        err instanceof Error ? err : new Error('Failed to copy to clipboard')
 
       console.error('Failed to copy:', error)
       onError?.(error)

@@ -9,7 +9,9 @@ describe('PageDescription', () => {
     })
 
     it('renders as paragraph semantic element', () => {
-      const { container } = render(<PageDescription>Description</PageDescription>)
+      const { container } = render(
+        <PageDescription>Description</PageDescription>,
+      )
       expect(container.querySelector('p')).toBeInTheDocument()
     })
 
@@ -25,7 +27,8 @@ describe('PageDescription', () => {
     })
 
     it('supports multiline text', () => {
-      const longText = 'This is a long description that spans multiple lines in the UI.'
+      const longText =
+        'This is a long description that spans multiple lines in the UI.'
       render(<PageDescription>{longText}</PageDescription>)
       expect(screen.getByText(longText)).toBeInTheDocument()
     })
@@ -33,7 +36,9 @@ describe('PageDescription', () => {
 
   describe('Styling', () => {
     it('applies default typography classes', () => {
-      const { container } = render(<PageDescription>Description</PageDescription>)
+      const { container } = render(
+        <PageDescription>Description</PageDescription>,
+      )
       const paragraph = container.querySelector('p')
 
       expect(paragraph).toHaveClass('font-normal')
@@ -44,14 +49,18 @@ describe('PageDescription', () => {
     })
 
     it('applies max-width constraint for readability', () => {
-      const { container } = render(<PageDescription>Description</PageDescription>)
+      const { container } = render(
+        <PageDescription>Description</PageDescription>,
+      )
       const paragraph = container.querySelector('p')
 
       expect(paragraph).toHaveClass('max-w-2xl')
     })
 
     it('applies responsive text sizing', () => {
-      const { container } = render(<PageDescription>Description</PageDescription>)
+      const { container } = render(
+        <PageDescription>Description</PageDescription>,
+      )
       const paragraph = container.querySelector('p')
 
       expect(paragraph).toHaveClass('text-lg')
@@ -91,7 +100,9 @@ describe('PageDescription', () => {
     })
 
     it('does not render id attribute when not provided', () => {
-      const { container } = render(<PageDescription>Description</PageDescription>)
+      const { container } = render(
+        <PageDescription>Description</PageDescription>,
+      )
       const paragraph = container.querySelector('p')
 
       expect(paragraph).not.toHaveAttribute('id')
@@ -101,7 +112,9 @@ describe('PageDescription', () => {
       render(
         <>
           <input aria-describedby="field-description" />
-          <PageDescription id="field-description">Help text for the field</PageDescription>
+          <PageDescription id="field-description">
+            Help text for the field
+          </PageDescription>
         </>,
       )
 

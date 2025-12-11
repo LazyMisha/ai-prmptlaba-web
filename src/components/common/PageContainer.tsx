@@ -14,7 +14,11 @@ interface PageContainerProps {
   centered?: boolean
 }
 
-export function PageContainer({ children, className, centered = false }: PageContainerProps) {
+export function PageContainer({
+  children,
+  className,
+  centered = false,
+}: PageContainerProps) {
   return (
     <div
       className={cn(

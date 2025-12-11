@@ -10,7 +10,9 @@ describe('PageContainer', () => {
       </PageContainer>,
     )
 
-    expect(screen.getByRole('heading', { name: /test heading/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: /test heading/i }),
+    ).toBeInTheDocument()
     expect(screen.getByText(/test content/i)).toBeInTheDocument()
   })
 

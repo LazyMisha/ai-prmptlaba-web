@@ -1,5 +1,8 @@
 import { DB_NAME, DB_VERSION } from '@/constants/db'
-import { SAVED_PROMPTS_DB, DEFAULT_COLLECTION_COLOR } from '@/constants/saved-prompts'
+import {
+  SAVED_PROMPTS_DB,
+  DEFAULT_COLLECTION_COLOR,
+} from '@/constants/saved-prompts'
 import { PROMPT_HISTORY_DB } from '@/constants/history'
 import type {
   Collection,
@@ -47,9 +50,12 @@ function openDatabase(): Promise<IDBDatabase> {
 
       // Existing prompt history store (from v1)
       if (!db.objectStoreNames.contains(PROMPT_HISTORY_DB.STORE_NAME)) {
-        const historyStore = db.createObjectStore(PROMPT_HISTORY_DB.STORE_NAME, {
-          keyPath: 'id',
-        })
+        const historyStore = db.createObjectStore(
+          PROMPT_HISTORY_DB.STORE_NAME,
+          {
+            keyPath: 'id',
+          },
+        )
         historyStore.createIndex('timestamp', 'timestamp', { unique: false })
       }
 
@@ -57,22 +63,40 @@ function openDatabase(): Promise<IDBDatabase> {
       if (oldVersion < 3) {
         // Collections store
         if (!db.objectStoreNames.contains(SAVED_PROMPTS_DB.COLLECTIONS_STORE)) {
-          const collectionsStore = db.createObjectStore(SAVED_PROMPTS_DB.COLLECTIONS_STORE, {
-            keyPath: 'id',
+          const collectionsStore = db.createObjectStore(
+            SAVED_PROMPTS_DB.COLLECTIONS_STORE,
+            {
+              keyPath: 'id',
+            },
+          )
+          collectionsStore.createIndex('sortOrder', 'sortOrder', {
+            unique: false,
           })
-          collectionsStore.createIndex('sortOrder', 'sortOrder', { unique: false })
-          collectionsStore.createIndex('isDefault', 'isDefault', { unique: false })
-          collectionsStore.createIndex('createdAt', 'createdAt', { unique: false })
+          collectionsStore.createIndex('isDefault', 'isDefault', {
+            unique: false,
+          })
+          collectionsStore.createIndex('createdAt', 'createdAt', {
+            unique: false,
+          })
         }
 
         // Saved prompts store
-        if (!db.objectStoreNames.contains(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)) {
-          const savedPromptsStore = db.createObjectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE, {
-            keyPath: 'id',
+        if (
+          !db.objectStoreNames.contains(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
+        ) {
+          const savedPromptsStore = db.createObjectStore(
+            SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE,
+            {
+              keyPath: 'id',
+            },
+          )
+          savedPromptsStore.createIndex('collectionId', 'collectionId', {
+            unique: false,
           })
-          savedPromptsStore.createIndex('collectionId', 'collectionId', { unique: false })
           savedPromptsStore.createIndex('target', 'target', { unique: false })
-          savedPromptsStore.createIndex('createdAt', 'createdAt', { unique: false })
+          savedPromptsStore.createIndex('createdAt', 'createdAt', {
+            unique: false,
+          })
         }
       }
     }
@@ -89,12 +113,17 @@ function openDatabase(): Promise<IDBDatabase> {
  * @param data - The collection data to create
  * @returns Promise that resolves to the created collection
  */
-export async function createCollection(data: CreateCollectionRequest): Promise<Collection> {
+export async function createCollection(
+  data: CreateCollectionRequest,
+): Promise<Collection> {
   const db = await openDatabase()
 
   // Get the next sort order
   const existingCollections = await getAllCollections()
-  const maxSortOrder = existingCollections.reduce((max, c) => Math.max(max, c.sortOrder), -1)
+  const maxSortOrder = existingCollections.reduce(
+    (max, c) => Math.max(max, c.sortOrder),
+    -1,
+  )
 
   const now = Date.now()
   const collection: Collection = {
@@ -109,7 +138,10 @@ export async function createCollection(data: CreateCollectionRequest): Promise<C
   }
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([SAVED_PROMPTS_DB.COLLECTIONS_STORE], 'readwrite')
+    const transaction = db.transaction(
+      [SAVED_PROMPTS_DB.COLLECTIONS_STORE],
+      'readwrite',
+    )
     const store = transaction.objectStore(SAVED_PROMPTS_DB.COLLECTIONS_STORE)
 
     const request = store.add(collection)
@@ -138,7 +170,10 @@ export async function getAllCollections(): Promise<Collection[]> {
     const db = await openDatabase()
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([SAVED_PROMPTS_DB.COLLECTIONS_STORE], 'readonly')
+      const transaction = db.transaction(
+        [SAVED_PROMPTS_DB.COLLECTIONS_STORE],
+        'readonly',
+      )
       const store = transaction.objectStore(SAVED_PROMPTS_DB.COLLECTIONS_STORE)
       const index = store.index('sortOrder')
 
@@ -174,7 +209,9 @@ export async function getAllCollections(): Promise<Collection[]> {
  *
  * @returns Promise that resolves to array of collections with counts
  */
-export async function getAllCollectionsWithCounts(): Promise<CollectionWithCount[]> {
+export async function getAllCollectionsWithCounts(): Promise<
+  CollectionWithCount[]
+> {
   const collections = await getAllCollections()
   const savedPrompts = await getAllSavedPrompts()
 
@@ -197,12 +234,17 @@ export async function getAllCollectionsWithCounts(): Promise<CollectionWithCount
  * @param id - The collection ID
  * @returns Promise that resolves to the collection or null if not found
  */
-export async function getCollectionById(id: string): Promise<Collection | null> {
+export async function getCollectionById(
+  id: string,
+): Promise<Collection | null> {
   try {
     const db = await openDatabase()
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([SAVED_PROMPTS_DB.COLLECTIONS_STORE], 'readonly')
+      const transaction = db.transaction(
+        [SAVED_PROMPTS_DB.COLLECTIONS_STORE],
+        'readonly',
+      )
       const store = transaction.objectStore(SAVED_PROMPTS_DB.COLLECTIONS_STORE)
 
       const request = store.get(id)
@@ -250,7 +292,10 @@ export async function updateCollection(
   }
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([SAVED_PROMPTS_DB.COLLECTIONS_STORE], 'readwrite')
+    const transaction = db.transaction(
+      [SAVED_PROMPTS_DB.COLLECTIONS_STORE],
+      'readwrite',
+    )
     const store = transaction.objectStore(SAVED_PROMPTS_DB.COLLECTIONS_STORE)
 
     const request = store.put(updated)
@@ -276,7 +321,9 @@ export async function updateCollection(
  * @param target - The target name to get or create a collection for
  * @returns Promise that resolves to the collection
  */
-export async function getOrCreateDefaultCollection(target: string): Promise<Collection> {
+export async function getOrCreateDefaultCollection(
+  target: string,
+): Promise<Collection> {
   // Check if a default collection for this target already exists
   const collections = await getAllCollections()
   const existing = collections.find((c) => c.isDefault && c.name === target)
@@ -308,7 +355,10 @@ export async function deleteCollection(id: string): Promise<void> {
   }
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([SAVED_PROMPTS_DB.COLLECTIONS_STORE], 'readwrite')
+    const transaction = db.transaction(
+      [SAVED_PROMPTS_DB.COLLECTIONS_STORE],
+      'readwrite',
+    )
     const store = transaction.objectStore(SAVED_PROMPTS_DB.COLLECTIONS_STORE)
 
     const request = store.delete(id)
@@ -337,7 +387,9 @@ export async function deleteCollection(id: string): Promise<void> {
  * @param data - The prompt data to save
  * @returns Promise that resolves to the saved prompt
  */
-export async function savePrompt(data: SavePromptRequest): Promise<SavedPrompt> {
+export async function savePrompt(
+  data: SavePromptRequest,
+): Promise<SavedPrompt> {
   const db = await openDatabase()
 
   const now = Date.now()
@@ -353,7 +405,10 @@ export async function savePrompt(data: SavePromptRequest): Promise<SavedPrompt> 
   }
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE], 'readwrite')
+    const transaction = db.transaction(
+      [SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE],
+      'readwrite',
+    )
     const store = transaction.objectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
 
     const request = store.add(savedPrompt)
@@ -382,8 +437,13 @@ export async function getAllSavedPrompts(): Promise<SavedPrompt[]> {
     const db = await openDatabase()
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE], 'readonly')
-      const store = transaction.objectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
+      const transaction = db.transaction(
+        [SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE],
+        'readonly',
+      )
+      const store = transaction.objectStore(
+        SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE,
+      )
       const index = store.index('createdAt')
 
       const request = index.openCursor(null, 'prev')
@@ -419,13 +479,20 @@ export async function getAllSavedPrompts(): Promise<SavedPrompt[]> {
  * @param collectionId - The collection ID to filter by
  * @returns Promise that resolves to array of saved prompts
  */
-export async function getSavedPromptsByCollection(collectionId: string): Promise<SavedPrompt[]> {
+export async function getSavedPromptsByCollection(
+  collectionId: string,
+): Promise<SavedPrompt[]> {
   try {
     const db = await openDatabase()
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE], 'readonly')
-      const store = transaction.objectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
+      const transaction = db.transaction(
+        [SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE],
+        'readonly',
+      )
+      const store = transaction.objectStore(
+        SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE,
+      )
       const index = store.index('collectionId')
 
       const request = index.openCursor(IDBKeyRange.only(collectionId))
@@ -463,13 +530,20 @@ export async function getSavedPromptsByCollection(collectionId: string): Promise
  * @param id - The saved prompt ID
  * @returns Promise that resolves to the saved prompt or null if not found
  */
-export async function getSavedPromptById(id: string): Promise<SavedPrompt | null> {
+export async function getSavedPromptById(
+  id: string,
+): Promise<SavedPrompt | null> {
   try {
     const db = await openDatabase()
 
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE], 'readonly')
-      const store = transaction.objectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
+      const transaction = db.transaction(
+        [SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE],
+        'readonly',
+      )
+      const store = transaction.objectStore(
+        SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE,
+      )
 
       const request = store.get(id)
 
@@ -516,7 +590,10 @@ export async function updateSavedPrompt(
   }
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE], 'readwrite')
+    const transaction = db.transaction(
+      [SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE],
+      'readwrite',
+    )
     const store = transaction.objectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
 
     const request = store.put(updated)
@@ -545,7 +622,10 @@ export async function deleteSavedPrompt(id: string): Promise<void> {
   const db = await openDatabase()
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE], 'readwrite')
+    const transaction = db.transaction(
+      [SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE],
+      'readwrite',
+    )
     const store = transaction.objectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
 
     const request = store.delete(id)
@@ -571,7 +651,10 @@ export async function deleteSavedPrompt(id: string): Promise<void> {
  * @param newCollectionId - The target collection ID
  * @returns Promise that resolves to the updated saved prompt
  */
-export async function moveSavedPrompt(id: string, newCollectionId: string): Promise<SavedPrompt> {
+export async function moveSavedPrompt(
+  id: string,
+  newCollectionId: string,
+): Promise<SavedPrompt> {
   return updateSavedPrompt(id, { collectionId: newCollectionId })
 }
 
@@ -585,7 +668,10 @@ export async function bulkDeleteSavedPrompts(ids: string[]): Promise<void> {
   const db = await openDatabase()
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE], 'readwrite')
+    const transaction = db.transaction(
+      [SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE],
+      'readwrite',
+    )
     const store = transaction.objectStore(SAVED_PROMPTS_DB.SAVED_PROMPTS_STORE)
 
     let completed = 0
@@ -627,7 +713,10 @@ export async function bulkDeleteSavedPrompts(ids: string[]): Promise<void> {
  * @param newCollectionId - The target collection ID
  * @returns Promise that resolves when all moves are complete
  */
-export async function bulkMoveSavedPrompts(ids: string[], newCollectionId: string): Promise<void> {
+export async function bulkMoveSavedPrompts(
+  ids: string[],
+  newCollectionId: string,
+): Promise<void> {
   // Move each prompt sequentially to ensure data consistency
   for (const id of ids) {
     await moveSavedPrompt(id, newCollectionId)

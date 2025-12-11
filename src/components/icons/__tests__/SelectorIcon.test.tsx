@@ -22,7 +22,9 @@ describe('SelectorIcon', () => {
   })
 
   it('applies custom className', () => {
-    const { container } = render(<SelectorIcon className="custom-class w-6 h-6" />)
+    const { container } = render(
+      <SelectorIcon className="custom-class w-6 h-6" />,
+    )
     const svg = container.querySelector('svg')
     expect(svg).toHaveClass('custom-class')
     expect(svg).toHaveClass('w-6')

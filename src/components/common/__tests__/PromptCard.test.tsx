@@ -21,7 +21,9 @@ describe('PromptCard', () => {
     it('renders with all required fields', () => {
       render(<PromptCard {...mockPrompt} />)
 
-      expect(screen.getByRole('button', { name: /prompt entry/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /prompt entry/i }),
+      ).toBeInTheDocument()
       expect(screen.getByText('ChatGPT')).toBeInTheDocument()
       expect(screen.getByText(mockPrompt.originalPrompt)).toBeInTheDocument()
       expect(screen.getByText(mockPrompt.enhancedPrompt)).toBeInTheDocument()
@@ -48,14 +50,18 @@ describe('PromptCard', () => {
     it('renders Copy button with correct label', () => {
       render(<PromptCard {...mockPrompt} />)
 
-      expect(screen.getByRole('button', { name: /copy to clipboard/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /copy to clipboard/i }),
+      ).toBeInTheDocument()
       expect(screen.getByText('Copy')).toBeInTheDocument()
     })
 
     it('applies custom className', () => {
       render(<PromptCard {...mockPrompt} className="custom-class" />)
 
-      expect(screen.getByRole('button', { name: /prompt entry/i })).toHaveClass('custom-class')
+      expect(screen.getByRole('button', { name: /prompt entry/i })).toHaveClass(
+        'custom-class',
+      )
     })
   })
 
@@ -63,10 +69,9 @@ describe('PromptCard', () => {
     it('starts in collapsed state', () => {
       render(<PromptCard {...mockPrompt} />)
 
-      expect(screen.getByRole('button', { name: /prompt entry/i })).toHaveAttribute(
-        'aria-expanded',
-        'false',
-      )
+      expect(
+        screen.getByRole('button', { name: /prompt entry/i }),
+      ).toHaveAttribute('aria-expanded', 'false')
     })
 
     it('expands when clicked', () => {
@@ -112,13 +117,17 @@ describe('PromptCard', () => {
       const onDelete = jest.fn()
       render(<PromptCard {...mockPrompt} onDelete={onDelete} />)
 
-      expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /delete/i }),
+      ).toBeInTheDocument()
     })
 
     it('does not render delete button when onDelete is not provided', () => {
       render(<PromptCard {...mockPrompt} />)
 
-      expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: /delete/i }),
+      ).not.toBeInTheDocument()
     })
 
     it('calls onDelete with id when delete button is clicked', () => {
@@ -157,7 +166,9 @@ describe('PromptCard', () => {
     it('does not render move button when onMove is not provided', () => {
       render(<PromptCard {...mockPrompt} />)
 
-      expect(screen.queryByRole('button', { name: /move/i })).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: /move/i }),
+      ).not.toBeInTheDocument()
     })
 
     it('calls onMove with id when move button is clicked', () => {
@@ -191,7 +202,9 @@ describe('PromptCard', () => {
       const onMove = jest.fn()
       render(<PromptCard {...mockPrompt} onDelete={onDelete} onMove={onMove} />)
 
-      expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /delete/i }),
+      ).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /move/i })).toBeInTheDocument()
     })
   })
@@ -200,7 +213,9 @@ describe('PromptCard', () => {
     it('has proper aria-label with expand instruction when collapsed', () => {
       render(<PromptCard {...mockPrompt} />)
 
-      expect(screen.getByRole('button', { name: /prompt entry/i })).toHaveAttribute(
+      expect(
+        screen.getByRole('button', { name: /prompt entry/i }),
+      ).toHaveAttribute(
         'aria-label',
         expect.stringContaining('Click to expand'),
       )
@@ -212,13 +227,18 @@ describe('PromptCard', () => {
       const article = screen.getByRole('button', { name: /prompt entry/i })
       fireEvent.click(article)
 
-      expect(article).toHaveAttribute('aria-label', expect.stringContaining('Click to collapse'))
+      expect(article).toHaveAttribute(
+        'aria-label',
+        expect.stringContaining('Click to collapse'),
+      )
     })
 
     it('has tabIndex for keyboard navigation', () => {
       render(<PromptCard {...mockPrompt} />)
 
-      expect(screen.getByRole('button', { name: /prompt entry/i })).toHaveAttribute('tabIndex', '0')
+      expect(
+        screen.getByRole('button', { name: /prompt entry/i }),
+      ).toHaveAttribute('tabIndex', '0')
     })
 
     it('time element has datetime attribute', () => {
@@ -226,7 +246,10 @@ describe('PromptCard', () => {
 
       const article = screen.getByRole('button', { name: /prompt entry/i })
       const timeElement = article.querySelector('time')
-      expect(timeElement).toHaveAttribute('datetime', new Date(mockPrompt.timestamp).toISOString())
+      expect(timeElement).toHaveAttribute(
+        'datetime',
+        new Date(mockPrompt.timestamp).toISOString(),
+      )
     })
   })
 })

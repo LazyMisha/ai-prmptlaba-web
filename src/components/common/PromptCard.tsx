@@ -11,6 +11,23 @@ import IconTextButton from '@/components/common/IconTextButton'
 import TrashIcon from '@/components/icons/TrashIcon'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
+/**
+ * Translations for PromptCard.
+ */
+export interface PromptCardTranslations {
+  target: string
+  original: string
+  enhanced: string
+  expandCollapse: string
+  deleteEntry: string
+  copy?: string
+  copied?: string
+  move?: string
+  copyToClipboard?: string
+  copiedToClipboard?: string
+  moveToAnother?: string
+}
+
 export interface PromptCardProps {
   /** Unique identifier for the prompt */
   id: string
@@ -26,6 +43,8 @@ export interface PromptCardProps {
   onDelete?: (id: string) => void
   /** Callback when move is requested (for saved prompts) */
   onMove?: (id: string) => void
+  /** Translations for the component */
+  translations?: PromptCardTranslations
   /** Additional CSS classes */
   className?: string
 }
@@ -41,8 +60,24 @@ export function PromptCard({
   timestamp,
   onDelete,
   onMove,
+  translations,
   className,
 }: PromptCardProps) {
+  // Default translations
+  const t = translations ?? {
+    target: 'Target',
+    original: 'Original',
+    enhanced: 'Enhanced',
+    expandCollapse: 'Click to expand',
+    deleteEntry: 'Delete this entry',
+    copy: 'Copy',
+    copied: 'Copied',
+    move: 'Move',
+    copyToClipboard: 'Copy to clipboard',
+    copiedToClipboard: 'Copied to clipboard',
+    moveToAnother: 'Move to another collection',
+  }
+
   const [isExpanded, setIsExpanded] = useState(false)
   const { copied, copy } = useCopyToClipboard()
 
@@ -169,22 +204,32 @@ export function PromptCard({
           )}
         >
           <IconTextButton
-            icon={copied ? <CheckIcon className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
-            label={copied ? 'Copied' : 'Copy'}
+            icon={
+              copied ? (
+                <CheckIcon className="w-4 h-4" />
+              ) : (
+                <CopyIcon className="w-4 h-4" />
+              )
+            }
+            label={copied ? (t.copied ?? 'Copied') : (t.copy ?? 'Copy')}
             onClick={(e) => {
               e.stopPropagation()
               copy(enhancedPrompt)
             }}
             variant={copied ? 'success' : 'default'}
-            ariaLabel={copied ? 'Copied to clipboard' : 'Copy to clipboard'}
+            ariaLabel={
+              copied
+                ? (t.copiedToClipboard ?? 'Copied to clipboard')
+                : (t.copyToClipboard ?? 'Copy to clipboard')
+            }
             className={cn('[&]:pl-0', 'lg:[&]:pl-3')}
           />
           {onMove && (
             <IconTextButton
               icon={<FolderMoveIcon className="w-4 h-4" />}
-              label="Move"
+              label={t.move ?? 'Move'}
               onClick={handleMove}
-              ariaLabel="Move to another collection"
+              ariaLabel={t.moveToAnother ?? 'Move to another collection'}
             />
           )}
           {onDelete && (
@@ -193,7 +238,7 @@ export function PromptCard({
               label="Delete"
               onClick={handleDelete}
               variant="destructive"
-              ariaLabel="Delete this entry"
+              ariaLabel={t.deleteEntry}
             />
           )}
           {/* Desktop-only chevron */}
@@ -218,9 +263,13 @@ export function PromptCard({
               'shrink-0',
             )}
           >
-            Target
+            {t.target}
           </span>
-          <span className={cn('text-sm', 'font-normal', 'text-[#1d1d1f]', 'flex-1')}>{target}</span>
+          <span
+            className={cn('text-sm', 'font-normal', 'text-[#1d1d1f]', 'flex-1')}
+          >
+            {target}
+          </span>
         </div>
 
         {/* Original */}
@@ -236,7 +285,7 @@ export function PromptCard({
               'shrink-0',
             )}
           >
-            Original
+            {t.original}
           </span>
           <span
             className={cn(
@@ -264,7 +313,7 @@ export function PromptCard({
               'shrink-0',
             )}
           >
-            Enhanced
+            {t.enhanced}
           </span>
           <span
             className={cn(

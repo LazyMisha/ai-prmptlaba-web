@@ -14,7 +14,11 @@ export const metadata: Metadata = {
  * Features smooth transitions and elegant spacing.
  * Language-specific layouts handle Header rendering.
  */
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html data-scroll-behavior="smooth" suppressHydrationWarning>
       <body

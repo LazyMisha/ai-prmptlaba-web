@@ -8,7 +8,10 @@ import type {
   EnhanceResponse,
   EnhanceErrorResponse,
 } from '@/types/enhance'
-import { TOOL_CATEGORIES, TOOL_CATEGORY_NAMES } from '@/constants/tool-categories'
+import {
+  TOOL_CATEGORIES,
+  TOOL_CATEGORY_NAMES,
+} from '@/constants/tool-categories'
 import { cn } from '@/lib/utils'
 import { savePromptHistory } from '@/lib/db/prompt-history'
 
@@ -18,12 +21,105 @@ import EnhanceButton from './EnhanceButton'
 import EnhancedResult from './EnhancedResult'
 
 /**
+ * Form translations for EnhanceForm.
+ */
+interface FormTranslations {
+  ariaLabel: string
+  targetLabel: string
+  promptLabel: string
+  placeholder: string
+  helperText: string
+  moreCharNeeded: string
+  moreCharsNeeded: string
+  overLimit: string
+  enhanceButton: string
+  enhancing: string
+  enhancingAriaLabel: string
+  enhanceDisabledAriaLabel: string
+  enhanceAriaLabel: string
+}
+
+/**
+ * Result translations for EnhanceForm.
+ */
+interface ResultTranslations {
+  ariaLabel: string
+  title: string
+  error: string
+  viewOriginal: string
+  copyToClipboard: string
+  copiedToClipboard: string
+  promptSaved: string
+  saveToCollection: string
+}
+
+/**
+ * Validation translations for EnhanceForm.
+ */
+interface ValidationTranslations {
+  enterPrompt: string
+  minLength: string
+  maxLength: string
+  networkError: string
+  unexpectedError: string
+}
+
+/**
+ * Action translations for EnhanceForm.
+ */
+interface ActionTranslations {
+  copy: string
+  copied: string
+  save: string
+  saved: string
+}
+
+/**
+ * Save dialog translations for EnhanceForm.
+ */
+interface SaveDialogTranslations {
+  title?: string
+  newCollectionTitle?: string
+  closeDialog?: string
+  quickSaveTo?: string
+  orChooseCollection?: string
+  noCollectionsYet?: string
+  prompt?: string
+  prompts?: string
+  createAndSave?: string
+  saveToSelected?: string
+}
+
+/**
+ * All translations for EnhanceForm.
+ */
+export interface EnhanceFormTranslations {
+  form: FormTranslations
+  result: ResultTranslations
+  validation: ValidationTranslations
+  actions: ActionTranslations
+  saveDialog?: SaveDialogTranslations
+}
+
+/**
+ * Props for the EnhanceForm component.
+ */
+interface EnhanceFormProps {
+  /** Translations for the form */
+  translations: EnhanceFormTranslations
+}
+
+/**
  * Main form component that orchestrates the prompt enhancement flow.
  * Manages state, validation, API calls, and accessibility features.
  */
-export default function EnhanceForm() {
+export default function EnhanceForm({ translations }: EnhanceFormProps) {
+  const t = translations
+
   const resultRef = useRef<HTMLDivElement>(null)
-  const [target, setTarget] = useState<EnhancementTarget>(TOOL_CATEGORIES.GENERAL)
+  const [target, setTarget] = useState<EnhancementTarget>(
+    TOOL_CATEGORIES.GENERAL,
+  )
   const [prompt, setPrompt] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [enhanced, setEnhanced] = useState<string | null>(null)
@@ -34,15 +130,15 @@ export default function EnhanceForm() {
    */
   const validateForm = (): string | null => {
     if (!prompt.trim()) {
-      return 'Please enter a prompt'
+      return t.validation.enterPrompt
     }
 
     if (prompt.trim().length < 3) {
-      return 'Prompt must be at least 3 characters long'
+      return t.validation.minLength
     }
 
     if (prompt.length > 2000) {
-      return 'Prompt must not exceed 2000 characters'
+      return t.validation.maxLength
     }
 
     return null
@@ -81,12 +177,16 @@ export default function EnhanceForm() {
         body: JSON.stringify(requestBody),
       })
 
-      const data = (await response.json()) as EnhanceResponse | EnhanceErrorResponse
+      const data = (await response.json()) as
+        | EnhanceResponse
+        | EnhanceErrorResponse
 
       if (!response.ok) {
         const errorData = data as EnhanceErrorResponse
 
-        setError(errorData.error || `Request failed with status ${response.status}`)
+        setError(
+          errorData.error || `Request failed with status ${response.status}`,
+        )
 
         return
       }
@@ -114,8 +214,8 @@ export default function EnhanceForm() {
     } catch (err) {
       setError(
         err instanceof Error
-          ? `Network error: ${err.message}`
-          : 'An unexpected error occurred. Please try again.',
+          ? `${t.validation.networkError}: ${err.message}`
+          : t.validation.unexpectedError,
       )
     } finally {
       setIsLoading(false)
@@ -141,9 +241,15 @@ export default function EnhanceForm() {
           e.preventDefault()
           handleEnhance()
         }}
-        aria-label="Prompt enhancement form"
+        aria-label={t.form.ariaLabel}
       >
-        <TargetSelector value={target} onChange={setTarget} disabled={isLoading} className="mb-4" />
+        <TargetSelector
+          value={target}
+          onChange={setTarget}
+          disabled={isLoading}
+          label={t.form.targetLabel}
+          className="mb-4"
+        />
 
         <PromptInput
           value={prompt}
@@ -151,6 +257,14 @@ export default function EnhanceForm() {
           disabled={isLoading}
           error={error && !enhanced ? error : null}
           onKeyDown={handleKeyDown}
+          translations={{
+            label: t.form.promptLabel,
+            placeholder: t.form.placeholder,
+            helperText: t.form.helperText,
+            moreCharNeeded: t.form.moreCharNeeded,
+            moreCharsNeeded: t.form.moreCharsNeeded,
+            overLimit: t.form.overLimit,
+          }}
           className="mb-4"
         />
 
@@ -158,6 +272,13 @@ export default function EnhanceForm() {
           onClick={handleEnhance}
           disabled={!prompt.trim() || prompt.length < 3 || prompt.length > 2000}
           isLoading={isLoading}
+          translations={{
+            buttonText: t.form.enhanceButton,
+            loadingText: t.form.enhancing,
+            enhancingAriaLabel: t.form.enhancingAriaLabel,
+            disabledAriaLabel: t.form.enhanceDisabledAriaLabel,
+            ariaLabel: t.form.enhanceAriaLabel,
+          }}
         />
       </form>
 
@@ -169,6 +290,11 @@ export default function EnhanceForm() {
           originalPrompt={prompt}
           target={TOOL_CATEGORY_NAMES[target]}
           isLoading={isLoading}
+          translations={{
+            result: t.result,
+            actions: t.actions,
+            saveDialog: t.saveDialog,
+          }}
         />
       </div>
     </div>

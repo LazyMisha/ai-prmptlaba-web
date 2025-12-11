@@ -21,7 +21,10 @@ interface LangLayoutProps {
  * Language-specific layout.
  * Sets the html lang attribute and validates the locale.
  */
-export default async function LangLayout({ children, params }: LangLayoutProps) {
+export default async function LangLayout({
+  children,
+  params,
+}: LangLayoutProps) {
   const { lang } = await params
 
   // Validate locale and return 404 if invalid

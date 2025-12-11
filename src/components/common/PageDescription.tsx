@@ -20,7 +20,11 @@ interface PageDescriptionProps {
  * Page description component with refined typography.
  * Features secondary typography with optimal readability.
  */
-export function PageDescription({ children, className, id }: PageDescriptionProps) {
+export function PageDescription({
+  children,
+  className,
+  id,
+}: PageDescriptionProps) {
   return (
     <p
       id={id}

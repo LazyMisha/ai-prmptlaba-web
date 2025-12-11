@@ -13,11 +13,17 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields exist (additional validation happens in enhancePrompt)
     if (!body.target || typeof body.target !== 'string') {
-      return Response.json({ error: 'Missing or invalid "target" field' }, { status: 400 })
+      return Response.json(
+        { error: 'Missing or invalid "target" field' },
+        { status: 400 },
+      )
     }
 
     if (!body.prompt || typeof body.prompt !== 'string') {
-      return Response.json({ error: 'Missing or invalid "prompt" field' }, { status: 400 })
+      return Response.json(
+        { error: 'Missing or invalid "prompt" field' },
+        { status: 400 },
+      )
     }
 
     // Create AbortController for timeout handling
@@ -26,7 +32,11 @@ export async function POST(request: NextRequest) {
 
     try {
       // Enhance the prompt with OpenAI
-      const enhanced = await enhancePrompt(body.target, body.prompt, controller.signal)
+      const enhanced = await enhancePrompt(
+        body.target,
+        body.prompt,
+        controller.signal,
+      )
 
       // Clear timeout
       clearTimeout(timeoutId)
@@ -39,7 +49,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     // Handle JSON parsing errors
     if (error instanceof SyntaxError) {
-      return Response.json({ error: 'Invalid JSON in request body' }, { status: 400 })
+      return Response.json(
+        { error: 'Invalid JSON in request body' },
+        { status: 400 },
+      )
     }
 
     // Handle validation errors
@@ -62,7 +75,10 @@ export async function POST(request: NextRequest) {
 
     // Handle abort/timeout errors
     if ((error as Error).name === 'AbortError') {
-      return Response.json({ error: 'Request timeout - please try again' }, { status: 408 })
+      return Response.json(
+        { error: 'Request timeout - please try again' },
+        { status: 408 },
+      )
     }
 
     // Log unexpected errors for monitoring (in production, use proper logging service)

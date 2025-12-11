@@ -30,7 +30,9 @@ describe('ChevronIcon', () => {
   })
 
   it('applies custom className', () => {
-    const { container } = render(<ChevronIcon className="custom-class w-4 h-4" />)
+    const { container } = render(
+      <ChevronIcon className="custom-class w-4 h-4" />,
+    )
     const svg = container.querySelector('svg')
     expect(svg).toHaveClass('custom-class')
     expect(svg).toHaveClass('w-4')
@@ -78,13 +80,17 @@ describe('ChevronIcon', () => {
     })
 
     it('adds rotate-90 when isRotated is true and rotationAmount is 90', () => {
-      const { container } = render(<ChevronIcon isRotated={true} rotationAmount={90} />)
+      const { container } = render(
+        <ChevronIcon isRotated={true} rotationAmount={90} />,
+      )
       const svg = container.querySelector('svg')
       expect(svg).toHaveClass('rotate-90')
     })
 
     it('adds rotate-180 when isRotated is true and rotationAmount is 180', () => {
-      const { container } = render(<ChevronIcon isRotated={true} rotationAmount={180} />)
+      const { container } = render(
+        <ChevronIcon isRotated={true} rotationAmount={180} />,
+      )
       const svg = container.querySelector('svg')
       expect(svg).toHaveClass('rotate-180')
     })

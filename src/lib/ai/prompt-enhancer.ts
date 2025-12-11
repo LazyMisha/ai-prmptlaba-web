@@ -39,7 +39,9 @@ function validateInput(target: string, prompt: string): void {
   }
 
   if (target.length > CONFIG.maxTargetLength) {
-    throw new ValidationError(`Target must not exceed ${CONFIG.maxTargetLength} characters`)
+    throw new ValidationError(
+      `Target must not exceed ${CONFIG.maxTargetLength} characters`,
+    )
   }
 
   // Validate prompt
@@ -50,11 +52,15 @@ function validateInput(target: string, prompt: string): void {
   const trimmedPrompt = prompt.trim()
 
   if (trimmedPrompt.length < CONFIG.minPromptLength) {
-    throw new ValidationError(`Prompt must be at least ${CONFIG.minPromptLength} characters long`)
+    throw new ValidationError(
+      `Prompt must be at least ${CONFIG.minPromptLength} characters long`,
+    )
   }
 
   if (trimmedPrompt.length > CONFIG.maxPromptLength) {
-    throw new ValidationError(`Prompt must not exceed ${CONFIG.maxPromptLength} characters`)
+    throw new ValidationError(
+      `Prompt must not exceed ${CONFIG.maxPromptLength} characters`,
+    )
   }
 }
 
@@ -318,7 +324,10 @@ export async function enhancePrompt(
     return enhanced
   } catch (error) {
     // Re-throw known errors as-is
-    if (error instanceof ValidationError || (error as Error).name === 'OpenAIError') {
+    if (
+      error instanceof ValidationError ||
+      (error as Error).name === 'OpenAIError'
+    ) {
       throw error
     }
 

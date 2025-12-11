@@ -6,6 +6,20 @@ import MobileSheet from '@/components/common/MobileSheet'
 import PencilIcon from '@/components/icons/PencilIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
 
+/**
+ * Translations for the ManageCollectionsSheet component.
+ */
+export interface ManageCollectionsSheetTranslations {
+  /** Sheet title */
+  title?: string
+  /** Text shown when no collections exist */
+  noCollectionsYet?: string
+  /** Aria label pattern for rename button - receives collection name */
+  renameAriaLabel?: string
+  /** Aria label pattern for delete button - receives collection name */
+  deleteAriaLabel?: string
+}
+
 interface ManageCollectionsSheetProps {
   /** Whether the sheet is open */
   isOpen: boolean
@@ -17,6 +31,8 @@ interface ManageCollectionsSheetProps {
   onEdit?: (id: string) => void
   /** Callback when delete is requested */
   onDelete?: (id: string) => void
+  /** Translations for UI strings */
+  translations?: ManageCollectionsSheetTranslations
 }
 
 /**
@@ -29,17 +45,32 @@ export default function ManageCollectionsSheet({
   collections,
   onEdit,
   onDelete,
+  translations,
 }: ManageCollectionsSheetProps) {
+  // Default translations
+  const t = {
+    title: translations?.title ?? 'Manage Collections',
+    noCollectionsYet: translations?.noCollectionsYet ?? 'No collections yet',
+  }
+
   return (
     <MobileSheet
       isOpen={isOpen}
       onClose={onClose}
-      title="Manage Collections"
+      title={t.title}
       contentClassName="p-0"
     >
       {collections.length === 0 ? (
-        <p className={cn('px-5', 'py-8', 'text-center', 'text-gray-500', 'text-sm')}>
-          No collections yet
+        <p
+          className={cn(
+            'px-5',
+            'py-8',
+            'text-center',
+            'text-gray-500',
+            'text-sm',
+          )}
+        >
+          {t.noCollectionsYet}
         </p>
       ) : (
         <ul className="divide-y divide-gray-100">
@@ -64,7 +95,14 @@ export default function ManageCollectionsSheet({
                     aria-hidden="true"
                   />
                 )}
-                <span className={cn('text-[15px]', 'font-medium', 'text-gray-900', 'truncate')}>
+                <span
+                  className={cn(
+                    'text-[15px]',
+                    'font-medium',
+                    'text-gray-900',
+                    'truncate',
+                  )}
+                >
                   {collection.name}
                 </span>
               </div>

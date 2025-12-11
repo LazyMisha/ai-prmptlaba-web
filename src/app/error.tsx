@@ -21,7 +21,9 @@ export default function Error({
       aria-live="assertive"
     >
       <div className={cn('text-center')}>
-        <h2 className={cn('mb-4', 'text-2xl', 'font-bold')}>Something went wrong</h2>
+        <h2 className={cn('mb-4', 'text-2xl', 'font-bold')}>
+          Something went wrong
+        </h2>
         <button
           onClick={reset}
           className={cn(

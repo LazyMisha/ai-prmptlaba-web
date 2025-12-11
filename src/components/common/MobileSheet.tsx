@@ -56,7 +56,9 @@ export default function MobileSheet({
   contentClassName,
 }: MobileSheetProps) {
   const sheetRef = useRef<HTMLDivElement>(null)
-  const titleId = ariaLabelledBy ?? `mobile-sheet-title-${title.toLowerCase().replace(/\s+/g, '-')}`
+  const titleId =
+    ariaLabelledBy ??
+    `mobile-sheet-title-${title.toLowerCase().replace(/\s+/g, '-')}`
 
   // Handle escape key to close sheet
   useEffect(() => {
@@ -85,7 +87,11 @@ export default function MobileSheet({
   }
 
   // SSR-safe portal
-  const isMounted = useSyncExternalStore(subscribeToNothing, getIsMounted, getServerSnapshot)
+  const isMounted = useSyncExternalStore(
+    subscribeToNothing,
+    getIsMounted,
+    getServerSnapshot,
+  )
 
   if (!isOpen || !isMounted) {
     return null
@@ -140,7 +146,10 @@ export default function MobileSheet({
         )}
       >
         {/* Drag handle */}
-        <div className="flex justify-center pt-3 pb-1" data-testid="drag-handle">
+        <div
+          className="flex justify-center pt-3 pb-1"
+          data-testid="drag-handle"
+        >
           <div className="w-10 h-1 bg-gray-300 rounded-full" />
         </div>
 
@@ -158,7 +167,10 @@ export default function MobileSheet({
             'flex-shrink-0',
           )}
         >
-          <h2 id={titleId} className={cn('text-lg', 'font-semibold', 'text-gray-900')}>
+          <h2
+            id={titleId}
+            className={cn('text-lg', 'font-semibold', 'text-gray-900')}
+          >
             {title}
           </h2>
           {showCloseButton && (
@@ -195,7 +207,11 @@ export default function MobileSheet({
             'py-4',
             contentClassName,
           )}
-          style={{ paddingBottom: footer ? undefined : 'max(1rem, env(safe-area-inset-bottom))' }}
+          style={{
+            paddingBottom: footer
+              ? undefined
+              : 'max(1rem, env(safe-area-inset-bottom))',
+          }}
         >
           {children}
         </div>

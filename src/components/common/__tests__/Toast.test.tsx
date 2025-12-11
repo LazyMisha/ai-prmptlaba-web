@@ -1,5 +1,17 @@
-import { render, screen, fireEvent, act, waitFor, cleanup } from '@testing-library/react'
-import { ToastContainer, showToast, dismissToast, clearAllToasts } from '../Toast'
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+  cleanup,
+} from '@testing-library/react'
+import {
+  ToastContainer,
+  showToast,
+  dismissToast,
+  clearAllToasts,
+} from '../Toast'
 
 describe('Toast', () => {
   beforeEach(() => {
@@ -28,7 +40,12 @@ describe('Toast', () => {
     it('is positioned at bottom center of viewport', () => {
       render(<ToastContainer />)
       const container = document.querySelector('[aria-label="Notifications"]')
-      expect(container).toHaveClass('fixed', 'bottom-6', 'left-1/2', '-translate-x-1/2')
+      expect(container).toHaveClass(
+        'fixed',
+        'bottom-6',
+        'left-1/2',
+        '-translate-x-1/2',
+      )
     })
 
     it('has correct z-index for overlay', () => {
@@ -257,7 +274,9 @@ describe('Toast', () => {
         showToast('success', 'Test toast')
       })
 
-      expect(screen.getByRole('button', { name: /dismiss notification/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /dismiss notification/i }),
+      ).toBeInTheDocument()
     })
 
     it('dismiss button is focusable', () => {

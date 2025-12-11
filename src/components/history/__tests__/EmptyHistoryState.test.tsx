@@ -6,7 +6,9 @@ describe('EmptyHistoryState', () => {
     render(<EmptyHistoryState />)
 
     expect(screen.getByText(/no prompt history yet/i)).toBeInTheDocument()
-    expect(screen.getByText(/your enhanced prompts will appear here/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/your enhanced prompts will appear here/i),
+    ).toBeInTheDocument()
   })
 
   it('renders with correct styling', () => {

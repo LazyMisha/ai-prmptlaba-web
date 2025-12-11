@@ -30,7 +30,9 @@ describe('IconTextButton', () => {
     it('renders as a button element', () => {
       render(<IconTextButton {...defaultProps} />)
 
-      expect(screen.getByRole('button', { name: 'Test Button' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: 'Test Button' }),
+      ).toBeInTheDocument()
     })
   })
 
@@ -123,13 +125,19 @@ describe('IconTextButton', () => {
     it('uses label as aria-label by default', () => {
       render(<IconTextButton {...defaultProps} />)
 
-      expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'Test Button')
+      expect(screen.getByRole('button')).toHaveAttribute(
+        'aria-label',
+        'Test Button',
+      )
     })
 
     it('uses custom ariaLabel when provided', () => {
       render(<IconTextButton {...defaultProps} ariaLabel="Custom label" />)
 
-      expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'Custom label')
+      expect(screen.getByRole('button')).toHaveAttribute(
+        'aria-label',
+        'Custom label',
+      )
     })
 
     it('has proper focus styles', () => {

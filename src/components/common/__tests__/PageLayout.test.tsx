@@ -1,6 +1,42 @@
 import { render, screen } from '@testing-library/react'
 import { PageLayout } from '../PageLayout'
 
+// Mock the async Header component to avoid async rendering issues in tests
+jest.mock('../Header', () => {
+  return function MockHeader({
+    showLogo,
+    pageTitle,
+    locale,
+  }: {
+    showLogo?: boolean
+    pageTitle?: string
+    locale?: string
+  }) {
+    return (
+      <header role="banner">
+        <nav role="navigation" aria-label="Main navigation">
+          {showLogo ? (
+            <a href={`/${locale}`} aria-label="Go to home page">
+              <img alt="AI Prompt Laba" src="/logo.svg" />
+            </a>
+          ) : (
+            <a href={`/${locale}`} aria-label="Go to home page">
+              AI Prompt Laba
+            </a>
+          )}
+          {pageTitle && <h1>{pageTitle}</h1>}
+          <a
+            href={`/${locale}/enhance`}
+            aria-label="Go to prompt enhancer page"
+          >
+            Enhance
+          </a>
+        </nav>
+      </header>
+    )
+  }
+})
+
 describe('PageLayout', () => {
   describe('Default mode', () => {
     it('renders Header with default props', () => {
@@ -46,7 +82,10 @@ describe('PageLayout', () => {
           Content
         </PageLayout>,
       )
-      const heading = screen.getByRole('heading', { level: 1, name: /prompt enhancer/i })
+      const heading = screen.getByRole('heading', {
+        level: 1,
+        name: /prompt enhancer/i,
+      })
       expect(heading).toBeInTheDocument()
     })
 

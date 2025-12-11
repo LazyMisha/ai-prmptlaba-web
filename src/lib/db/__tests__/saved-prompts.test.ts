@@ -66,53 +66,57 @@ function createMockStore(data: Map<string, unknown>) {
       return request
     }),
     index: jest.fn((indexName: string) => ({
-      openCursor: jest.fn((range?: IDBKeyRange | null, direction?: IDBCursorDirection) => {
-        const request = createMockRequest()
-        setTimeout(() => {
-          let entries = Array.from(data.values())
+      openCursor: jest.fn(
+        (range?: IDBKeyRange | null, direction?: IDBCursorDirection) => {
+          const request = createMockRequest()
+          setTimeout(() => {
+            let entries = Array.from(data.values())
 
-          // Filter by key range if provided (for collectionId index)
-          if (range && (range as unknown as { _only?: string })._only) {
-            const filterValue = (range as unknown as { _only: string })._only
-            entries = entries.filter(
-              (entry) => (entry as { collectionId?: string }).collectionId === filterValue,
-            )
-          }
-
-          // Sort based on index and direction
-          entries.sort((a, b) => {
-            const aVal =
-              (a as Record<string, number>)[indexName] ??
-              (a as { createdAt?: number }).createdAt ??
-              0
-            const bVal =
-              (b as Record<string, number>)[indexName] ??
-              (b as { createdAt?: number }).createdAt ??
-              0
-            return direction === 'prev' ? bVal - aVal : aVal - bVal
-          })
-
-          let index = 0
-
-          const emitCursor = () => {
-            if (index < entries.length) {
-              request.result = {
-                value: entries[index],
-                continue: () => {
-                  index++
-                  setTimeout(() => emitCursor(), 0)
-                },
-              }
-            } else {
-              request.result = null
+            // Filter by key range if provided (for collectionId index)
+            if (range && (range as unknown as { _only?: string })._only) {
+              const filterValue = (range as unknown as { _only: string })._only
+              entries = entries.filter(
+                (entry) =>
+                  (entry as { collectionId?: string }).collectionId ===
+                  filterValue,
+              )
             }
-            request.onsuccess?.({ target: request })
-          }
 
-          emitCursor()
-        }, 0)
-        return request
-      }),
+            // Sort based on index and direction
+            entries.sort((a, b) => {
+              const aVal =
+                (a as Record<string, number>)[indexName] ??
+                (a as { createdAt?: number }).createdAt ??
+                0
+              const bVal =
+                (b as Record<string, number>)[indexName] ??
+                (b as { createdAt?: number }).createdAt ??
+                0
+              return direction === 'prev' ? bVal - aVal : aVal - bVal
+            })
+
+            let index = 0
+
+            const emitCursor = () => {
+              if (index < entries.length) {
+                request.result = {
+                  value: entries[index],
+                  continue: () => {
+                    index++
+                    setTimeout(() => emitCursor(), 0)
+                  },
+                }
+              } else {
+                request.result = null
+              }
+              request.onsuccess?.({ target: request })
+            }
+
+            emitCursor()
+          }, 0)
+          return request
+        },
+      ),
     })),
     createIndex: jest.fn(),
   }
@@ -162,7 +166,9 @@ beforeEach(() => {
 
   // Create mock database
   mockDb = {
-    transaction: jest.fn((storeNames: string[]) => createMockTransaction(storeNames)),
+    transaction: jest.fn((storeNames: string[]) =>
+      createMockTransaction(storeNames),
+    ),
     objectStoreNames: {
       contains: jest.fn(() => true),
     },
@@ -355,9 +361,9 @@ describe('saved-prompts database', () => {
       })
 
       it('throws error for non-existent collection', async () => {
-        await expect(updateCollection('non-existent-id', { name: 'Test' })).rejects.toThrow(
-          'Collection not found',
-        )
+        await expect(
+          updateCollection('non-existent-id', { name: 'Test' }),
+        ).rejects.toThrow('Collection not found')
       })
     })
 
@@ -463,7 +469,8 @@ describe('saved-prompts database', () => {
         })
 
         // Get or create default should create a new default collection
-        const defaultCollection = await getOrCreateDefaultCollection('Custom Target')
+        const defaultCollection =
+          await getOrCreateDefaultCollection('Custom Target')
 
         expect(defaultCollection.id).not.toBe(nonDefault.id)
         expect(defaultCollection.isDefault).toBe(true)
@@ -632,7 +639,9 @@ describe('saved-prompts database', () => {
           collectionId: testCollection.id,
         })
 
-        const updated = await updateSavedPrompt(created.id, { notes: 'New notes' })
+        const updated = await updateSavedPrompt(created.id, {
+          notes: 'New notes',
+        })
 
         expect(updated.notes).toBe('New notes')
       })
@@ -653,9 +662,9 @@ describe('saved-prompts database', () => {
       })
 
       it('throws error for non-existent prompt', async () => {
-        await expect(updateSavedPrompt('non-existent', { notes: 'Test' })).rejects.toThrow(
-          'Saved prompt not found',
-        )
+        await expect(
+          updateSavedPrompt('non-existent', { notes: 'Test' }),
+        ).rejects.toThrow('Saved prompt not found')
       })
     })
 
@@ -677,7 +686,9 @@ describe('saved-prompts database', () => {
 
     describe('moveSavedPrompt', () => {
       it('changes collection reference', async () => {
-        const collection2 = await createCollection({ name: 'Target Collection' })
+        const collection2 = await createCollection({
+          name: 'Target Collection',
+        })
         const prompt = await savePrompt({
           originalPrompt: 'Test',
           enhancedPrompt: 'Enhanced',
@@ -742,7 +753,9 @@ describe('saved-prompts database', () => {
       it('handles empty array gracefully', async () => {
         const collection2 = await createCollection({ name: 'Target' })
 
-        await expect(bulkMoveSavedPrompts([], collection2.id)).resolves.toBeUndefined()
+        await expect(
+          bulkMoveSavedPrompts([], collection2.id),
+        ).resolves.toBeUndefined()
       })
     })
   })
@@ -766,8 +779,12 @@ describe('saved-prompts database', () => {
         description: 'Description with "quotes" and \'apostrophes\'',
       })
 
-      expect(result.name).toBe('Test 🎉 Collection <script>alert("xss")</script>')
-      expect(result.description).toBe('Description with "quotes" and \'apostrophes\'')
+      expect(result.name).toBe(
+        'Test 🎉 Collection <script>alert("xss")</script>',
+      )
+      expect(result.description).toBe(
+        'Description with "quotes" and \'apostrophes\'',
+      )
     })
 
     it('handles empty description', async () => {

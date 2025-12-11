@@ -1,10 +1,34 @@
 import { cn } from '@/lib/utils'
 
 /**
+ * Translations for EmptyHistoryState.
+ */
+interface EmptyHistoryStateTranslations {
+  title: string
+  description: string
+}
+
+/**
+ * Props for the EmptyHistoryState component.
+ */
+interface EmptyHistoryStateProps {
+  /** Translations for the component */
+  translations?: EmptyHistoryStateTranslations
+}
+
+/**
  * Empty state component displayed when no history entries are found.
  * Features subtle visual styling with centered content.
  */
-export default function EmptyHistoryState() {
+export default function EmptyHistoryState({
+  translations,
+}: EmptyHistoryStateProps) {
+  // Default translations
+  const t = translations ?? {
+    title: 'No prompt history yet',
+    description: 'Your enhanced prompts will appear here',
+  }
+
   return (
     <div
       className={cn(
@@ -37,7 +61,7 @@ export default function EmptyHistoryState() {
           'mb-2',
         )}
       >
-        No prompt history yet
+        {t.title}
       </p>
       <p
         className={cn(
@@ -49,7 +73,7 @@ export default function EmptyHistoryState() {
           'tracking-tight',
         )}
       >
-        Your enhanced prompts will appear here
+        {t.description}
       </p>
     </div>
   )

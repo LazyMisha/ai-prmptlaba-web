@@ -21,7 +21,12 @@ interface PageLayoutProps {
  * Shared page layout component with Header and Footer.
  * Used by route group layouts to provide consistent structure.
  */
-export function PageLayout({ children, showLogo = false, pageTitle, locale }: PageLayoutProps) {
+export function PageLayout({
+  children,
+  showLogo = false,
+  pageTitle,
+  locale,
+}: PageLayoutProps) {
   return (
     <>
       <Header showLogo={showLogo} pageTitle={pageTitle} locale={locale} />

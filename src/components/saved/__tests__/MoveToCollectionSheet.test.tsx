@@ -73,7 +73,9 @@ describe('MoveToCollectionSheet', () => {
     })
 
     it('shows Current indicator for current collection', () => {
-      render(<MoveToCollectionSheet {...defaultProps} currentCollectionId="col-2" />)
+      render(
+        <MoveToCollectionSheet {...defaultProps} currentCollectionId="col-2" />,
+      )
 
       expect(screen.getByText('Current')).toBeInTheDocument()
     })
@@ -112,7 +114,11 @@ describe('MoveToCollectionSheet', () => {
     it('does not call onSelect when current collection is clicked', () => {
       const onSelect = jest.fn()
       render(
-        <MoveToCollectionSheet {...defaultProps} onSelect={onSelect} currentCollectionId="col-2" />,
+        <MoveToCollectionSheet
+          {...defaultProps}
+          onSelect={onSelect}
+          currentCollectionId="col-2"
+        />,
       )
 
       fireEvent.click(screen.getByText('Work'))
@@ -149,7 +155,9 @@ describe('MoveToCollectionSheet', () => {
     })
 
     it('disables current collection button', () => {
-      render(<MoveToCollectionSheet {...defaultProps} currentCollectionId="col-1" />)
+      render(
+        <MoveToCollectionSheet {...defaultProps} currentCollectionId="col-1" />,
+      )
 
       const generalButton = screen.getByText('General').closest('button')
       expect(generalButton).toBeDisabled()
@@ -161,7 +169,9 @@ describe('MoveToCollectionSheet', () => {
       render(<MoveToCollectionSheet {...defaultProps} />)
 
       // Color dots are spans with w-3 h-3 classes inside buttons
-      const buttons = screen.getAllByRole('button', { name: /General|Work|Personal/i })
+      const buttons = screen.getAllByRole('button', {
+        name: /General|Work|Personal/i,
+      })
       expect(buttons.length).toBe(3)
 
       // Each button should have a color indicator span
@@ -172,7 +182,9 @@ describe('MoveToCollectionSheet', () => {
     })
 
     it('applies different styles to current collection', () => {
-      render(<MoveToCollectionSheet {...defaultProps} currentCollectionId="col-2" />)
+      render(
+        <MoveToCollectionSheet {...defaultProps} currentCollectionId="col-2" />,
+      )
 
       const workButton = screen.getByText('Work').closest('button')
       expect(workButton).toHaveClass('bg-[#007aff]/10')

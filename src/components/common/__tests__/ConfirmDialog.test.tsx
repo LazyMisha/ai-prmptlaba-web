@@ -36,20 +36,34 @@ describe('ConfirmDialog', () => {
     it('renders description correctly', () => {
       render(<ConfirmDialog {...defaultProps} />)
 
-      expect(screen.getByText('Are you sure you want to proceed?')).toBeInTheDocument()
+      expect(
+        screen.getByText('Are you sure you want to proceed?'),
+      ).toBeInTheDocument()
     })
 
     it('renders default button text when not provided', () => {
       render(<ConfirmDialog {...defaultProps} />)
 
-      expect(screen.getByRole('button', { name: /confirm/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /confirm/i }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /cancel/i }),
+      ).toBeInTheDocument()
     })
 
     it('renders custom button text when provided', () => {
-      render(<ConfirmDialog {...defaultProps} confirmText="Delete" cancelText="Keep" />)
+      render(
+        <ConfirmDialog
+          {...defaultProps}
+          confirmText="Delete"
+          cancelText="Keep"
+        />,
+      )
 
-      expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /delete/i }),
+      ).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /keep/i })).toBeInTheDocument()
     })
   })

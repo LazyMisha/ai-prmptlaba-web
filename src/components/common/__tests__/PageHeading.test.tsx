@@ -5,7 +5,9 @@ describe('PageHeading', () => {
   describe('Rendering', () => {
     it('renders text content correctly', () => {
       render(<PageHeading>Test Heading</PageHeading>)
-      expect(screen.getByRole('heading', { level: 1, name: /test heading/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { level: 1, name: /test heading/i }),
+      ).toBeInTheDocument()
     })
 
     it('renders as h1 semantic element', () => {
@@ -94,7 +96,10 @@ describe('PageHeading', () => {
 
       const link = screen.getByRole('link', { name: /go to features/i })
       expect(link).toHaveAttribute('href', '#features')
-      expect(screen.getByRole('heading', { level: 1 })).toHaveAttribute('id', 'features')
+      expect(screen.getByRole('heading', { level: 1 })).toHaveAttribute(
+        'id',
+        'features',
+      )
     })
 
     it('can be referenced by aria-labelledby', () => {

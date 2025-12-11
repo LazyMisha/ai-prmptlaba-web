@@ -11,6 +11,55 @@ import BookmarkIcon from '@/components/icons/BookmarkIcon'
 import SaveToCollectionDialog from '@/components/common/SaveToCollectionDialog'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
+/**
+ * Result translations for EnhancedResult.
+ */
+interface ResultTranslations {
+  ariaLabel: string
+  title: string
+  error: string
+  viewOriginal: string
+  copyToClipboard: string
+  copiedToClipboard: string
+  promptSaved: string
+  saveToCollection: string
+}
+
+/**
+ * Action translations for EnhancedResult.
+ */
+interface ActionTranslations {
+  copy: string
+  copied: string
+  save: string
+  saved: string
+}
+
+/**
+ * Save dialog translations for EnhancedResult.
+ */
+interface SaveDialogTranslations {
+  title?: string
+  newCollectionTitle?: string
+  closeDialog?: string
+  quickSaveTo?: string
+  orChooseCollection?: string
+  noCollectionsYet?: string
+  prompt?: string
+  prompts?: string
+  createAndSave?: string
+  saveToSelected?: string
+}
+
+/**
+ * All translations for EnhancedResult.
+ */
+interface EnhancedResultTranslations {
+  result: ResultTranslations
+  actions: ActionTranslations
+  saveDialog?: SaveDialogTranslations
+}
+
 export interface EnhancedResultProps {
   /** The enhanced prompt text */
   enhanced: string | null
@@ -22,6 +71,8 @@ export interface EnhancedResultProps {
   target: string
   /** Whether enhancement is in progress */
   isLoading?: boolean
+  /** Translations for the component */
+  translations?: EnhancedResultTranslations
   /** Additional CSS classes */
   className?: string
 }
@@ -35,8 +86,29 @@ export default function EnhancedResult({
   originalPrompt,
   target,
   isLoading,
+  translations,
   className,
 }: EnhancedResultProps) {
+  // Default translations
+  const t = translations ?? {
+    result: {
+      ariaLabel: 'Enhanced prompt result',
+      title: 'Enhanced Prompt',
+      error: 'Enhancement Failed',
+      viewOriginal: 'View original prompt',
+      copyToClipboard: 'Copy to clipboard',
+      copiedToClipboard: 'Copied to clipboard',
+      promptSaved: 'Prompt saved',
+      saveToCollection: 'Save prompt to collection',
+    },
+    actions: {
+      copy: 'Copy',
+      copied: 'Copied',
+      save: 'Save',
+      saved: 'Saved',
+    },
+  }
+
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
   // Store the prompt that was saved, so we can check if current prompt matches
   const [savedPrompt, setSavedPrompt] = useState<string | null>(null)
@@ -94,10 +166,19 @@ export default function EnhancedResult({
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className={cn('text-base', 'font-semibold', 'text-red-900', 'mb-1')}>
-              Enhancement Failed
+            <h3
+              className={cn(
+                'text-base',
+                'font-semibold',
+                'text-red-900',
+                'mb-1',
+              )}
+            >
+              {t.result.error}
             </h3>
-            <p className={cn('text-sm', 'font-light', 'text-red-700')}>{error}</p>
+            <p className={cn('text-sm', 'font-light', 'text-red-700')}>
+              {error}
+            </p>
           </div>
         </div>
       </div>
@@ -111,7 +192,7 @@ export default function EnhancedResult({
   return (
     <div
       role="region"
-      aria-label="Enhanced prompt result"
+      aria-label={t.result.ariaLabel}
       aria-live="polite"
       className={cn(
         // Spacing
@@ -160,7 +241,10 @@ export default function EnhancedResult({
               'rounded-full',
             )}
           >
-            <CheckIcon className="w-3.5 h-3.5 text-emerald-600" strokeWidth={2.5} />
+            <CheckIcon
+              className="w-3.5 h-3.5 text-emerald-600"
+              strokeWidth={2.5}
+            />
           </div>
           <h3
             className={cn(
@@ -171,27 +255,41 @@ export default function EnhancedResult({
               'whitespace-nowrap',
             )}
           >
-            Enhanced Prompt
+            {t.result.title}
           </h3>
         </div>
 
         <div className={cn('flex', 'items-center', 'gap-2', 'shrink-0')}>
           {/* Save button */}
           <IconTextButton
-            icon={<BookmarkIcon className="w-4 h-4" filled={isCurrentlySaved} />}
-            label={isCurrentlySaved ? 'Saved' : 'Save'}
+            icon={
+              <BookmarkIcon className="w-4 h-4" filled={isCurrentlySaved} />
+            }
+            label={isCurrentlySaved ? t.actions.saved : t.actions.save}
             onClick={() => !isCurrentlySaved && setIsSaveDialogOpen(true)}
             disabled={isCurrentlySaved}
             variant={isCurrentlySaved ? 'primary' : 'default'}
-            ariaLabel={isCurrentlySaved ? 'Prompt saved' : 'Save prompt to collection'}
+            ariaLabel={
+              isCurrentlySaved
+                ? t.result.promptSaved
+                : t.result.saveToCollection
+            }
           />
 
           <IconTextButton
-            icon={copied ? <CheckIcon className="w-4 h-4" /> : <CopyIcon className="w-4 h-4" />}
-            label={copied ? 'Copied' : 'Copy'}
+            icon={
+              copied ? (
+                <CheckIcon className="w-4 h-4" />
+              ) : (
+                <CopyIcon className="w-4 h-4" />
+              )
+            }
+            label={copied ? t.actions.copied : t.actions.copy}
             onClick={() => copy(enhanced)}
             variant={copied ? 'success' : 'default'}
-            ariaLabel={copied ? 'Copied to clipboard' : 'Copy to clipboard'}
+            ariaLabel={
+              copied ? t.result.copiedToClipboard : t.result.copyToClipboard
+            }
           />
         </div>
       </div>
@@ -204,6 +302,7 @@ export default function EnhancedResult({
         originalPrompt={originalPrompt}
         enhancedPrompt={enhanced}
         target={target}
+        translations={translations?.saveDialog}
       />
 
       {/* Enhanced prompt content */}
@@ -278,7 +377,7 @@ export default function EnhancedResult({
                   'group-open:rotate-0',
                 )}
               />
-              View original prompt
+              {t.result.viewOriginal}
             </summary>
 
             <div

@@ -70,9 +70,13 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
   }, [toast.duration])
 
   const iconMap = {
-    success: <CheckIcon className={cn('w-4', 'h-4', 'text-white')} strokeWidth={2.5} />,
+    success: (
+      <CheckIcon className={cn('w-4', 'h-4', 'text-white')} strokeWidth={2.5} />
+    ),
     error: <CloseIcon className={cn('w-4', 'h-4', 'text-white')} />,
-    info: <InfoIcon className={cn('w-4', 'h-4', 'text-white')} strokeWidth={2} />,
+    info: (
+      <InfoIcon className={cn('w-4', 'h-4', 'text-white')} strokeWidth={2} />
+    ),
   }
 
   const bgColorMap = {
@@ -126,7 +130,9 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
       </div>
 
       {/* Message */}
-      <p className={cn('flex-1', 'text-sm', 'font-medium', 'text-white')}>{toast.message}</p>
+      <p className={cn('flex-1', 'text-sm', 'font-medium', 'text-white')}>
+        {toast.message}
+      </p>
 
       {/* Dismiss button */}
       <button

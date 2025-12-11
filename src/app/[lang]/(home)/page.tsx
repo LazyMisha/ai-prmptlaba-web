@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { PageContainer } from '@/components/common/PageContainer'
 import { PageHeading } from '@/components/common/PageHeading'
 import { PageDescription } from '@/components/common/PageDescription'
 import { getDictionary } from '@/i18n/dictionaries'
-import { hasLocale, type Locale } from '@/i18n/locales'
+import type { Locale } from '@/i18n/locales'
 
 export const metadata: Metadata = {
   title: 'AI Prompt Laba | Smart Prompt Creation & Management',
@@ -28,11 +27,6 @@ interface HomePageProps {
  */
 export default async function HomePage({ params }: HomePageProps) {
   const { lang } = await params
-
-  if (!hasLocale(lang)) {
-    notFound()
-  }
-
   const locale = lang as Locale
   const dict = await getDictionary(locale)
 
@@ -59,7 +53,7 @@ export default async function HomePage({ params }: HomePageProps) {
           'rounded-[22%]',
         )}
       />
-      <PageHeading>AI Prompt Laba</PageHeading>
+      <PageHeading>{dict.home.title}</PageHeading>
       <PageDescription>{dict.home.description}</PageDescription>
 
       <Link
@@ -99,7 +93,7 @@ export default async function HomePage({ params }: HomePageProps) {
           'active:scale-[0.98]',
         )}
       >
-        Enhance Your Prompt
+        {dict.home.cta}
       </Link>
     </PageContainer>
   )

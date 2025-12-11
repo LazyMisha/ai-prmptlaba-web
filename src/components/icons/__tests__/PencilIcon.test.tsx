@@ -24,7 +24,9 @@ describe('PencilIcon', () => {
   })
 
   it('applies custom className', () => {
-    const { container } = render(<PencilIcon className="w-6 h-6 text-blue-500" />)
+    const { container } = render(
+      <PencilIcon className="w-6 h-6 text-blue-500" />,
+    )
     const svg = container.querySelector('svg')
 
     expect(svg).toHaveClass('w-6', 'h-6', 'text-blue-500')

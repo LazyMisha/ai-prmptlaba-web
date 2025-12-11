@@ -6,9 +6,40 @@ import { cn } from '@/lib/utils'
 import BookmarkIcon from '@/components/icons/BookmarkIcon'
 
 /**
+ * Translations for the EmptySavedState component.
+ */
+export interface EmptySavedStateTranslations {
+  /** Empty state title */
+  title?: string
+  /** Empty state description */
+  description?: string
+  /** Call-to-action button text */
+  cta?: string
+}
+
+interface EmptySavedStateProps {
+  /** Translations for UI strings */
+  translations?: EmptySavedStateTranslations
+  /** Base path for links (includes locale) */
+  basePath?: string
+}
+
+/**
  * EmptySavedState displays a friendly empty state when no prompts are saved.
  */
-export function EmptySavedState() {
+export function EmptySavedState({
+  translations,
+  basePath = '',
+}: EmptySavedStateProps) {
+  // Default translations
+  const t = {
+    title: translations?.title ?? 'No saved prompts yet',
+    description:
+      translations?.description ??
+      'Save your enhanced prompts to organize them into collections and access them anytime.',
+    cta: translations?.cta ?? 'Start Enhancing',
+  }
+
   return (
     <div
       className={cn(
@@ -75,7 +106,7 @@ export function EmptySavedState() {
           'mb-2',
         )}
       >
-        No saved prompts yet
+        {t.title}
       </h2>
 
       {/* Description */}
@@ -93,12 +124,12 @@ export function EmptySavedState() {
           'mb-8',
         )}
       >
-        Save your enhanced prompts to organize them into collections and access them anytime.
+        {t.description}
       </p>
 
       {/* CTA Button */}
       <Link
-        href="/enhance"
+        href={`${basePath}/enhance`}
         className={cn(
           // Layout
           'inline-flex',
@@ -131,7 +162,7 @@ export function EmptySavedState() {
           'focus-visible:ring-offset-2',
         )}
       >
-        Start Enhancing
+        {t.cta}
       </Link>
     </div>
   )

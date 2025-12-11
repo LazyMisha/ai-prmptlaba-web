@@ -91,7 +91,11 @@ export default function ConfirmDialog({
   }
 
   // SSR-safe portal
-  const isMounted = useSyncExternalStore(subscribeToNothing, getIsMounted, getServerSnapshot)
+  const isMounted = useSyncExternalStore(
+    subscribeToNothing,
+    getIsMounted,
+    getServerSnapshot,
+  )
 
   if (!isOpen || !isMounted) {
     return null
@@ -230,7 +234,9 @@ export default function ConfirmDialog({
               // Focus
               'focus:outline-none',
               'focus-visible:ring-2',
-              isDestructive ? 'focus-visible:ring-red-500' : 'focus-visible:ring-blue-500',
+              isDestructive
+                ? 'focus-visible:ring-red-500'
+                : 'focus-visible:ring-blue-500',
               'focus-visible:ring-inset',
             )}
           >

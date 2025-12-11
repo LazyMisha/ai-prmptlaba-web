@@ -45,7 +45,8 @@ function getOpenAIClient(): OpenAI {
 /**
  * Sleep utility for exponential backoff
  */
-const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
+const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms))
 
 /**
  * Determine if an error is retryable
@@ -53,7 +54,10 @@ const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout
 function isRetryableError(error: unknown): boolean {
   if (error instanceof OpenAI.APIError) {
     // Retry on 5xx server errors and rate limits
-    return error.status !== undefined && (error.status >= 500 || error.status === 429)
+    return (
+      error.status !== undefined &&
+      (error.status >= 500 || error.status === 429)
+    )
   }
 
   // Retry on network errors
@@ -113,7 +117,11 @@ export async function callOpenAI(
       const content = completion.choices[0]?.message?.content
 
       if (!content) {
-        throw new OpenAIError('OpenAI returned an empty response. Please try again.', 500, true)
+        throw new OpenAIError(
+          'OpenAI returned an empty response. Please try again.',
+          500,
+          true,
+        )
       }
 
       return content.trim()
@@ -131,7 +139,11 @@ export async function callOpenAI(
 
         // If this is the last attempt or error is not retryable, throw immediately
         if (attempt === OPENAI_CONFIG.retryAttempts || !isRetryable) {
-          throw new OpenAIError(`OpenAI API error: ${error.message}`, error.status, isRetryable)
+          throw new OpenAIError(
+            `OpenAI API error: ${error.message}`,
+            error.status,
+            isRetryable,
+          )
         }
 
         // Calculate exponential backoff delay: 300ms, 900ms
@@ -158,7 +170,11 @@ export async function callOpenAI(
       }
 
       // Non-retryable error
-      throw new OpenAIError(`Unexpected error calling OpenAI: ${lastError.message}`, 500, false)
+      throw new OpenAIError(
+        `Unexpected error calling OpenAI: ${lastError.message}`,
+        500,
+        false,
+      )
     }
   }
 

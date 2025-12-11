@@ -55,7 +55,9 @@ describe('useCopyToClipboard', () => {
   })
 
   it('should respect custom resetDelay', async () => {
-    const { result } = renderHook(() => useCopyToClipboard({ resetDelay: 1000 }))
+    const { result } = renderHook(() =>
+      useCopyToClipboard({ resetDelay: 1000 }),
+    )
 
     await act(async () => {
       await result.current.copy('test text')

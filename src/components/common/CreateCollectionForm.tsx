@@ -3,11 +3,28 @@
 import { useRef, useEffect } from 'react'
 
 import { cn } from '@/lib/utils'
-import { COLLECTION_COLORS, DEFAULT_COLLECTION_COLOR } from '@/constants/saved-prompts'
+import {
+  COLLECTION_COLORS,
+  DEFAULT_COLLECTION_COLOR,
+} from '@/constants/saved-prompts'
 import CheckIcon from '@/components/icons/CheckIcon'
 import ChevronIcon from '@/components/icons/ChevronIcon'
 
 import type { CollectionColor } from '@/constants/saved-prompts'
+
+/**
+ * Translations for the CreateCollectionForm component.
+ */
+export interface CreateCollectionFormTranslations {
+  /** Label for the name input */
+  nameLabel?: string
+  /** Placeholder for the name input */
+  namePlaceholder?: string
+  /** Label for the color picker */
+  colorLabel?: string
+  /** Text for back button */
+  backToCollections?: string
+}
 
 /**
  * Props for the CreateCollectionForm component.
@@ -33,6 +50,8 @@ interface CreateCollectionFormProps {
   autoFocus?: boolean
   /** Additional CSS classes for the container */
   className?: string
+  /** Translations for UI strings */
+  translations?: CreateCollectionFormTranslations
 }
 
 /**
@@ -49,8 +68,17 @@ export default function CreateCollectionForm({
   onBack,
   autoFocus = false,
   className,
+  translations,
 }: CreateCollectionFormProps) {
   const nameInputRef = useRef<HTMLInputElement>(null)
+
+  // Default translations
+  const t = {
+    nameLabel: translations?.nameLabel ?? 'Collection Name',
+    namePlaceholder: translations?.namePlaceholder ?? 'e.g., Work Projects',
+    colorLabel: translations?.colorLabel ?? 'Collection Color',
+    backToCollections: translations?.backToCollections ?? 'Back to collections',
+  }
 
   // Auto-focus name input when component mounts
   useEffect(() => {
@@ -105,7 +133,7 @@ export default function CreateCollectionForm({
               'text-current',
             )}
           />
-          Back to collections
+          {t.backToCollections}
         </button>
       )}
 
@@ -113,9 +141,15 @@ export default function CreateCollectionForm({
       <div className="mb-6">
         <label
           htmlFor="collection-name"
-          className={cn('block', 'text-sm', 'font-medium', 'text-gray-700', 'mb-1.5')}
+          className={cn(
+            'block',
+            'text-sm',
+            'font-medium',
+            'text-gray-700',
+            'mb-1.5',
+          )}
         >
-          Collection Name
+          {t.nameLabel}
         </label>
         <input
           ref={nameInputRef}
@@ -123,7 +157,7 @@ export default function CreateCollectionForm({
           type="text"
           value={name}
           onChange={handleNameChange}
-          placeholder="e.g., Work Projects"
+          placeholder={t.namePlaceholder}
           maxLength={50}
           className={cn(
             // Sizing
@@ -148,13 +182,23 @@ export default function CreateCollectionForm({
             'transition-colors',
           )}
         />
-        {nameError && <p className={cn('mt-1.5', 'text-sm', 'text-red-600')}>{nameError}</p>}
+        {nameError && (
+          <p className={cn('mt-1.5', 'text-sm', 'text-red-600')}>{nameError}</p>
+        )}
       </div>
 
       {/* Color picker */}
       <div>
-        <label className={cn('block', 'text-sm', 'font-medium', 'text-gray-700', 'mb-2')}>
-          Collection Color
+        <label
+          className={cn(
+            'block',
+            'text-sm',
+            'font-medium',
+            'text-gray-700',
+            'mb-2',
+          )}
+        >
+          {t.colorLabel}
         </label>
         <div
           className={cn(

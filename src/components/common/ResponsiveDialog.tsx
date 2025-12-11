@@ -73,7 +73,8 @@ const breakpointClasses: Record<
     dialog:
       'rounded-t-3xl sm:rounded-2xl slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95',
     dragHandle: 'sm:hidden',
-    header: 'px-5 pt-2 pb-4 sm:px-6 sm:pt-5 sm:pb-4 border-b border-gray-100 sm:border-b-0',
+    header:
+      'px-5 pt-2 pb-4 sm:px-6 sm:pt-5 sm:pb-4 border-b border-gray-100 sm:border-b-0',
     closeButton: 'sm:hidden',
     footer:
       'px-5 py-4 sm:px-6 border-t border-gray-100 sm:border-t-0 bg-gray-50/80 sm:bg-transparent',
@@ -83,7 +84,8 @@ const breakpointClasses: Record<
     dialog:
       'rounded-t-3xl md:rounded-2xl slide-in-from-bottom md:slide-in-from-bottom-0 md:zoom-in-95',
     dragHandle: 'md:hidden',
-    header: 'px-5 pt-2 pb-4 md:px-6 md:pt-5 md:pb-4 border-b border-gray-100 md:border-b-0',
+    header:
+      'px-5 pt-2 pb-4 md:px-6 md:pt-5 md:pb-4 border-b border-gray-100 md:border-b-0',
     closeButton: 'md:hidden',
     footer:
       'px-5 py-4 md:px-6 border-t border-gray-100 md:border-t-0 bg-gray-50/80 md:bg-transparent',
@@ -93,7 +95,8 @@ const breakpointClasses: Record<
     dialog:
       'rounded-t-3xl lg:rounded-2xl slide-in-from-bottom lg:slide-in-from-bottom-0 lg:zoom-in-95',
     dragHandle: 'lg:hidden',
-    header: 'px-5 pt-2 pb-4 lg:px-6 lg:pt-5 lg:pb-4 border-b border-gray-100 lg:border-b-0',
+    header:
+      'px-5 pt-2 pb-4 lg:px-6 lg:pt-5 lg:pb-4 border-b border-gray-100 lg:border-b-0',
     closeButton: 'lg:hidden',
     footer:
       'px-5 py-4 lg:px-6 border-t border-gray-100 lg:border-t-0 bg-gray-50/80 lg:bg-transparent',
@@ -121,7 +124,8 @@ export default function ResponsiveDialog({
 }: ResponsiveDialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const titleId =
-    ariaLabelledBy ?? `responsive-dialog-title-${title.toLowerCase().replace(/\s+/g, '-')}`
+    ariaLabelledBy ??
+    `responsive-dialog-title-${title.toLowerCase().replace(/\s+/g, '-')}`
   const classes = breakpointClasses[breakpoint]
 
   // Handle escape key to close dialog
@@ -151,7 +155,11 @@ export default function ResponsiveDialog({
   }
 
   // SSR-safe portal
-  const isMounted = useSyncExternalStore(subscribeToNothing, getIsMounted, getServerSnapshot)
+  const isMounted = useSyncExternalStore(
+    subscribeToNothing,
+    getIsMounted,
+    getServerSnapshot,
+  )
 
   if (!isOpen || !isMounted) {
     return null
@@ -209,7 +217,13 @@ export default function ResponsiveDialog({
       >
         {/* Drag handle - mobile only */}
         <div
-          className={cn('flex', 'justify-center', 'pt-3', 'pb-1', classes.dragHandle)}
+          className={cn(
+            'flex',
+            'justify-center',
+            'pt-3',
+            'pb-1',
+            classes.dragHandle,
+          )}
           data-testid="drag-handle"
         >
           <div className="w-10 h-1 bg-gray-300 rounded-full" />
@@ -217,9 +231,18 @@ export default function ResponsiveDialog({
 
         {/* Header */}
         <div
-          className={cn('flex', 'items-center', 'justify-between', 'flex-shrink-0', classes.header)}
+          className={cn(
+            'flex',
+            'items-center',
+            'justify-between',
+            'flex-shrink-0',
+            classes.header,
+          )}
         >
-          <h2 id={titleId} className={cn('text-lg', 'font-semibold', 'text-gray-900')}>
+          <h2
+            id={titleId}
+            className={cn('text-lg', 'font-semibold', 'text-gray-900')}
+          >
             {title}
           </h2>
           {showCloseButton && (

@@ -25,8 +25,8 @@
 
   /* System Font Stack */
   --font-sans:
-    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue',
-    'Helvetica', 'Arial', sans-serif;
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 
   /* Spacing scale */
   --spacing-xs: 4px;

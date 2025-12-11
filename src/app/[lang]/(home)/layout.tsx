@@ -1,6 +1,5 @@
 import { PageLayout } from '@/components/common/PageLayout'
-import { hasLocale, type Locale } from '@/i18n/locales'
-import { notFound } from 'next/navigation'
+import type { Locale } from '@/i18n/locales'
 
 /**
  * Props for the home layout.
@@ -13,14 +12,13 @@ interface HomeLayoutProps {
 /**
  * Layout for the home page.
  * Uses default Header with brand name text.
+ * Note: Locale validation is handled by [lang]/layout.tsx
  */
-export default async function HomeLayout({ children, params }: HomeLayoutProps) {
+export default async function HomeLayout({
+  children,
+  params,
+}: HomeLayoutProps) {
   const { lang } = await params
-
-  if (!hasLocale(lang)) {
-    notFound()
-  }
-
   const locale = lang as Locale
 
   return <PageLayout locale={locale}>{children}</PageLayout>

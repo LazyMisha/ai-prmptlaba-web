@@ -2,10 +2,20 @@ import type { Metadata } from 'next'
 import { PageContainer } from '@/components/common/PageContainer'
 import { PageDescription } from '@/components/common/PageDescription'
 import SavedPromptsClient from '@/components/saved/SavedPromptsClient'
+import { getDictionary } from '@/i18n/dictionaries'
+import type { Locale } from '@/i18n/locales'
 
 export const metadata: Metadata = {
   title: 'Saved Prompts | AI Prompt Laba',
-  description: 'View and manage your saved enhanced prompts organized by collections.',
+  description:
+    'View and manage your saved enhanced prompts organized by collections.',
+}
+
+/**
+ * Props for the saved page.
+ */
+interface SavedPageProps {
+  params: Promise<{ lang: string }>
 }
 
 /**
@@ -13,14 +23,23 @@ export const metadata: Metadata = {
  * Users can view, copy, and manage their saved enhanced prompts.
  * Page title is displayed in the Header via layout.
  */
-export default function SavedPage() {
+export default async function SavedPage({ params }: SavedPageProps) {
+  const { lang } = await params
+  const locale = lang as Locale
+  const dict = await getDictionary(locale)
+
   return (
     <PageContainer>
-      <PageDescription>
-        Your enhanced prompts organized by collections. Click on a collection to view its prompts.
-      </PageDescription>
-
-      <SavedPromptsClient />
+      <PageDescription>{dict.saved.description}</PageDescription>
+      <SavedPromptsClient
+        basePath={`/${locale}`}
+        translations={{
+          saved: dict.saved,
+          promptCard: dict.promptCard,
+          actions: dict.common.actions,
+          toast: dict.toast,
+        }}
+      />
     </PageContainer>
   )
 }

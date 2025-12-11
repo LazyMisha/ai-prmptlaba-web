@@ -2,7 +2,11 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import SaveToCollectionDialog from '../SaveToCollectionDialog'
 import * as savedPromptsDb from '@/lib/db/saved-prompts'
 import { clearAllToasts } from '../Toast'
-import type { CollectionWithCount, Collection, SavedPrompt } from '@/types/saved-prompts'
+import type {
+  CollectionWithCount,
+  Collection,
+  SavedPrompt,
+} from '@/types/saved-prompts'
 
 // Mock the database functions
 jest.mock('@/lib/db/saved-prompts', () => ({
@@ -56,7 +60,9 @@ describe('SaveToCollectionDialog', () => {
     act(() => {
       clearAllToasts()
     })
-    ;(savedPromptsDb.getAllCollectionsWithCounts as jest.Mock).mockResolvedValue(mockCollections)
+    ;(
+      savedPromptsDb.getAllCollectionsWithCounts as jest.Mock
+    ).mockResolvedValue(mockCollections)
   })
 
   describe('Rendering', () => {
@@ -79,7 +85,9 @@ describe('SaveToCollectionDialog', () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /quick save to/i })).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /quick save to/i }),
+        ).toBeInTheDocument()
       })
     })
 
@@ -106,10 +114,12 @@ describe('SaveToCollectionDialog', () => {
       if (!firstCollection) {
         throw new Error('Mock collection not found')
       }
-      const singlePromptCollection: CollectionWithCount[] = [{ ...firstCollection, promptCount: 1 }]
-      ;(savedPromptsDb.getAllCollectionsWithCounts as jest.Mock).mockResolvedValue(
-        singlePromptCollection,
-      )
+      const singlePromptCollection: CollectionWithCount[] = [
+        { ...firstCollection, promptCount: 1 },
+      ]
+      ;(
+        savedPromptsDb.getAllCollectionsWithCounts as jest.Mock
+      ).mockResolvedValue(singlePromptCollection)
 
       render(<SaveToCollectionDialog {...defaultProps} />)
 
@@ -119,12 +129,16 @@ describe('SaveToCollectionDialog', () => {
     })
 
     it('shows empty state when no collections exist', async () => {
-      ;(savedPromptsDb.getAllCollectionsWithCounts as jest.Mock).mockResolvedValue([])
+      ;(
+        savedPromptsDb.getAllCollectionsWithCounts as jest.Mock
+      ).mockResolvedValue([])
 
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('No collections yet. Create your first one!')).toBeInTheDocument()
+        expect(
+          screen.getByText('No collections yet. Create your first one!'),
+        ).toBeInTheDocument()
       })
     })
   })
@@ -137,7 +151,9 @@ describe('SaveToCollectionDialog', () => {
         // Look for the collection button that contains "ChatGPT" and "prompts"
         const collectionButtons = screen.getAllByRole('button')
         const chatGptCollectionButton = collectionButtons.find(
-          (btn) => btn.textContent?.includes('ChatGPT') && btn.textContent?.includes('prompts'),
+          (btn) =>
+            btn.textContent?.includes('ChatGPT') &&
+            btn.textContent?.includes('prompts'),
         )
         expect(chatGptCollectionButton).toHaveClass('bg-[#007aff]/10')
       })
@@ -150,7 +166,9 @@ describe('SaveToCollectionDialog', () => {
         expect(screen.getByText('Work Projects')).toBeInTheDocument()
       })
 
-      const workProjectsButton = screen.getByRole('button', { name: /Work Projects.*prompts/i })
+      const workProjectsButton = screen.getByRole('button', {
+        name: /Work Projects.*prompts/i,
+      })
       fireEvent.click(workProjectsButton)
 
       expect(workProjectsButton).toHaveClass('bg-[#007aff]/10')
@@ -178,20 +196,30 @@ describe('SaveToCollectionDialog', () => {
         createdAt: Date.now(),
         updatedAt: Date.now(),
       }
-      ;(savedPromptsDb.getOrCreateDefaultCollection as jest.Mock).mockResolvedValue(mockCollection)
-      ;(savedPromptsDb.savePrompt as jest.Mock).mockResolvedValue({} as SavedPrompt)
+      ;(
+        savedPromptsDb.getOrCreateDefaultCollection as jest.Mock
+      ).mockResolvedValue(mockCollection)
+      ;(savedPromptsDb.savePrompt as jest.Mock).mockResolvedValue(
+        {} as SavedPrompt,
+      )
 
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /quick save to/i })).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /quick save to/i }),
+        ).toBeInTheDocument()
       })
 
-      const quickSaveButton = screen.getByRole('button', { name: /quick save to/i })
+      const quickSaveButton = screen.getByRole('button', {
+        name: /quick save to/i,
+      })
       fireEvent.click(quickSaveButton)
 
       await waitFor(() => {
-        expect(savedPromptsDb.getOrCreateDefaultCollection).toHaveBeenCalledWith('ChatGPT')
+        expect(
+          savedPromptsDb.getOrCreateDefaultCollection,
+        ).toHaveBeenCalledWith('ChatGPT')
         expect(savedPromptsDb.savePrompt).toHaveBeenCalledWith({
           originalPrompt: 'Original prompt text',
           enhancedPrompt: 'Enhanced prompt text',
@@ -211,13 +239,19 @@ describe('SaveToCollectionDialog', () => {
         createdAt: Date.now(),
         updatedAt: Date.now(),
       }
-      ;(savedPromptsDb.getOrCreateDefaultCollection as jest.Mock).mockResolvedValue(mockCollection)
-      ;(savedPromptsDb.savePrompt as jest.Mock).mockResolvedValue({} as SavedPrompt)
+      ;(
+        savedPromptsDb.getOrCreateDefaultCollection as jest.Mock
+      ).mockResolvedValue(mockCollection)
+      ;(savedPromptsDb.savePrompt as jest.Mock).mockResolvedValue(
+        {} as SavedPrompt,
+      )
 
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /quick save to/i })).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /quick save to/i }),
+        ).toBeInTheDocument()
       })
 
       fireEvent.click(screen.getByRole('button', { name: /quick save to/i }))
@@ -231,19 +265,25 @@ describe('SaveToCollectionDialog', () => {
 
   describe('Save to Selected Collection', () => {
     it('saves prompt to selected collection', async () => {
-      ;(savedPromptsDb.savePrompt as jest.Mock).mockResolvedValue({} as SavedPrompt)
+      ;(savedPromptsDb.savePrompt as jest.Mock).mockResolvedValue(
+        {} as SavedPrompt,
+      )
 
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /Work Projects/i })).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /Work Projects/i }),
+        ).toBeInTheDocument()
       })
 
       // Select a different collection
       fireEvent.click(screen.getByRole('button', { name: /Work Projects/i }))
 
       // Click save
-      fireEvent.click(screen.getByRole('button', { name: /Save to Selected Collection/i }))
+      fireEvent.click(
+        screen.getByRole('button', { name: /Save to Selected Collection/i }),
+      )
 
       await waitFor(() => {
         expect(savedPromptsDb.savePrompt).toHaveBeenCalledWith({
@@ -306,7 +346,9 @@ describe('SaveToCollectionDialog', () => {
       fireEvent.click(screen.getByText('Create New Collection'))
 
       // Check that color buttons exist (10 colors)
-      const colorButtons = screen.getAllByRole('button', { name: /Select color/i })
+      const colorButtons = screen.getAllByRole('button', {
+        name: /Select color/i,
+      })
       expect(colorButtons).toHaveLength(10)
     })
 
@@ -320,7 +362,9 @@ describe('SaveToCollectionDialog', () => {
       fireEvent.click(screen.getByText('Create New Collection'))
 
       // The Create & Save button should be disabled when the name is empty
-      const createButton = screen.getByRole('button', { name: /Create & Save/i })
+      const createButton = screen.getByRole('button', {
+        name: /Create & Save/i,
+      })
       expect(createButton).toBeDisabled()
     })
 
@@ -332,10 +376,14 @@ describe('SaveToCollectionDialog', () => {
       })
 
       fireEvent.click(screen.getByText('Create New Collection'))
-      fireEvent.change(screen.getByLabelText('Collection Name'), { target: { value: 'ChatGPT' } })
+      fireEvent.change(screen.getByLabelText('Collection Name'), {
+        target: { value: 'ChatGPT' },
+      })
       fireEvent.click(screen.getByRole('button', { name: /Create & Save/i }))
 
-      expect(screen.getByText('A collection with this name already exists')).toBeInTheDocument()
+      expect(
+        screen.getByText('A collection with this name already exists'),
+      ).toBeInTheDocument()
     })
 
     it('creates collection and saves prompt on valid submission', async () => {
@@ -348,8 +396,12 @@ describe('SaveToCollectionDialog', () => {
         createdAt: Date.now(),
         updatedAt: Date.now(),
       }
-      ;(savedPromptsDb.createCollection as jest.Mock).mockResolvedValue(newCollection)
-      ;(savedPromptsDb.savePrompt as jest.Mock).mockResolvedValue({} as SavedPrompt)
+      ;(savedPromptsDb.createCollection as jest.Mock).mockResolvedValue(
+        newCollection,
+      )
+      ;(savedPromptsDb.savePrompt as jest.Mock).mockResolvedValue(
+        {} as SavedPrompt,
+      )
 
       render(<SaveToCollectionDialog {...defaultProps} />)
 
@@ -439,9 +491,9 @@ describe('SaveToCollectionDialog', () => {
   describe('Loading States', () => {
     it('shows loading spinner while fetching collections', async () => {
       // Make the promise hang
-      ;(savedPromptsDb.getAllCollectionsWithCounts as jest.Mock).mockImplementation(
-        () => new Promise(() => {}),
-      )
+      ;(
+        savedPromptsDb.getAllCollectionsWithCounts as jest.Mock
+      ).mockImplementation(() => new Promise(() => {}))
 
       render(<SaveToCollectionDialog {...defaultProps} />)
 
@@ -451,9 +503,9 @@ describe('SaveToCollectionDialog', () => {
 
     it('disables buttons while saving', async () => {
       // Make the save hang
-      ;(savedPromptsDb.getOrCreateDefaultCollection as jest.Mock).mockImplementation(
-        () => new Promise(() => {}),
-      )
+      ;(
+        savedPromptsDb.getOrCreateDefaultCollection as jest.Mock
+      ).mockImplementation(() => new Promise(() => {}))
 
       render(<SaveToCollectionDialog {...defaultProps} />)
 
@@ -471,7 +523,9 @@ describe('SaveToCollectionDialog', () => {
 
       // Click the quick save button
       const buttons = screen.getAllByRole('button')
-      const quickSaveButton = buttons.find((btn) => btn.textContent?.includes('Quick Save to'))
+      const quickSaveButton = buttons.find((btn) =>
+        btn.textContent?.includes('Quick Save to'),
+      )
       if (quickSaveButton) {
         fireEvent.click(quickSaveButton)
       }
@@ -518,7 +572,9 @@ describe('SaveToCollectionDialog', () => {
 
       fireEvent.click(screen.getByText('Create New Collection'))
 
-      const colorButtons = screen.getAllByRole('button', { name: /Select color/i })
+      const colorButtons = screen.getAllByRole('button', {
+        name: /Select color/i,
+      })
       expect(colorButtons.length).toBeGreaterThan(0)
     })
   })

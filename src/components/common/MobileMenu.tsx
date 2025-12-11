@@ -7,18 +7,46 @@ import { LanguageSwitcher } from './LanguageSwitcher'
 import NavLink from './NavLink'
 
 /**
+ * Navigation translations for MobileMenu.
+ */
+interface NavTranslations {
+  enhance: string
+  saved: string
+  history: string
+  goToEnhance: string
+  goToSaved: string
+  goToHistory: string
+  openMenu: string
+  closeMenu: string
+}
+
+/**
  * Props for the MobileMenu component.
  */
 interface MobileMenuProps {
   /** Current locale for navigation links */
   locale: Locale
+  /** Navigation translations */
+  translations?: NavTranslations
 }
 
 /**
  * Mobile menu component with clean dropdown.
  * Features smooth animations and refined interaction patterns.
  */
-export default function MobileMenu({ locale }: MobileMenuProps) {
+export default function MobileMenu({ locale, translations }: MobileMenuProps) {
+  // Default translations for fallback
+  const t = translations ?? {
+    enhance: 'Enhance',
+    saved: 'Saved',
+    history: 'History',
+    goToEnhance: 'Go to prompt enhancer page',
+    goToSaved: 'Go to saved prompts page',
+    goToHistory: 'Go to prompt history page',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+  }
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -85,7 +113,7 @@ export default function MobileMenu({ locale }: MobileMenuProps) {
           'focus-visible:ring-[#007aff]',
           'focus-visible:ring-offset-2',
         )}
-        aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+        aria-label={isMenuOpen ? t.closeMenu : t.openMenu}
         aria-expanded={isMenuOpen}
         aria-controls="mobile-menu"
       >
@@ -174,7 +202,7 @@ export default function MobileMenu({ locale }: MobileMenuProps) {
           <NavLink
             href={`/${locale}/enhance`}
             onClick={closeMenu}
-            ariaLabel="Go to prompt enhancer page"
+            ariaLabel={t.goToEnhance}
             role="menuitem"
             className={cn(
               // Display
@@ -201,12 +229,12 @@ export default function MobileMenu({ locale }: MobileMenuProps) {
               'duration-150',
             )}
           >
-            Enhance
+            {t.enhance}
           </NavLink>
           <NavLink
             href={`/${locale}/saved`}
             onClick={closeMenu}
-            ariaLabel="Go to saved prompts page"
+            ariaLabel={t.goToSaved}
             role="menuitem"
             className={cn(
               // Display
@@ -233,12 +261,12 @@ export default function MobileMenu({ locale }: MobileMenuProps) {
               'duration-150',
             )}
           >
-            Saved
+            {t.saved}
           </NavLink>
           <NavLink
             href={`/${locale}/history`}
             onClick={closeMenu}
-            ariaLabel="Go to prompt history page"
+            ariaLabel={t.goToHistory}
             role="menuitem"
             className={cn(
               // Display
@@ -265,11 +293,14 @@ export default function MobileMenu({ locale }: MobileMenuProps) {
               'duration-150',
             )}
           >
-            History
+            {t.history}
           </NavLink>
 
           {/* Divider */}
-          <div className={cn('my-2', 'mx-4', 'h-px', 'bg-black/[0.08]')} role="separator" />
+          <div
+            className={cn('my-2', 'mx-4', 'h-px', 'bg-black/[0.08]')}
+            role="separator"
+          />
 
           {/* Language Switcher */}
           <div className={cn('px-4', 'py-2')}>
