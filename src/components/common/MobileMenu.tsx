@@ -80,7 +80,7 @@ export default function MobileMenu({ locale, translations }: MobileMenuProps) {
   }, [isMenuOpen])
 
   return (
-    <div className={cn('relative', 'lg:hidden')}>
+    <div className={cn('relative', 'xl:hidden')}>
       {/* Menu Button - minimal design */}
       <button
         ref={buttonRef}

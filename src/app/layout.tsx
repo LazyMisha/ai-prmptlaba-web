@@ -7,6 +7,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'AI Prompt Laba',
   description: 'Professional prompt creation and management tool.',
+  icons: {
+    icon: '/icon.svg',
+  },
 }
 
 /**

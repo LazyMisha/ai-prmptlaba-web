@@ -203,5 +203,16 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
  * @param locale - The locale code to load translations for
  * @returns Promise resolving to the dictionary object
  */
-export const getDictionary = async (locale: Locale): Promise<Dictionary> =>
-  dictionaries[locale]()
+export const getDictionary = async (locale: Locale): Promise<Dictionary> => {
+  if (typeof dictionaries[locale] !== 'function') {
+    console.error(
+      `[getDictionary] Invalid locale: "${locale}". Available locales: ${Object.keys(dictionaries).join(', ')}`,
+    )
+    // Fallback to 'en' if possible, or throw a more descriptive error
+    if (dictionaries['en']) {
+      console.warn(`[getDictionary] Falling back to 'en'`)
+      return dictionaries['en']()
+    }
+  }
+  return dictionaries[locale]()
+}

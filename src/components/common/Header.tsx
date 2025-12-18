@@ -154,8 +154,8 @@ export default async function Header({
             className={cn(
               // Hidden on mobile and tablet
               'hidden',
-              // Visible on lg and up
-              'lg:flex',
+              // Visible on xl and up
+              'xl:flex',
               // Gap between items
               'gap-8',
               // Center items
@@ -176,7 +176,7 @@ export default async function Header({
           {/* Language Switcher - Desktop only */}
           <LanguageSwitcher
             currentLocale={locale}
-            className="hidden lg:inline-flex"
+            className="hidden xl:inline-flex"
           />
 
           {/* Mobile Menu - Hidden on desktop */}
