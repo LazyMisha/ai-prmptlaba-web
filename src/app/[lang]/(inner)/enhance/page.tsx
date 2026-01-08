@@ -30,16 +30,10 @@ export default async function EnhancePage({ params }: EnhancePageProps) {
 
   return (
     <PageContainer>
-      <PageDescription>{dict.enhance.description}</PageDescription>
-      <EnhanceForm
-        translations={{
-          form: dict.enhance.form,
-          result: dict.enhance.result,
-          validation: dict.enhance.validation,
-          actions: dict.common.actions,
-          saveDialog: dict.saveDialog,
-        }}
-      />
+      <PageDescription id="enhance-description">
+        {dict.enhance.description}
+      </PageDescription>
+      <EnhanceForm />
     </PageContainer>
   )
 }

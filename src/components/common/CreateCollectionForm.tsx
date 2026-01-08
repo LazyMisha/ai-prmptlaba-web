@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-
+import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
 import {
   COLLECTION_COLORS,
@@ -11,20 +11,6 @@ import CheckIcon from '@/components/icons/CheckIcon'
 import ChevronIcon from '@/components/icons/ChevronIcon'
 
 import type { CollectionColor } from '@/constants/saved-prompts'
-
-/**
- * Translations for the CreateCollectionForm component.
- */
-export interface CreateCollectionFormTranslations {
-  /** Label for the name input */
-  nameLabel?: string
-  /** Placeholder for the name input */
-  namePlaceholder?: string
-  /** Label for the color picker */
-  colorLabel?: string
-  /** Text for back button */
-  backToCollections?: string
-}
 
 /**
  * Props for the CreateCollectionForm component.
@@ -50,8 +36,6 @@ interface CreateCollectionFormProps {
   autoFocus?: boolean
   /** Additional CSS classes for the container */
   className?: string
-  /** Translations for UI strings */
-  translations?: CreateCollectionFormTranslations
 }
 
 /**
@@ -68,17 +52,10 @@ export default function CreateCollectionForm({
   onBack,
   autoFocus = false,
   className,
-  translations,
 }: CreateCollectionFormProps) {
+  const dict = useTranslations()
+  const t = dict.saved.collections
   const nameInputRef = useRef<HTMLInputElement>(null)
-
-  // Default translations
-  const t = {
-    nameLabel: translations?.nameLabel ?? 'Collection Name',
-    namePlaceholder: translations?.namePlaceholder ?? 'e.g., Work Projects',
-    colorLabel: translations?.colorLabel ?? 'Collection Color',
-    backToCollections: translations?.backToCollections ?? 'Back to collections',
-  }
 
   // Auto-focus name input when component mounts
   useEffect(() => {
@@ -149,7 +126,7 @@ export default function CreateCollectionForm({
             'mb-1.5',
           )}
         >
-          {t.nameLabel}
+          {t.collectionName}
         </label>
         <input
           ref={nameInputRef}
@@ -198,7 +175,7 @@ export default function CreateCollectionForm({
             'mb-2',
           )}
         >
-          {t.colorLabel}
+          {t.collectionColor}
         </label>
         <div
           className={cn(
@@ -206,8 +183,6 @@ export default function CreateCollectionForm({
             'grid',
             'grid-cols-5',
             'gap-3',
-            // Constrain width to prevent stretching
-            'max-w-[232px]',
           )}
         >
           {COLLECTION_COLORS.map((colorOption) => (

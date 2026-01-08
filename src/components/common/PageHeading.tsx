@@ -13,7 +13,7 @@ interface PageHeadingProps {
    * HTML id attribute for accessibility.
    * Useful for anchor links or when referenced by aria-labelledby.
    */
-  id?: string
+  id: string
 }
 
 /**

@@ -1,5 +1,4 @@
 import Header from '@/components/common/Header'
-import Footer from '@/components/common/Footer'
 import { cn } from '@/lib/utils'
 import type { Locale } from '@/i18n/locales'
 
@@ -11,8 +10,6 @@ interface PageLayoutProps {
   children: React.ReactNode
   /** Whether to show logo in header instead of brand name */
   showLogo?: boolean
-  /** Page title to display in header center */
-  pageTitle?: string
   /** Current locale for navigation */
   locale: Locale
 }
@@ -24,12 +21,11 @@ interface PageLayoutProps {
 export function PageLayout({
   children,
   showLogo = false,
-  pageTitle,
   locale,
 }: PageLayoutProps) {
   return (
     <>
-      <Header showLogo={showLogo} pageTitle={pageTitle} locale={locale} />
+      <Header showLogo={showLogo} locale={locale} />
       <main
         className={cn(
           // Full width
@@ -43,7 +39,6 @@ export function PageLayout({
       >
         {children}
       </main>
-      <Footer />
     </>
   )
 }

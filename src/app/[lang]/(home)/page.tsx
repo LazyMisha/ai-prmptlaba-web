@@ -53,8 +53,10 @@ export default async function HomePage({ params }: HomePageProps) {
           'rounded-[22%]',
         )}
       />
-      <PageHeading>{dict.home.title}</PageHeading>
-      <PageDescription>{dict.home.description}</PageDescription>
+      <PageHeading id="home-title">{dict.home.title}</PageHeading>
+      <PageDescription id="home-description">
+        {dict.home.description}
+      </PageDescription>
 
       <Link
         href={`/${locale}/enhance`}

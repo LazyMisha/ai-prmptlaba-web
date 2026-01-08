@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
 interface NavLinkProps {
@@ -7,7 +10,7 @@ interface NavLinkProps {
   /** The visible text of the link */
   children: React.ReactNode
   /** Accessible label for screen readers */
-  ariaLabel?: string
+  ariaLabel: string
   /** Additional CSS classes */
   className?: string
   /** Click handler for closing menus */
@@ -18,7 +21,7 @@ interface NavLinkProps {
 
 /**
  * Navigation link component with smooth hover transitions.
- * Features refined typography and subtle interaction feedback.
+ * Features refined typography, subtle interaction feedback, and active state indicator.
  */
 export default function NavLink({
   href,
@@ -28,6 +31,9 @@ export default function NavLink({
   onClick,
   role,
 }: NavLinkProps) {
+  const pathname = usePathname()
+  const isActive = pathname === href || pathname.startsWith(href + '/')
+
   return (
     <Link
       href={href}
@@ -45,6 +51,9 @@ export default function NavLink({
         'transition-opacity',
         'duration-200',
         'hover:opacity-60',
+        // Active state
+        isActive && 'font-semibold opacity-100',
+        !isActive && 'opacity-60',
         // Focus styles
         'focus:outline-none',
         'focus-visible:ring-2',
@@ -56,6 +65,7 @@ export default function NavLink({
         className,
       )}
       aria-label={ariaLabel}
+      aria-current={isActive ? 'page' : undefined}
     >
       {children}
     </Link>

@@ -1,18 +1,8 @@
 'use client'
 
+import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
 import SpinnerIcon from '@/components/icons/SpinnerIcon'
-
-/**
- * Translations for EnhanceButton.
- */
-interface EnhanceButtonTranslations {
-  buttonText: string
-  loadingText: string
-  enhancingAriaLabel: string
-  disabledAriaLabel: string
-  ariaLabel: string
-}
 
 export interface EnhanceButtonProps {
   /** Callback fired when button is clicked */
@@ -21,8 +11,6 @@ export interface EnhanceButtonProps {
   disabled?: boolean
   /** Whether the button is in a loading state */
   isLoading?: boolean
-  /** Translations for the button */
-  translations?: EnhanceButtonTranslations
   /** Additional CSS classes */
   className?: string
 }
@@ -34,18 +22,10 @@ export default function EnhanceButton({
   onClick,
   disabled,
   isLoading,
-  translations,
   className,
 }: EnhanceButtonProps) {
-  // Default translations
-  const t = translations ?? {
-    buttonText: 'Enhance Prompt',
-    loadingText: 'Enhancing...',
-    enhancingAriaLabel: 'Enhancing prompt, please wait',
-    disabledAriaLabel: 'Enhance prompt (currently disabled)',
-    ariaLabel: 'Enhance prompt',
-  }
-
+  const dict = useTranslations()
+  const t = dict.enhance.form
   const isDisabled = disabled || isLoading
 
   return (
@@ -58,7 +38,7 @@ export default function EnhanceButton({
         isLoading
           ? t.enhancingAriaLabel
           : disabled
-            ? t.disabledAriaLabel
+            ? t.enhanceDisabledAriaLabel
             : t.ariaLabel
       }
       className={cn(
@@ -110,7 +90,7 @@ export default function EnhanceButton({
     >
       <span className="flex items-center justify-center gap-2">
         {isLoading && <SpinnerIcon className="h-4 w-4" />}
-        {isLoading ? t.loadingText : t.buttonText}
+        {isLoading ? t.enhancing : t.enhanceButton}
       </span>
     </button>
   )

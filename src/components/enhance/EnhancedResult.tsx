@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { useTranslations } from '@/i18n/client'
 import CloseIcon from '@/components/icons/CloseIcon'
 import CheckIcon from '@/components/icons/CheckIcon'
 import ChevronIcon from '@/components/icons/ChevronIcon'
@@ -10,55 +11,6 @@ import IconTextButton from '@/components/common/IconTextButton'
 import BookmarkIcon from '@/components/icons/BookmarkIcon'
 import SaveToCollectionDialog from '@/components/common/SaveToCollectionDialog'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
-
-/**
- * Result translations for EnhancedResult.
- */
-interface ResultTranslations {
-  ariaLabel: string
-  title: string
-  error: string
-  viewOriginal: string
-  copyToClipboard: string
-  copiedToClipboard: string
-  promptSaved: string
-  saveToCollection: string
-}
-
-/**
- * Action translations for EnhancedResult.
- */
-interface ActionTranslations {
-  copy: string
-  copied: string
-  save: string
-  saved: string
-}
-
-/**
- * Save dialog translations for EnhancedResult.
- */
-interface SaveDialogTranslations {
-  title?: string
-  newCollectionTitle?: string
-  closeDialog?: string
-  quickSaveTo?: string
-  orChooseCollection?: string
-  noCollectionsYet?: string
-  prompt?: string
-  prompts?: string
-  createAndSave?: string
-  saveToSelected?: string
-}
-
-/**
- * All translations for EnhancedResult.
- */
-interface EnhancedResultTranslations {
-  result: ResultTranslations
-  actions: ActionTranslations
-  saveDialog?: SaveDialogTranslations
-}
 
 export interface EnhancedResultProps {
   /** The enhanced prompt text */
@@ -71,8 +23,6 @@ export interface EnhancedResultProps {
   target: string
   /** Whether enhancement is in progress */
   isLoading?: boolean
-  /** Translations for the component */
-  translations?: EnhancedResultTranslations
   /** Additional CSS classes */
   className?: string
 }
@@ -86,29 +36,9 @@ export default function EnhancedResult({
   originalPrompt,
   target,
   isLoading,
-  translations,
   className,
 }: EnhancedResultProps) {
-  // Default translations
-  const t = translations ?? {
-    result: {
-      ariaLabel: 'Enhanced prompt result',
-      title: 'Enhanced Prompt',
-      error: 'Enhancement Failed',
-      viewOriginal: 'View original prompt',
-      copyToClipboard: 'Copy to clipboard',
-      copiedToClipboard: 'Copied to clipboard',
-      promptSaved: 'Prompt saved',
-      saveToCollection: 'Save prompt to collection',
-    },
-    actions: {
-      copy: 'Copy',
-      copied: 'Copied',
-      save: 'Save',
-      saved: 'Saved',
-    },
-  }
-
+  const t = useTranslations()
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
   // Store the prompt that was saved, so we can check if current prompt matches
   const [savedPrompt, setSavedPrompt] = useState<string | null>(null)
@@ -174,7 +104,7 @@ export default function EnhancedResult({
                 'mb-1',
               )}
             >
-              {t.result.error}
+              {t.enhance.result.error}
             </h3>
             <p className={cn('text-sm', 'font-light', 'text-red-700')}>
               {error}
@@ -192,7 +122,7 @@ export default function EnhancedResult({
   return (
     <div
       role="region"
-      aria-label={t.result.ariaLabel}
+      aria-label={t.enhance.result.ariaLabel}
       aria-live="polite"
       className={cn(
         // Spacing
@@ -255,7 +185,7 @@ export default function EnhancedResult({
               'whitespace-nowrap',
             )}
           >
-            {t.result.title}
+            {t.enhance.result.title}
           </h3>
         </div>
 
@@ -265,14 +195,16 @@ export default function EnhancedResult({
             icon={
               <BookmarkIcon className="w-4 h-4" filled={isCurrentlySaved} />
             }
-            label={isCurrentlySaved ? t.actions.saved : t.actions.save}
+            label={
+              isCurrentlySaved ? t.common.actions.saved : t.common.actions.save
+            }
             onClick={() => !isCurrentlySaved && setIsSaveDialogOpen(true)}
             disabled={isCurrentlySaved}
             variant={isCurrentlySaved ? 'primary' : 'default'}
             ariaLabel={
               isCurrentlySaved
-                ? t.result.promptSaved
-                : t.result.saveToCollection
+                ? t.enhance.result.promptSaved
+                : t.enhance.result.saveToCollection
             }
           />
 
@@ -284,11 +216,13 @@ export default function EnhancedResult({
                 <CopyIcon className="w-4 h-4" />
               )
             }
-            label={copied ? t.actions.copied : t.actions.copy}
+            label={copied ? t.common.actions.copied : t.common.actions.copy}
             onClick={() => copy(enhanced)}
             variant={copied ? 'success' : 'default'}
             ariaLabel={
-              copied ? t.result.copiedToClipboard : t.result.copyToClipboard
+              copied
+                ? t.enhance.result.copiedToClipboard
+                : t.enhance.result.copyToClipboard
             }
           />
         </div>
@@ -302,7 +236,6 @@ export default function EnhancedResult({
         originalPrompt={originalPrompt}
         enhancedPrompt={enhanced}
         target={target}
-        translations={translations?.saveDialog}
       />
 
       {/* Enhanced prompt content */}
@@ -377,7 +310,7 @@ export default function EnhancedResult({
                   'group-open:rotate-0',
                 )}
               />
-              {t.result.viewOriginal}
+              {t.enhance.result.viewOriginal}
             </summary>
 
             <div

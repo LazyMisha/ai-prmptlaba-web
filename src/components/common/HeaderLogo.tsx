@@ -10,7 +10,7 @@ interface HeaderLogoProps {
   /** Current locale for the home link */
   locale: Locale
   /** Accessible label for the link */
-  ariaLabel?: string
+  ariaLabel: string
 }
 
 /**
@@ -18,10 +18,7 @@ interface HeaderLogoProps {
  * Displays the app logo spanning the full height of the header.
  * Uses negative margins to extend beyond header padding.
  */
-export function HeaderLogo({
-  locale,
-  ariaLabel = 'Go to home page',
-}: HeaderLogoProps) {
+export function HeaderLogo({ locale, ariaLabel }: HeaderLogoProps) {
   return (
     <Link
       href={`/${locale}`}

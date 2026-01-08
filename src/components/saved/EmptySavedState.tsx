@@ -1,25 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-
 import { cn } from '@/lib/utils'
+import { useTranslations } from '@/i18n/client'
 import BookmarkIcon from '@/components/icons/BookmarkIcon'
 
-/**
- * Translations for the EmptySavedState component.
- */
-export interface EmptySavedStateTranslations {
-  /** Empty state title */
-  title?: string
-  /** Empty state description */
-  description?: string
-  /** Call-to-action button text */
-  cta?: string
-}
-
 interface EmptySavedStateProps {
-  /** Translations for UI strings */
-  translations?: EmptySavedStateTranslations
   /** Base path for links (includes locale) */
   basePath?: string
 }
@@ -27,18 +13,9 @@ interface EmptySavedStateProps {
 /**
  * EmptySavedState displays a friendly empty state when no prompts are saved.
  */
-export function EmptySavedState({
-  translations,
-  basePath = '',
-}: EmptySavedStateProps) {
-  // Default translations
-  const t = {
-    title: translations?.title ?? 'No saved prompts yet',
-    description:
-      translations?.description ??
-      'Save your enhanced prompts to organize them into collections and access them anytime.',
-    cta: translations?.cta ?? 'Start Enhancing',
-  }
+export function EmptySavedState({ basePath = '' }: EmptySavedStateProps) {
+  const dict = useTranslations()
+  const t = dict.saved.empty
 
   return (
     <div

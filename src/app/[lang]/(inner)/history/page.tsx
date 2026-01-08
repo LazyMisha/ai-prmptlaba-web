@@ -29,18 +29,10 @@ export default async function HistoryPage({ params }: HistoryPageProps) {
 
   return (
     <PageContainer>
-      <PageDescription>{dict.history.description}</PageDescription>
-      <HistoryList
-        translations={{
-          history: dict.history,
-          promptCard: dict.promptCard,
-          actions: dict.common.actions,
-          common: {
-            entry: dict.common.entry,
-            entries: dict.common.entries,
-          },
-        }}
-      />
+      <PageDescription id="history-description">
+        {dict.history.description}
+      </PageDescription>
+      <HistoryList />
     </PageContainer>
   )
 }

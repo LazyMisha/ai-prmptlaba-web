@@ -1,33 +1,13 @@
 import { cn } from '@/lib/utils'
-
-/**
- * Translations for EmptyHistoryState.
- */
-interface EmptyHistoryStateTranslations {
-  title: string
-  description: string
-}
-
-/**
- * Props for the EmptyHistoryState component.
- */
-interface EmptyHistoryStateProps {
-  /** Translations for the component */
-  translations?: EmptyHistoryStateTranslations
-}
+import { useTranslations } from '@/i18n/client'
 
 /**
  * Empty state component displayed when no history entries are found.
  * Features subtle visual styling with centered content.
  */
-export default function EmptyHistoryState({
-  translations,
-}: EmptyHistoryStateProps) {
-  // Default translations
-  const t = translations ?? {
-    title: 'No prompt history yet',
-    description: 'Your enhanced prompts will appear here',
-  }
+export default function EmptyHistoryState() {
+  const dict = useTranslations()
+  const t = dict.history.empty
 
   return (
     <div

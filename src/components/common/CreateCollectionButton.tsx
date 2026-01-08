@@ -10,7 +10,7 @@ interface CreateCollectionButtonProps {
   /** Callback when button is clicked */
   onClick: () => void
   /** Button label text */
-  label?: string
+  label: string
   /** Whether the button is disabled */
   disabled?: boolean
   /** Additional CSS classes */
@@ -22,7 +22,7 @@ interface CreateCollectionButtonProps {
  */
 export default function CreateCollectionButton({
   onClick,
-  label = 'Create New Collection',
+  label,
   disabled = false,
   className,
 }: CreateCollectionButtonProps) {

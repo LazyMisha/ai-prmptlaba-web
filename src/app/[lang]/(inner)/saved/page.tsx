@@ -30,16 +30,10 @@ export default async function SavedPage({ params }: SavedPageProps) {
 
   return (
     <PageContainer>
-      <PageDescription>{dict.saved.description}</PageDescription>
-      <SavedPromptsClient
-        basePath={`/${locale}`}
-        translations={{
-          saved: dict.saved,
-          promptCard: dict.promptCard,
-          actions: dict.common.actions,
-          toast: dict.toast,
-        }}
-      />
+      <PageDescription id="saved-description">
+        {dict.saved.description}
+      </PageDescription>
+      <SavedPromptsClient basePath={`/${locale}`} />
     </PageContainer>
   )
 }

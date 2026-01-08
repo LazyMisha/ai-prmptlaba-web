@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-
+import { useTranslations } from '@/i18n/client'
 import type {
   EnhancementTarget,
   EnhanceRequest,
@@ -21,101 +21,10 @@ import EnhanceButton from './EnhanceButton'
 import EnhancedResult from './EnhancedResult'
 
 /**
- * Form translations for EnhanceForm.
- */
-interface FormTranslations {
-  ariaLabel: string
-  targetLabel: string
-  promptLabel: string
-  placeholder: string
-  helperText: string
-  moreCharNeeded: string
-  moreCharsNeeded: string
-  overLimit: string
-  enhanceButton: string
-  enhancing: string
-  enhancingAriaLabel: string
-  enhanceDisabledAriaLabel: string
-  enhanceAriaLabel: string
-}
-
-/**
- * Result translations for EnhanceForm.
- */
-interface ResultTranslations {
-  ariaLabel: string
-  title: string
-  error: string
-  viewOriginal: string
-  copyToClipboard: string
-  copiedToClipboard: string
-  promptSaved: string
-  saveToCollection: string
-}
-
-/**
- * Validation translations for EnhanceForm.
- */
-interface ValidationTranslations {
-  enterPrompt: string
-  minLength: string
-  maxLength: string
-  networkError: string
-  unexpectedError: string
-}
-
-/**
- * Action translations for EnhanceForm.
- */
-interface ActionTranslations {
-  copy: string
-  copied: string
-  save: string
-  saved: string
-}
-
-/**
- * Save dialog translations for EnhanceForm.
- */
-interface SaveDialogTranslations {
-  title?: string
-  newCollectionTitle?: string
-  closeDialog?: string
-  quickSaveTo?: string
-  orChooseCollection?: string
-  noCollectionsYet?: string
-  prompt?: string
-  prompts?: string
-  createAndSave?: string
-  saveToSelected?: string
-}
-
-/**
- * All translations for EnhanceForm.
- */
-export interface EnhanceFormTranslations {
-  form: FormTranslations
-  result: ResultTranslations
-  validation: ValidationTranslations
-  actions: ActionTranslations
-  saveDialog?: SaveDialogTranslations
-}
-
-/**
- * Props for the EnhanceForm component.
- */
-interface EnhanceFormProps {
-  /** Translations for the form */
-  translations: EnhanceFormTranslations
-}
-
-/**
  * Main form component that orchestrates the prompt enhancement flow.
  * Manages state, validation, API calls, and accessibility features.
  */
-export default function EnhanceForm({ translations }: EnhanceFormProps) {
-  const t = translations
-
+export default function EnhanceForm() {
   const resultRef = useRef<HTMLDivElement>(null)
   const [target, setTarget] = useState<EnhancementTarget>(
     TOOL_CATEGORIES.GENERAL,
@@ -124,6 +33,8 @@ export default function EnhanceForm({ translations }: EnhanceFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [enhanced, setEnhanced] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const dict = useTranslations()
+  const t = dict.enhance
 
   /**
    * Validate the form inputs before submission
@@ -248,6 +159,7 @@ export default function EnhanceForm({ translations }: EnhanceFormProps) {
           onChange={setTarget}
           disabled={isLoading}
           label={t.form.targetLabel}
+          helperText={t.form.targetHelperText}
           className="mb-4"
         />
 
@@ -257,14 +169,6 @@ export default function EnhanceForm({ translations }: EnhanceFormProps) {
           disabled={isLoading}
           error={error && !enhanced ? error : null}
           onKeyDown={handleKeyDown}
-          translations={{
-            label: t.form.promptLabel,
-            placeholder: t.form.placeholder,
-            helperText: t.form.helperText,
-            moreCharNeeded: t.form.moreCharNeeded,
-            moreCharsNeeded: t.form.moreCharsNeeded,
-            overLimit: t.form.overLimit,
-          }}
           className="mb-4"
         />
 
@@ -272,13 +176,6 @@ export default function EnhanceForm({ translations }: EnhanceFormProps) {
           onClick={handleEnhance}
           disabled={!prompt.trim() || prompt.length < 3 || prompt.length > 2000}
           isLoading={isLoading}
-          translations={{
-            buttonText: t.form.enhanceButton,
-            loadingText: t.form.enhancing,
-            enhancingAriaLabel: t.form.enhancingAriaLabel,
-            disabledAriaLabel: t.form.enhanceDisabledAriaLabel,
-            ariaLabel: t.form.enhanceAriaLabel,
-          }}
         />
       </form>
 
@@ -290,11 +187,6 @@ export default function EnhanceForm({ translations }: EnhanceFormProps) {
           originalPrompt={prompt}
           target={TOOL_CATEGORY_NAMES[target]}
           isLoading={isLoading}
-          translations={{
-            result: t.result,
-            actions: t.actions,
-            saveDialog: t.saveDialog,
-          }}
         />
       </div>
     </div>

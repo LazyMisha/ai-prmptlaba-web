@@ -1,24 +1,11 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
 import type { Locale } from '@/i18n/locales'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import NavLink from './NavLink'
-
-/**
- * Navigation translations for MobileMenu.
- */
-interface NavTranslations {
-  enhance: string
-  saved: string
-  history: string
-  goToEnhance: string
-  goToSaved: string
-  goToHistory: string
-  openMenu: string
-  closeMenu: string
-}
 
 /**
  * Props for the MobileMenu component.
@@ -26,30 +13,18 @@ interface NavTranslations {
 interface MobileMenuProps {
   /** Current locale for navigation links */
   locale: Locale
-  /** Navigation translations */
-  translations?: NavTranslations
 }
 
 /**
  * Mobile menu component with clean dropdown.
  * Features smooth animations and refined interaction patterns.
  */
-export default function MobileMenu({ locale, translations }: MobileMenuProps) {
-  // Default translations for fallback
-  const t = translations ?? {
-    enhance: 'Enhance',
-    saved: 'Saved',
-    history: 'History',
-    goToEnhance: 'Go to prompt enhancer page',
-    goToSaved: 'Go to saved prompts page',
-    goToHistory: 'Go to prompt history page',
-    openMenu: 'Open menu',
-    closeMenu: 'Close menu',
-  }
-
+export default function MobileMenu({ locale }: MobileMenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const dict = useTranslations()
+  const t = dict.common.navigation
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev)

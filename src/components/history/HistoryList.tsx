@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
+import { useTranslations } from '@/i18n/client'
 import type { PromptHistoryEntry } from '@/types/history'
 import {
   getAllPromptHistory,
@@ -13,113 +14,14 @@ import PromptCard from '@/components/common/PromptCard'
 import EmptyHistoryState from './EmptyHistoryState'
 
 /**
- * History translations.
- */
-interface HistoryTranslations {
-  loading: string
-  error: string
-  empty: {
-    title: string
-    description: string
-  }
-  clearAll: {
-    title: string
-    description: string
-    confirm: string
-  }
-}
-
-/**
- * Prompt card translations.
- */
-interface PromptCardTranslations {
-  target: string
-  original: string
-  enhanced: string
-  expandCollapse: string
-  deleteEntry: string
-}
-
-/**
- * Action translations.
- */
-interface ActionTranslations {
-  copy: string
-  copied: string
-  cancel: string
-  tryAgain: string
-  clearAll: string
-}
-
-/**
- * Common translations.
- */
-interface CommonTranslations {
-  entry: string
-  entries: string
-}
-
-/**
- * All translations for HistoryList.
- */
-interface HistoryListTranslations {
-  history: HistoryTranslations
-  promptCard: PromptCardTranslations
-  actions: ActionTranslations
-  common?: CommonTranslations
-}
-
-/**
- * Props for the HistoryList component.
- */
-interface HistoryListProps {
-  /** Translations for the component */
-  translations?: HistoryListTranslations
-}
-
-/**
  * Displays the list of all prompt history entries.
  * Handles loading, empty states, and deletion of entries.
  */
-export default function HistoryList({ translations }: HistoryListProps) {
-  // Default translations
-  const t = translations ?? {
-    history: {
-      loading: 'Loading history...',
-      error: 'Failed to load prompt history',
-      empty: {
-        title: 'No prompt history yet',
-        description: 'Your enhanced prompts will appear here',
-      },
-      clearAll: {
-        title: 'Clear all history?',
-        description:
-          'This will permanently delete all your prompt history. This action cannot be undone.',
-        confirm: 'Clear all',
-      },
-    },
-    promptCard: {
-      target: 'Target',
-      original: 'Original',
-      enhanced: 'Enhanced',
-      expandCollapse: 'Click to expand',
-      deleteEntry: 'Delete this entry',
-    },
-    actions: {
-      copy: 'Copy',
-      copied: 'Copied',
-      cancel: 'Cancel',
-      tryAgain: 'Try again',
-      clearAll: 'Clear all',
-    },
-    common: {
-      entry: 'entry',
-      entries: 'entries',
-    },
-  }
-
-  // Get common translations with defaults
-  const commonT = t.common ?? { entry: 'entry', entries: 'entries' }
+export default function HistoryList() {
+  const dict = useTranslations()
+  const historyT = dict.history
+  const commonT = dict.common
+  const actionsT = commonT.actions
 
   const [entries, setEntries] = useState<PromptHistoryEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -140,7 +42,7 @@ export default function HistoryList({ translations }: HistoryListProps) {
     } catch (err) {
       console.error('Failed to load history:', err)
 
-      setError(t.history.error)
+      setError(historyT.error)
     } finally {
       setIsLoading(false)
     }
@@ -153,7 +55,7 @@ export default function HistoryList({ translations }: HistoryListProps) {
     } catch (err) {
       console.error('Failed to delete entry:', err)
 
-      setError(t.history.error)
+      setError(historyT.error)
     }
   }
 
@@ -169,7 +71,7 @@ export default function HistoryList({ translations }: HistoryListProps) {
     } catch (err) {
       console.error('Failed to clear history:', err)
 
-      setError(t.history.error)
+      setError(historyT.error)
     }
   }
 
@@ -194,7 +96,7 @@ export default function HistoryList({ translations }: HistoryListProps) {
             'tracking-tight',
           )}
         >
-          {t.history.loading}
+          {historyT.loading}
         </p>
       </div>
     )
@@ -249,21 +151,14 @@ export default function HistoryList({ translations }: HistoryListProps) {
             'rounded-lg',
           )}
         >
-          {t.actions.tryAgain}
+          {actionsT.tryAgain}
         </button>
       </div>
     )
   }
 
   if (entries.length === 0) {
-    return (
-      <EmptyHistoryState
-        translations={{
-          title: t.history.empty.title,
-          description: t.history.empty.description,
-        }}
-      />
-    )
+    return <EmptyHistoryState />
   }
 
   return (
@@ -321,7 +216,7 @@ export default function HistoryList({ translations }: HistoryListProps) {
             'rounded-lg',
           )}
         >
-          {t.actions.clearAll}
+          {actionsT.clearAll}
         </button>
       </div>
 
@@ -344,7 +239,6 @@ export default function HistoryList({ translations }: HistoryListProps) {
             target={entry.target}
             timestamp={entry.timestamp}
             onDelete={handleDelete}
-            translations={t.promptCard}
           />
         ))}
       </div>
@@ -354,10 +248,10 @@ export default function HistoryList({ translations }: HistoryListProps) {
         isOpen={showClearConfirm}
         onClose={() => setShowClearConfirm(false)}
         onConfirm={confirmClearAll}
-        title={t.history.clearAll.title}
-        description={t.history.clearAll.description}
-        confirmText={t.history.clearAll.confirm}
-        cancelText={t.actions.cancel}
+        title={historyT.clearAll.title}
+        description={historyT.clearAll.description}
+        confirmText={historyT.clearAll.confirm}
+        cancelText={actionsT.cancel}
         isDestructive
       />
     </div>

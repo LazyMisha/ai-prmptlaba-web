@@ -2,7 +2,7 @@
  * Supported locales configuration.
  * Easily extendable by adding new locale codes.
  */
-export const locales = ['en', 'uk', 'pl'] as const
+export const locales = ['en', 'uk'] as const
 
 /**
  * Type representing supported locale codes.
@@ -20,7 +20,6 @@ export const defaultLocale: Locale = 'en'
 export const localeNames: Record<Locale, string> = {
   en: 'EN',
   uk: 'UA',
-  pl: 'PL',
 }
 
 /**
@@ -29,7 +28,6 @@ export const localeNames: Record<Locale, string> = {
 export const localeFullNames: Record<Locale, string> = {
   en: 'English',
   uk: 'Українська',
-  pl: 'Polski',
 }
 
 /**

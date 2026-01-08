@@ -1,6 +1,5 @@
 import { PageLayout } from '@/components/common/PageLayout'
 import type { Locale } from '@/i18n/locales'
-import { getDictionary } from '@/i18n/dictionaries'
 
 /**
  * Props for the enhance layout.
@@ -12,7 +11,7 @@ interface EnhanceLayoutProps {
 
 /**
  * Layout for the Enhance page.
- * Uses Header with logo and centered page title.
+ * Uses Header with logo and auto-detected page title.
  */
 export default async function EnhanceLayout({
   children,
@@ -20,10 +19,9 @@ export default async function EnhanceLayout({
 }: EnhanceLayoutProps) {
   const { lang } = await params
   const locale = lang as Locale
-  const dict = await getDictionary(locale)
 
   return (
-    <PageLayout showLogo pageTitle={dict.enhance.pageTitle} locale={locale}>
+    <PageLayout showLogo locale={locale}>
       {children}
     </PageLayout>
   )

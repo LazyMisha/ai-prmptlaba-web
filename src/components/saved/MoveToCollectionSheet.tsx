@@ -1,22 +1,9 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
 import ResponsiveDialog from '@/components/common/ResponsiveDialog'
-
-/**
- * Translations for the MoveToCollectionSheet component.
- */
-export interface MoveToCollectionSheetTranslations {
-  /** Dialog title */
-  title?: string
-  /** Cancel button text */
-  cancel?: string
-  /** Text shown when no collections available */
-  noCollectionsAvailable?: string
-  /** Text shown for current collection */
-  current?: string
-}
 
 interface MoveToCollectionSheetProps {
   /** Whether the sheet is open */
@@ -29,8 +16,6 @@ interface MoveToCollectionSheetProps {
   currentCollectionId?: string
   /** Callback when a collection is selected */
   onSelect: (collectionId: string) => void
-  /** Translations for UI strings */
-  translations?: MoveToCollectionSheetTranslations
 }
 
 /**
@@ -43,16 +28,11 @@ export default function MoveToCollectionSheet({
   collections,
   currentCollectionId,
   onSelect,
-  translations,
 }: MoveToCollectionSheetProps) {
-  // Default translations
-  const t = {
-    title: translations?.title ?? 'Move to Collection',
-    cancel: translations?.cancel ?? 'Cancel',
-    noCollectionsAvailable:
-      translations?.noCollectionsAvailable ?? 'No collections available',
-    current: translations?.current ?? 'Current',
-  }
+  const dict = useTranslations()
+  const collectionsT = dict.saved.collections
+  const promptsT = dict.saved.prompts
+  const actionsT = dict.common.actions
 
   // Footer with cancel button (desktop only - handled by ResponsiveDialog)
   const footer = (
@@ -75,7 +55,7 @@ export default function MoveToCollectionSheet({
         'focus-visible:ring-[#007aff]',
       )}
     >
-      {t.cancel}
+      {actionsT.cancel}
     </button>
   )
 
@@ -83,7 +63,7 @@ export default function MoveToCollectionSheet({
     <ResponsiveDialog
       isOpen={isOpen}
       onClose={onClose}
-      title={t.title}
+      title={promptsT.move}
       breakpoint="lg"
       maxWidth="sm"
       footer={footer}
@@ -99,7 +79,7 @@ export default function MoveToCollectionSheet({
             'text-sm',
           )}
         >
-          {t.noCollectionsAvailable}
+          {collectionsT.noCollectionsAvailable}
         </p>
       ) : (
         <ul className="divide-y divide-gray-100">
@@ -156,7 +136,7 @@ export default function MoveToCollectionSheet({
                   {/* Current indicator */}
                   {isCurrentCollection && (
                     <span className="text-sm font-medium text-[#007aff]">
-                      {t.current}
+                      {collectionsT.current}
                     </span>
                   )}
                 </button>

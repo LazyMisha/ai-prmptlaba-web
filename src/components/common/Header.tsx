@@ -1,8 +1,11 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { APP_NAME } from '@/constants/app'
 import { cn } from '@/lib/utils'
+import { useDictionary } from '@/i18n/client'
 import type { Locale } from '@/i18n/locales'
-import { getDictionary } from '@/i18n/dictionaries'
 import { HeaderLogo } from './HeaderLogo'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import MobileMenu from './MobileMenu'
@@ -14,27 +17,33 @@ import NavLink from './NavLink'
 interface HeaderProps {
   /** Whether to show logo instead of text brand name */
   showLogo?: boolean
-  /** Page title to display in the center of the header */
-  pageTitle?: string
   /** Current locale for language switcher */
-  locale?: Locale
+  locale: Locale
 }
 
 /**
  * Header component with frosted glass effect.
  * Supports two modes:
  * - Default: Shows brand name text on left, navigation on right (for home page)
- * - Inner page: Shows logo on left, page title in center, navigation on right
- * This is a Server Component that loads its own translations.
+ * - Inner page: Shows logo on left, auto-detected page title in center, navigation on right
  */
-export default async function Header({
+export default function Header({
   showLogo = false,
-  pageTitle,
   locale = 'en',
 }: HeaderProps) {
-  // Load translations directly - cached by Next.js
-  const dict = await getDictionary(locale)
-  const t = dict.common.navigation
+  const pathname = usePathname()
+  const dictionary = useDictionary()
+  const t = dictionary.common.navigation
+
+  // Auto-detect page title based on current route
+  let pageTitle: string | null = null
+  if (pathname.includes('/enhance')) {
+    pageTitle = t.enhance
+  } else if (pathname.includes('/saved')) {
+    pageTitle = t.saved
+  } else if (pathname.includes('/history')) {
+    pageTitle = t.history
+  }
 
   return (
     <header
@@ -112,7 +121,7 @@ export default async function Header({
           </Link>
         )}
 
-        {/* Center - Page Title (only on inner pages) */}
+        {/* Center - Page Title (mobile only) */}
         {pageTitle && (
           <h1
             className={cn(
@@ -133,6 +142,8 @@ export default async function Header({
               // Hide on very small screens if needed
               'max-w-[50%]',
               'truncate',
+              // Hide on desktop
+              'xl:hidden',
             )}
           >
             {pageTitle}
@@ -180,7 +191,7 @@ export default async function Header({
           />
 
           {/* Mobile Menu - Hidden on desktop */}
-          <MobileMenu locale={locale} translations={t} />
+          <MobileMenu locale={locale} />
         </div>
       </nav>
     </header>

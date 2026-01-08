@@ -42,11 +42,11 @@ export type Dictionary = {
     cta: string
   }
   enhance: {
-    pageTitle: string
     description: string
     form: {
       ariaLabel: string
       targetLabel: string
+      targetHelperText: string
       promptLabel: string
       placeholder: string
       helperText: string
@@ -78,7 +78,6 @@ export type Dictionary = {
     }
   }
   saved: {
-    pageTitle: string
     description: string
     empty: {
       title: string
@@ -115,7 +114,6 @@ export type Dictionary = {
     deleteCollectionConfirm: string
   }
   history: {
-    pageTitle: string
     description: string
     loading: string
     error: string
@@ -192,10 +190,6 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
     import('./dictionaries/uk.json').then(
       (module) => module.default as Dictionary,
     ),
-  pl: () =>
-    import('./dictionaries/pl.json').then(
-      (module) => module.default as Dictionary,
-    ),
 }
 
 /**
@@ -205,14 +199,9 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
  */
 export const getDictionary = async (locale: Locale): Promise<Dictionary> => {
   if (typeof dictionaries[locale] !== 'function') {
-    console.error(
+    throw new Error(
       `[getDictionary] Invalid locale: "${locale}". Available locales: ${Object.keys(dictionaries).join(', ')}`,
     )
-    // Fallback to 'en' if possible, or throw a more descriptive error
-    if (dictionaries['en']) {
-      console.warn(`[getDictionary] Falling back to 'en'`)
-      return dictionaries['en']()
-    }
   }
   return dictionaries[locale]()
 }

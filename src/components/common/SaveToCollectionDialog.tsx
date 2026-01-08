@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
 import { DEFAULT_COLLECTION_COLOR } from '@/constants/saved-prompts'
 import {
@@ -21,52 +22,7 @@ import type { CollectionWithCount } from '@/types/saved-prompts'
 import type { CollectionColor } from '@/constants/saved-prompts'
 
 /**
- * Translations for the SaveToCollectionDialog component.
- */
-export interface SaveToCollectionDialogTranslations {
-  /** Dialog title */
-  title?: string
-  /** Title for new collection mode */
-  newCollectionTitle?: string
-  /** Close dialog aria-label */
-  closeDialog?: string
-  /** Quick save button text prefix */
-  quickSaveTo?: string
-  /** Separator text "or choose collection" */
-  orChooseCollection?: string
-  /** Empty state message */
-  noCollectionsYet?: string
-  /** Singular "prompt" */
-  prompt?: string
-  /** Plural "prompts" */
-  prompts?: string
-  /** Create & Save button text */
-  createAndSave?: string
-  /** Save to Selected Collection button text */
-  saveToSelected?: string
-  /** Collection form translations */
-  collectionForm?: {
-    nameLabel?: string
-    namePlaceholder?: string
-    colorLabel?: string
-    backToCollections?: string
-    nameRequired?: string
-    nameTooLong?: string
-    nameExists?: string
-  }
-  /** Toast translations */
-  toast?: {
-    loadCollectionsFailed?: string
-    selectCollection?: string
-    promptSaved?: string
-    saveFailed?: string
-    savedTo?: string
-    createFailed?: string
-  }
-}
-
-/**
- * Props for the SaveToCollectionDialog component.
+ * Props for the SaveToCollectionDialog component
  */
 interface SaveToCollectionDialogProps {
   /** Whether the dialog is open */
@@ -81,8 +37,6 @@ interface SaveToCollectionDialogProps {
   enhancedPrompt: string
   /** The target tool category */
   target: string
-  /** Translations for UI strings */
-  translations?: SaveToCollectionDialogTranslations
 }
 
 type DialogMode = 'select' | 'create'
@@ -98,60 +52,10 @@ export default function SaveToCollectionDialog({
   originalPrompt,
   enhancedPrompt,
   target,
-  translations,
 }: SaveToCollectionDialogProps) {
-  // Default translations
-  const t = {
-    title: translations?.title ?? 'Save to Collection',
-    newCollectionTitle: translations?.newCollectionTitle ?? 'New Collection',
-    closeDialog: translations?.closeDialog ?? 'Close dialog',
-    quickSaveTo: translations?.quickSaveTo ?? 'Quick Save to',
-    orChooseCollection:
-      translations?.orChooseCollection ?? 'or choose collection',
-    noCollectionsYet:
-      translations?.noCollectionsYet ??
-      'No collections yet. Create your first one!',
-    prompt: translations?.prompt ?? 'prompt',
-    prompts: translations?.prompts ?? 'prompts',
-    createAndSave: translations?.createAndSave ?? 'Create & Save',
-    saveToSelected:
-      translations?.saveToSelected ?? 'Save to Selected Collection',
-    collectionForm: {
-      nameLabel: translations?.collectionForm?.nameLabel ?? 'Collection Name',
-      namePlaceholder:
-        translations?.collectionForm?.namePlaceholder ?? 'e.g., Work Projects',
-      colorLabel:
-        translations?.collectionForm?.colorLabel ?? 'Collection Color',
-      backToCollections:
-        translations?.collectionForm?.backToCollections ??
-        'Back to collections',
-      nameRequired:
-        translations?.collectionForm?.nameRequired ??
-        'Please enter a collection name',
-      nameTooLong:
-        translations?.collectionForm?.nameTooLong ??
-        'Name must be 50 characters or less',
-      nameExists:
-        translations?.collectionForm?.nameExists ??
-        'A collection with this name already exists',
-    },
-    toast: {
-      loadCollectionsFailed:
-        translations?.toast?.loadCollectionsFailed ??
-        'Failed to load collections',
-      selectCollection:
-        translations?.toast?.selectCollection ?? 'Please select a collection',
-      promptSaved:
-        translations?.toast?.promptSaved ?? 'Prompt saved successfully',
-      saveFailed: translations?.toast?.saveFailed ?? 'Failed to save prompt',
-      savedTo: translations?.toast?.savedTo ?? 'Saved to',
-      createFailed:
-        translations?.toast?.createFailed ?? 'Failed to create collection',
-    },
-  }
-
   const dialogRef = useRef<HTMLDivElement>(null)
   const modeRef = useRef<DialogMode>('select')
+  const t = useTranslations()
 
   const [mode, setMode] = useState<DialogMode>('select')
   const [collections, setCollections] = useState<CollectionWithCount[]>([])
@@ -190,7 +94,7 @@ export default function SaveToCollectionDialog({
     } catch (error) {
       console.error('Failed to load collections:', error)
 
-      showToast('error', t.toast.loadCollectionsFailed)
+      showToast('error', t.toast.error.loadCollectionsFailed)
     } finally {
       setIsLoadingCollections(false)
     }
@@ -247,7 +151,7 @@ export default function SaveToCollectionDialog({
   // Handle saving to selected collection
   const handleSaveToCollection = async () => {
     if (!selectedCollectionId) {
-      showToast('error', t.toast.selectCollection)
+      showToast('error', t.toast.error.selectCollection)
 
       return
     }
@@ -262,13 +166,13 @@ export default function SaveToCollectionDialog({
         collectionId: selectedCollectionId,
       })
 
-      showToast('success', t.toast.promptSaved)
+      showToast('success', t.toast.success.promptSaved)
       onSaved?.()
       onClose()
     } catch (error) {
       console.error('Failed to save prompt:', error)
 
-      showToast('error', t.toast.saveFailed)
+      showToast('error', t.toast.error.saveFailed)
     } finally {
       setIsSaving(false)
     }
@@ -289,13 +193,13 @@ export default function SaveToCollectionDialog({
         collectionId: collection.id,
       })
 
-      showToast('success', `${t.toast.savedTo} "${collection.name}"`)
+      showToast('success', `${t.toast.success.savedTo} "${collection.name}"`)
       onSaved?.()
       onClose()
     } catch (error) {
       console.error('Failed to quick save:', error)
 
-      showToast('error', t.toast.saveFailed)
+      showToast('error', t.toast.error.saveFailed)
     } finally {
       setIsSaving(false)
     }
@@ -306,13 +210,13 @@ export default function SaveToCollectionDialog({
     const trimmedName = newCollectionName.trim()
 
     if (!trimmedName) {
-      setNameError(t.collectionForm.nameRequired)
+      setNameError(t.saved.collections.nameRequired)
 
       return
     }
 
     if (trimmedName.length > 50) {
-      setNameError(t.collectionForm.nameTooLong)
+      setNameError(t.saved.collections.nameTooLong)
 
       return
     }
@@ -323,7 +227,7 @@ export default function SaveToCollectionDialog({
         (c) => c.name.toLowerCase() === trimmedName.toLowerCase(),
       )
     ) {
-      setNameError(t.collectionForm.nameExists)
+      setNameError(t.saved.collections.nameExists)
 
       return
     }
@@ -347,13 +251,13 @@ export default function SaveToCollectionDialog({
         collectionId: newCollection.id,
       })
 
-      showToast('success', `${t.toast.savedTo} "${newCollection.name}"`)
+      showToast('success', `${t.toast.success.savedTo} "${newCollection.name}"`)
       onSaved?.()
       onClose()
     } catch (error) {
       console.error('Failed to create collection and save:', error)
 
-      showToast('error', t.toast.createFailed)
+      showToast('error', t.toast.error.createFailed)
     } finally {
       setIsSaving(false)
     }
@@ -454,12 +358,14 @@ export default function SaveToCollectionDialog({
             id="save-dialog-title"
             className={cn('text-lg', 'font-semibold', 'text-gray-900')}
           >
-            {mode === 'select' ? t.title : t.newCollectionTitle}
+            {mode === 'select'
+              ? t.saveDialog.title
+              : t.saveDialog.newCollectionTitle}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label={t.closeDialog}
+            aria-label={t.saveDialog.closeDialog}
             className={cn(
               'p-2',
               '-mr-2',
@@ -515,7 +421,7 @@ export default function SaveToCollectionDialog({
                 ) : (
                   <>
                     <CheckIcon className="w-5 h-5" strokeWidth={2} />
-                    {t.quickSaveTo} &ldquo;{target}&rdquo;
+                    {t.saveDialog.quickSaveTo} &ldquo;{target}&rdquo;
                   </>
                 )}
               </button>
@@ -530,7 +436,7 @@ export default function SaveToCollectionDialog({
                     'tracking-wider',
                   )}
                 >
-                  {t.orChooseCollection}
+                  {t.saveDialog.orChooseCollection}
                 </span>
                 <div className={cn('flex-1', 'h-px', 'bg-gray-200')} />
               </div>
@@ -556,7 +462,7 @@ export default function SaveToCollectionDialog({
                     'text-sm',
                   )}
                 >
-                  {t.noCollectionsYet}
+                  {t.saveDialog.noCollectionsYet}
                 </div>
               ) : (
                 <div className={cn('space-y-2', 'mb-4')}>
@@ -610,7 +516,9 @@ export default function SaveToCollectionDialog({
                         </div>
                         <div className={cn('text-xs', 'text-gray-500')}>
                           {collection.promptCount}{' '}
-                          {collection.promptCount === 1 ? t.prompt : t.prompts}
+                          {collection.promptCount === 1
+                            ? t.saveDialog.prompt
+                            : t.saveDialog.prompts}
                         </div>
                       </div>
                       {selectedCollectionId === collection.id && (
@@ -626,6 +534,7 @@ export default function SaveToCollectionDialog({
 
               {/* Create new collection button */}
               <CreateCollectionButton
+                label={t.saveDialog.orChooseCollection}
                 onClick={() => {
                   setMode('create')
                   modeRef.current = 'create'
@@ -652,12 +561,6 @@ export default function SaveToCollectionDialog({
                   setNameError(null)
                 }}
                 autoFocus
-                translations={{
-                  nameLabel: t.collectionForm.nameLabel,
-                  namePlaceholder: t.collectionForm.namePlaceholder,
-                  colorLabel: t.collectionForm.colorLabel,
-                  backToCollections: t.collectionForm.backToCollections,
-                }}
               />
             </div>
           )}
@@ -711,7 +614,7 @@ export default function SaveToCollectionDialog({
                 {isSaving ? (
                   <SpinnerIcon className="w-5 h-5 animate-spin" />
                 ) : (
-                  t.createAndSave
+                  t.saveDialog.createAndSave
                 )}
               </button>
             ) : (
@@ -747,7 +650,7 @@ export default function SaveToCollectionDialog({
                 ) : (
                   <>
                     <CheckIcon className="w-5 h-5" strokeWidth={2} />
-                    {t.saveToSelected}
+                    {t.saveDialog.saveToSelected}
                   </>
                 )}
               </button>

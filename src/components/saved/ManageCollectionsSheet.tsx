@@ -1,24 +1,11 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
 import MobileSheet from '@/components/common/MobileSheet'
 import PencilIcon from '@/components/icons/PencilIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
-
-/**
- * Translations for the ManageCollectionsSheet component.
- */
-export interface ManageCollectionsSheetTranslations {
-  /** Sheet title */
-  title?: string
-  /** Text shown when no collections exist */
-  noCollectionsYet?: string
-  /** Aria label pattern for rename button - receives collection name */
-  renameAriaLabel?: string
-  /** Aria label pattern for delete button - receives collection name */
-  deleteAriaLabel?: string
-}
 
 interface ManageCollectionsSheetProps {
   /** Whether the sheet is open */
@@ -31,8 +18,6 @@ interface ManageCollectionsSheetProps {
   onEdit?: (id: string) => void
   /** Callback when delete is requested */
   onDelete?: (id: string) => void
-  /** Translations for UI strings */
-  translations?: ManageCollectionsSheetTranslations
 }
 
 /**
@@ -45,19 +30,15 @@ export default function ManageCollectionsSheet({
   collections,
   onEdit,
   onDelete,
-  translations,
 }: ManageCollectionsSheetProps) {
-  // Default translations
-  const t = {
-    title: translations?.title ?? 'Manage Collections',
-    noCollectionsYet: translations?.noCollectionsYet ?? 'No collections yet',
-  }
+  const dict = useTranslations()
+  const t = dict.saved.collections
 
   return (
     <MobileSheet
       isOpen={isOpen}
       onClose={onClose}
-      title={t.title}
+      title={t.manageTitle}
       contentClassName="p-0"
     >
       {collections.length === 0 ? (

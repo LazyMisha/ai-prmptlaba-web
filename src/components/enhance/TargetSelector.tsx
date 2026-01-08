@@ -14,7 +14,9 @@ export interface TargetSelectorProps {
   /** Whether the selector is disabled */
   disabled?: boolean
   /** Label text for the selector */
-  label?: string
+  label: string
+  /** Helper text displayed below the selector */
+  helperText?: string
   /** Additional CSS classes */
   className?: string
 }
@@ -26,7 +28,8 @@ export default function TargetSelector({
   value,
   onChange,
   disabled,
-  label = 'Target Platform',
+  label,
+  helperText,
   className,
 }: TargetSelectorProps) {
   return (
@@ -134,7 +137,7 @@ export default function TargetSelector({
           'mt-2',
         )}
       >
-        Choose the AI tool or context for optimized results
+        {helperText}
       </p>
     </div>
   )

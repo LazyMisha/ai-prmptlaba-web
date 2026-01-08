@@ -53,4 +53,11 @@ describe('TargetSelector', () => {
       screen.getByRole('combobox', { name: /choose target/i }),
     ).toBeInTheDocument()
   })
+
+  it('renders custom helper text', () => {
+    const helperText = 'Custom helper text'
+    render(<TargetSelector {...defaultProps} helperText={helperText} />)
+
+    expect(screen.getByText(helperText)).toBeInTheDocument()
+  })
 })

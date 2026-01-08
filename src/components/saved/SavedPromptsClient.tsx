@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useSyncExternalStore } from 'react'
-
+import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
 import type { Collection, SavedPrompt } from '@/types/saved-prompts'
 import type { CollectionColor } from '@/constants/saved-prompts'
@@ -34,110 +34,9 @@ function useIsClient() {
 }
 
 /**
- * Saved translations.
- */
-interface SavedTranslations {
-  empty: {
-    title: string
-    description: string
-    cta: string
-  }
-  noPromptsInCollection: string
-  collections: {
-    all: string
-    label: string
-    create: string
-    rename: string
-    delete: string
-    newCollection: string
-    collectionName: string
-    collectionColor: string
-    namePlaceholder: string
-    nameRequired: string
-    nameTooLong: string
-    nameExists: string
-    manage: string
-    manageTitle: string
-    noCollectionsYet: string
-    noCollectionsAvailable: string
-    backToCollections: string
-    current: string
-  }
-  prompts: {
-    delete: string
-    deleteConfirm: string
-    move: string
-    moveToAnother: string
-  }
-  deleteCollectionConfirm: string
-}
-
-/**
- * Prompt card translations.
- */
-interface PromptCardTranslations {
-  target: string
-  original: string
-  enhanced: string
-  expandCollapse: string
-  deleteEntry: string
-  copy?: string
-  copied?: string
-  move?: string
-  delete?: string
-  copyToClipboard?: string
-  copiedToClipboard?: string
-  moveToAnother?: string
-}
-
-/**
- * Action translations.
- */
-interface ActionTranslations {
-  cancel: string
-  save?: string
-  saved?: string
-  create?: string
-  delete?: string
-}
-
-/**
- * Toast translations.
- */
-interface ToastTranslations {
-  success: {
-    promptDeleted: string
-    collectionDeleted: string
-    collectionRenamed: string
-    collectionCreated: string
-    promptMoved: string
-  }
-  error: {
-    loadFailed: string
-    deleteFailed: string
-    deleteCollectionFailed: string
-    renameFailed: string
-    createFailed: string
-    moveFailed: string
-  }
-}
-
-/**
- * All translations for SavedPromptsClient.
- */
-export interface SavedPromptsTranslations {
-  saved: SavedTranslations
-  promptCard: PromptCardTranslations
-  actions: ActionTranslations
-  toast: ToastTranslations
-}
-
-/**
  * Props for the SavedPromptsClient component.
  */
 interface SavedPromptsClientProps {
-  /** Translations for the component */
-  translations?: SavedPromptsTranslations
   /** Base path for links (includes locale, e.g., '/en') */
   basePath?: string
 }
@@ -148,80 +47,12 @@ interface SavedPromptsClientProps {
  * the collection sidebar and prompt cards.
  */
 export default function SavedPromptsClient({
-  translations,
   basePath = '',
 }: SavedPromptsClientProps) {
-  // Default translations
-  const t = translations ?? {
-    saved: {
-      empty: {
-        title: 'No saved prompts yet',
-        description:
-          'Save your enhanced prompts to organize them into collections and access them anytime.',
-        cta: 'Start Enhancing',
-      },
-      noPromptsInCollection: 'No prompts in this collection',
-      collections: {
-        all: 'All',
-        label: 'Collection',
-        create: 'Create Collection',
-        rename: 'Rename Collection',
-        delete: 'Delete Collection',
-        newCollection: 'New Collection',
-        collectionName: 'Collection Name',
-        collectionColor: 'Collection Color',
-        namePlaceholder: 'e.g., Work Projects',
-        nameRequired: 'Please enter a collection name',
-        nameTooLong: 'Name must be 50 characters or less',
-        nameExists: 'A collection with this name already exists',
-        manage: 'Manage',
-        manageTitle: 'Manage Collections',
-        noCollectionsYet: 'No collections yet',
-        noCollectionsAvailable: 'No collections available',
-        backToCollections: 'Back to collections',
-        current: 'Current',
-      },
-      prompts: {
-        delete: 'Delete Prompt',
-        deleteConfirm:
-          'Are you sure you want to delete this saved prompt? This action cannot be undone.',
-        move: 'Move to Collection',
-        moveToAnother: 'Move to another collection',
-      },
-      deleteCollectionConfirm:
-        'Are you sure you want to delete this collection? All prompts in this collection will also be deleted.',
-    },
-    promptCard: {
-      target: 'Target',
-      original: 'Original',
-      enhanced: 'Enhanced',
-      expandCollapse: 'Click to expand',
-      deleteEntry: 'Delete this entry',
-    },
-    actions: {
-      cancel: 'Cancel',
-      save: 'Save',
-      create: 'Create',
-      delete: 'Delete',
-    },
-    toast: {
-      success: {
-        promptDeleted: 'Prompt deleted',
-        collectionDeleted: 'Collection deleted',
-        collectionRenamed: 'Collection renamed',
-        collectionCreated: 'Collection created',
-        promptMoved: 'Prompt moved',
-      },
-      error: {
-        loadFailed: 'Failed to load saved prompts',
-        deleteFailed: 'Failed to delete prompt',
-        deleteCollectionFailed: 'Failed to delete collection',
-        renameFailed: 'Failed to rename collection',
-        createFailed: 'Failed to create collection',
-        moveFailed: 'Failed to move prompt',
-      },
-    },
-  }
+  const dict = useTranslations()
+  const savedT = dict.saved
+  const toastT = dict.toast
+  const actionsT = dict.common.actions
 
   const isClient = useIsClient()
 
@@ -274,7 +105,7 @@ export default function SavedPromptsClient({
       setSavedPrompts(promptsData)
     } catch (error) {
       console.error('Failed to load saved prompts:', error)
-      showToast('error', t.toast.error.loadFailed)
+      showToast('error', toastT.error.loadFailed)
     } finally {
       setIsLoading(false)
     }
@@ -290,10 +121,10 @@ export default function SavedPromptsClient({
     try {
       await deleteSavedPrompt(deletePromptId)
       setSavedPrompts((prev) => prev.filter((p) => p.id !== deletePromptId))
-      showToast('success', t.toast.success.promptDeleted)
+      showToast('success', toastT.success.promptDeleted)
     } catch (error) {
       console.error('Failed to delete prompt:', error)
-      showToast('error', t.toast.error.deleteFailed)
+      showToast('error', toastT.error.deleteFailed)
     } finally {
       setDeletePromptId(null)
     }
@@ -310,10 +141,10 @@ export default function SavedPromptsClient({
       if (selectedCollectionId === deleteCollectionId) {
         setSelectedCollectionId(null)
       }
-      showToast('success', t.toast.success.collectionDeleted)
+      showToast('success', toastT.success.collectionDeleted)
     } catch (error) {
       console.error('Failed to delete collection:', error)
-      showToast('error', t.toast.error.deleteCollectionFailed)
+      showToast('error', toastT.error.deleteCollectionFailed)
     } finally {
       setDeleteCollectionId(null)
     }
@@ -328,10 +159,10 @@ export default function SavedPromptsClient({
       setCollections((prev) =>
         prev.map((c) => (c.id === updated.id ? updated : c)),
       )
-      showToast('success', t.toast.success.collectionRenamed)
+      showToast('success', toastT.success.collectionRenamed)
     } catch (error) {
       console.error('Failed to rename collection:', error)
-      showToast('error', t.toast.error.renameFailed)
+      showToast('error', toastT.error.renameFailed)
     } finally {
       setRenameCollectionId(null)
       setRenameValue('')
@@ -342,12 +173,12 @@ export default function SavedPromptsClient({
     const trimmedName = newCollectionName.trim()
 
     if (!trimmedName) {
-      setNewCollectionNameError(t.saved.collections.nameRequired)
+      setNewCollectionNameError(savedT.collections.nameRequired)
       return
     }
 
     if (trimmedName.length > 50) {
-      setNewCollectionNameError(t.saved.collections.nameTooLong)
+      setNewCollectionNameError(savedT.collections.nameTooLong)
       return
     }
 
@@ -357,7 +188,7 @@ export default function SavedPromptsClient({
         (c) => c.name.toLowerCase() === trimmedName.toLowerCase(),
       )
     ) {
-      setNewCollectionNameError(t.saved.collections.nameExists)
+      setNewCollectionNameError(savedT.collections.nameExists)
       return
     }
 
@@ -367,10 +198,10 @@ export default function SavedPromptsClient({
         color: newCollectionColor,
       })
       setCollections((prev) => [...prev, newCollection])
-      showToast('success', t.toast.success.collectionCreated)
+      showToast('success', toastT.success.collectionCreated)
     } catch (error) {
       console.error('Failed to create collection:', error)
-      showToast('error', t.toast.error.createFailed)
+      showToast('error', toastT.error.createFailed)
     } finally {
       setShowCreateCollection(false)
       setNewCollectionName('')
@@ -386,10 +217,10 @@ export default function SavedPromptsClient({
       setSavedPrompts((prev) =>
         prev.map((p) => (p.id === updated.id ? updated : p)),
       )
-      showToast('success', t.toast.success.promptMoved)
+      showToast('success', toastT.success.promptMoved)
     } catch (error) {
       console.error('Failed to move prompt:', error)
-      showToast('error', t.toast.error.moveFailed)
+      showToast('error', toastT.error.moveFailed)
     } finally {
       setMovePromptId(null)
     }
@@ -435,16 +266,7 @@ export default function SavedPromptsClient({
   }
 
   if (savedPrompts.length === 0) {
-    return (
-      <EmptySavedState
-        translations={{
-          title: t.saved.empty.title,
-          description: t.saved.empty.description,
-          cta: t.saved.empty.cta,
-        }}
-        basePath={basePath}
-      />
-    )
+    return <EmptySavedState basePath={basePath} />
   }
 
   return (
@@ -479,14 +301,6 @@ export default function SavedPromptsClient({
             onEdit={openRenameDialog}
             onDelete={setDeleteCollectionId}
             onCreate={() => setShowCreateCollection(true)}
-            translations={{
-              label: t.saved.collections.label,
-              all: t.saved.collections.all,
-              create: t.saved.collections.create,
-              manage: t.saved.collections.manage,
-              manageTitle: t.saved.collections.manageTitle,
-              noCollectionsYet: t.saved.collections.noCollectionsYet,
-            }}
           />
         </aside>
 
@@ -503,7 +317,7 @@ export default function SavedPromptsClient({
               )}
             >
               <p className={cn('text-[#86868b]', 'text-[17px]')}>
-                {t.saved.noPromptsInCollection}
+                {savedT.noPromptsInCollection}
               </p>
             </div>
           ) : (
@@ -518,7 +332,6 @@ export default function SavedPromptsClient({
                   timestamp={prompt.createdAt}
                   onDelete={setDeletePromptId}
                   onMove={setMovePromptId}
-                  translations={t.promptCard}
                 />
               ))}
             </div>
@@ -528,10 +341,10 @@ export default function SavedPromptsClient({
 
       <ConfirmDialog
         isOpen={deletePromptId !== null}
-        title={t.saved.prompts.delete}
-        description={t.saved.prompts.deleteConfirm}
-        confirmText={t.actions.delete ?? 'Delete'}
-        cancelText={t.actions.cancel}
+        title={savedT.prompts.delete}
+        description={savedT.prompts.deleteConfirm}
+        confirmText={actionsT.delete}
+        cancelText={actionsT.cancel}
         isDestructive
         onConfirm={handleDeletePrompt}
         onClose={() => setDeletePromptId(null)}
@@ -539,10 +352,10 @@ export default function SavedPromptsClient({
 
       <ConfirmDialog
         isOpen={deleteCollectionId !== null}
-        title={t.saved.collections.delete}
-        description={t.saved.deleteCollectionConfirm}
-        confirmText={t.actions.delete ?? 'Delete'}
-        cancelText={t.actions.cancel}
+        title={savedT.collections.delete}
+        description={savedT.deleteCollectionConfirm}
+        confirmText={actionsT.delete}
+        cancelText={actionsT.cancel}
         isDestructive
         onConfirm={handleDeleteCollection}
         onClose={() => setDeleteCollectionId(null)}
@@ -552,7 +365,7 @@ export default function SavedPromptsClient({
       <ResponsiveDialog
         isOpen={!!renameCollectionId}
         onClose={() => setRenameCollectionId(null)}
-        title={t.saved.collections.rename}
+        title={savedT.collections.rename}
         maxWidth="sm"
         showCloseButton={false}
         footer={
@@ -573,7 +386,7 @@ export default function SavedPromptsClient({
                 'focus-visible:ring-[#007aff]',
               )}
             >
-              {t.actions.cancel}
+              {actionsT.cancel}
             </button>
             <button
               type="button"
@@ -596,7 +409,7 @@ export default function SavedPromptsClient({
                 'focus-visible:ring-offset-2',
               )}
             >
-              {t.actions.save ?? 'Save'}
+              {actionsT.save}
             </button>
           </div>
         }
@@ -605,7 +418,7 @@ export default function SavedPromptsClient({
           type="text"
           value={renameValue}
           onChange={(e) => setRenameValue(e.target.value)}
-          placeholder={t.saved.collections.collectionName}
+          placeholder={savedT.collections.collectionName}
           className={cn(
             'w-full',
             'px-4',
@@ -635,7 +448,7 @@ export default function SavedPromptsClient({
           setNewCollectionColor(DEFAULT_COLLECTION_COLOR as CollectionColor)
           setNewCollectionNameError(null)
         }}
-        title={t.saved.collections.newCollection}
+        title={savedT.collections.newCollection}
         maxWidth="md"
         footer={
           <button
@@ -665,7 +478,7 @@ export default function SavedPromptsClient({
               'disabled:cursor-not-allowed',
             )}
           >
-            {t.actions.create ?? 'Create'}
+            {actionsT.create}
           </button>
         }
       >
@@ -679,11 +492,6 @@ export default function SavedPromptsClient({
           onColorChange={setNewCollectionColor}
           nameError={newCollectionNameError}
           autoFocus
-          translations={{
-            nameLabel: t.saved.collections.collectionName,
-            colorLabel: t.saved.collections.collectionColor,
-            namePlaceholder: t.saved.collections.namePlaceholder,
-          }}
         />
       </ResponsiveDialog>
 
@@ -695,12 +503,6 @@ export default function SavedPromptsClient({
         currentCollectionId={
           savedPrompts.find((p) => p.id === movePromptId)?.collectionId
         }
-        translations={{
-          title: t.saved.prompts.move,
-          cancel: t.actions.cancel,
-          noCollectionsAvailable: t.saved.collections.noCollectionsAvailable,
-          current: t.saved.collections.current,
-        }}
         onSelect={handleMovePrompt}
       />
 

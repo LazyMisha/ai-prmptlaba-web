@@ -3,14 +3,14 @@
     "appName": "AI Prompt Laba",
     "navigation": {
       "enhance": "Enhance",
-      "saved": "Saved",
+      "saved": "My Collections",
       "history": "History",
-      "goToHome": "Go to home page",
-      "goToEnhance": "Go to prompt enhancer page",
-      "goToSaved": "Go to saved prompts page",
-      "goToHistory": "Go to prompt history page",
-      "openMenu": "Open menu",
-      "closeMenu": "Close menu"
+      "goToHome": "Go to Home",
+      "goToEnhance": "Go to Prompt Enhancer",
+      "goToSaved": "Go to My Collections",
+      "goToHistory": "Go to Prompt History",
+      "openMenu": "Open Menu",
+      "closeMenu": "Close Menu"
     },
     "actions": {
       "copy": "Copy",
@@ -23,63 +23,62 @@
       "move": "Move",
       "create": "Create",
       "rename": "Rename",
-      "tryAgain": "Try again",
-      "clearAll": "Clear all"
+      "tryAgain": "Try Again",
+      "clearAll": "Clear All"
     },
-    "loading": "Loading...",
+    "loading": "Loading…",
     "entry": "entry",
     "entries": "entries"
   },
   "home": {
     "title": "AI Prompt Laba",
-    "description": "Your hub for smart prompt creation and management. Transform basic ideas into professional, effective AI instructions with ease.",
-    "cta": "Enhance Your Prompt"
+    "description": "Your space for creating and managing high-quality AI prompts. Turn simple ideas into clear, effective instructions in seconds.",
+    "cta": "Get Started"
   },
   "enhance": {
-    "pageTitle": "Prompt Enhancer",
-    "description": "Transform your basic prompts into professional, effective AI instructions optimized for your target context.",
+    "description": "Make your AI prompt professional and effective",
     "form": {
       "ariaLabel": "Prompt enhancement form",
-      "targetLabel": "Target Platform",
-      "promptLabel": "Your Prompt",
-      "placeholder": "e.g., write a post about my promotion",
-      "helperText": "Press ⌘/Ctrl + Enter to enhance",
+      "targetLabel": "Context",
+      "targetHelperText": "Set the context for better results",
+      "promptLabel": "Prompt",
+      "placeholder": "e.g. write a post about my promotion",
+      "helperText": "Press ⌘ / Ctrl + Enter to enhance",
       "moreCharNeeded": "more character needed",
       "moreCharsNeeded": "more characters needed",
-      "overLimit": "over limit",
-      "enhanceButton": "Enhance Prompt",
-      "enhancing": "Enhancing...",
+      "overLimit": "over the limit",
+      "enhanceButton": "Enhance",
+      "enhancing": "Enhancing…",
       "enhancingAriaLabel": "Enhancing prompt, please wait",
-      "enhanceDisabledAriaLabel": "Enhance prompt (currently disabled)",
+      "enhanceDisabledAriaLabel": "Enhance prompt (disabled)",
       "enhanceAriaLabel": "Enhance prompt"
     },
     "result": {
       "ariaLabel": "Enhanced prompt result",
       "title": "Enhanced Prompt",
       "error": "Enhancement Failed",
-      "viewOriginal": "View original prompt",
-      "copyToClipboard": "Copy to clipboard",
-      "copiedToClipboard": "Copied to clipboard",
+      "viewOriginal": "View Original",
+      "copyToClipboard": "Copy to Clipboard",
+      "copiedToClipboard": "Copied to Clipboard",
       "promptSaved": "Prompt saved",
-      "saveToCollection": "Save prompt to collection"
+      "saveToCollection": "Save to Collection"
     },
     "validation": {
-      "enterPrompt": "Please enter a prompt",
-      "minLength": "Prompt must be at least 3 characters long",
-      "maxLength": "Prompt must not exceed 2000 characters",
+      "enterPrompt": "Enter a prompt",
+      "minLength": "Prompt must be at least 3 characters",
+      "maxLength": "Prompt must be no longer than 2000 characters",
       "networkError": "Network error",
-      "unexpectedError": "An unexpected error occurred. Please try again."
+      "unexpectedError": "Something went wrong. Please try again."
     }
   },
   "saved": {
-    "pageTitle": "Saved Prompts",
-    "description": "Your enhanced prompts organized by collections. Click on a collection to view its prompts.",
+    "description": "My Collections",
     "empty": {
-      "title": "No saved prompts yet",
-      "description": "Save your enhanced prompts to organize them into collections and access them anytime.",
+      "title": "No saved prompts",
+      "description": "Save enhanced prompts to collections and access them anytime.",
       "cta": "Start Enhancing"
     },
-    "noPromptsInCollection": "No prompts in this collection",
+    "noPromptsInCollection": "This collection is empty",
     "collections": {
       "all": "All",
       "label": "Collection",
@@ -87,55 +86,54 @@
       "rename": "Rename Collection",
       "delete": "Delete Collection",
       "newCollection": "New Collection",
-      "collectionName": "Collection Name",
-      "collectionColor": "Collection Color",
-      "namePlaceholder": "e.g., Work Projects",
-      "nameRequired": "Please enter a collection name",
-      "nameTooLong": "Name must be 50 characters or less",
-      "nameExists": "A collection with this name already exists",
+      "collectionName": "Name",
+      "collectionColor": "Color",
+      "namePlaceholder": "e.g. Work Projects",
+      "nameRequired": "Collection name is required",
+      "nameTooLong": "Maximum 50 characters",
+      "nameExists": "Collection name already exists",
       "manage": "Manage",
       "manageTitle": "Manage Collections",
       "noCollectionsYet": "No collections yet",
       "noCollectionsAvailable": "No collections available",
-      "backToCollections": "Back to collections",
+      "backToCollections": "Back to Collections",
       "current": "Current"
     },
     "prompts": {
       "delete": "Delete Prompt",
-      "deleteConfirm": "Are you sure you want to delete this saved prompt? This action cannot be undone.",
+      "deleteConfirm": "Delete this prompt? This action cannot be undone.",
       "move": "Move to Collection",
-      "moveToAnother": "Move to another collection"
+      "moveToAnother": "Move to Another Collection"
     },
-    "deleteCollectionConfirm": "Are you sure you want to delete this collection? All prompts in this collection will also be deleted."
+    "deleteCollectionConfirm": "Delete this collection and all its prompts? This action cannot be undone."
   },
   "history": {
-    "pageTitle": "Recent Prompts",
-    "description": "View and manage your recently enhanced prompts. All data is stored locally in your browser.",
-    "loading": "Loading history...",
-    "error": "Failed to load prompt history",
+    "description": "My Recent Enhancements",
+    "loading": "Loading history…",
+    "error": "Failed to load history",
     "empty": {
-      "title": "No prompt history yet",
-      "description": "Your enhanced prompts will appear here"
+      "title": "No history yet",
+      "description": "Enhanced prompts will appear here"
     },
     "clearAll": {
       "title": "Clear all history?",
-      "description": "This will permanently delete all your prompt history. This action cannot be undone.",
-      "confirm": "Clear all"
+      "description": "This will permanently delete your entire prompt history.",
+      "confirm": "Clear All"
     }
   },
   "promptCard": {
-    "target": "Target",
-    "original": "Original",
-    "enhanced": "Enhanced",
-    "expandCollapse": "Click to expand",
-    "deleteEntry": "Delete this entry",
+    "target": "Context",
+    "original": "Before",
+    "enhanced": "After",
+    "expandCollapse": "Tap to expand",
+    "deleteEntry": "Delete entry",
     "copy": "Copy",
     "copied": "Copied",
     "move": "Move",
     "delete": "Delete",
-    "copyToClipboard": "Copy to clipboard",
-    "copiedToClipboard": "Copied to clipboard",
-    "moveToAnother": "Move to another collection"
+    "copyToClipboard": "Copy to Clipboard",
+    "copiedToClipboard": "Copied to Clipboard",
+    "moveToAnother": "Move to Another Collection"
   },
   "toast": {
     "success": {
@@ -144,7 +142,7 @@
       "collectionRenamed": "Collection renamed",
       "collectionCreated": "Collection created",
       "promptMoved": "Prompt moved",
-      "promptSaved": "Prompt saved successfully",
+      "promptSaved": "Prompt saved",
       "savedTo": "Saved to"
     },
     "error": {
@@ -155,7 +153,7 @@
       "createFailed": "Failed to create collection",
       "moveFailed": "Failed to move prompt",
       "loadCollectionsFailed": "Failed to load collections",
-      "selectCollection": "Please select a collection",
+      "selectCollection": "Select a collection",
       "saveFailed": "Failed to save prompt"
     }
   },
@@ -163,9 +161,9 @@
     "title": "Save to Collection",
     "newCollectionTitle": "New Collection",
     "closeDialog": "Close dialog",
-    "quickSaveTo": "Quick Save to",
-    "orChooseCollection": "or choose collection",
-    "noCollectionsYet": "No collections yet. Create your first one!",
+    "quickSaveTo": "Quick Save",
+    "orChooseCollection": "or choose a collection",
+    "noCollectionsYet": "No collections yet. Create your first one.",
     "prompt": "prompt",
     "prompts": "prompts",
     "createAndSave": "Create & Save",

@@ -2,30 +2,13 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
 import CreateCollectionButton from '@/components/common/CreateCollectionButton'
 import PencilIcon from '@/components/icons/PencilIcon'
 import SelectorIcon from '@/components/icons/SelectorIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
 import ManageCollectionsSheet from './ManageCollectionsSheet'
-
-/**
- * Translations for the CollectionSidebar component.
- */
-export interface CollectionSidebarTranslations {
-  /** Label for the collection dropdown on mobile */
-  label?: string
-  /** "All" collection option */
-  all?: string
-  /** Create collection button text */
-  create?: string
-  /** Manage collections button text */
-  manage?: string
-  /** Manage collections sheet title */
-  manageTitle?: string
-  /** Text shown when no collections exist in manage sheet */
-  noCollectionsYet?: string
-}
 
 interface CollectionSidebarProps {
   /** List of collections to display */
@@ -44,8 +27,6 @@ interface CollectionSidebarProps {
   onCreate?: () => void
   /** Additional CSS classes for the container */
   className?: string
-  /** Translations for UI strings */
-  translations?: CollectionSidebarTranslations
 }
 
 /**
@@ -62,23 +43,14 @@ export function CollectionSidebar({
   onDelete,
   onCreate,
   className,
-  translations,
 }: CollectionSidebarProps) {
+  const dict = useTranslations()
+  const t = dict.saved.collections
   const [isManageSheetOpen, setIsManageSheetOpen] = useState(false)
   const totalCount = Object.values(promptCounts).reduce(
     (sum, count) => sum + count,
     0,
   )
-
-  // Default translations
-  const t = {
-    label: translations?.label ?? 'Collection',
-    all: translations?.all ?? 'All',
-    create: translations?.create ?? 'Create',
-    manage: translations?.manage ?? 'Manage',
-    manageTitle: translations?.manageTitle ?? 'Manage Collections',
-    noCollectionsYet: translations?.noCollectionsYet ?? 'No collections yet',
-  }
 
   return (
     <div className={className}>
@@ -99,7 +71,6 @@ export function CollectionSidebar({
         >
           {t.label}
         </label>
-
         <div className="relative">
           <select
             id="collection-selector"
@@ -153,7 +124,6 @@ export function CollectionSidebar({
               </option>
             ))}
           </select>
-
           <div
             className={cn(
               // Position
@@ -170,7 +140,6 @@ export function CollectionSidebar({
             <SelectorIcon className="w-5 h-5" />
           </div>
         </div>
-
         {/* Mobile action buttons */}
         <div className="flex gap-2 mt-3">
           {onCreate && (
@@ -219,7 +188,6 @@ export function CollectionSidebar({
             </button>
           )}
         </div>
-
         {/* Manage Collections Sheet */}
         <ManageCollectionsSheet
           isOpen={isManageSheetOpen}
@@ -227,13 +195,8 @@ export function CollectionSidebar({
           collections={collections}
           onEdit={onEdit}
           onDelete={onDelete}
-          translations={{
-            title: t.manageTitle,
-            noCollectionsYet: t.noCollectionsYet,
-          }}
         />
       </div>
-
       {/* Desktop: Vertical Sidebar */}
       <nav
         aria-label="Collections"
@@ -297,7 +260,6 @@ export function CollectionSidebar({
             {totalCount}
           </span>
         </button>
-
         {/* Collection items */}
         {collections.map((collection) => (
           <div
@@ -366,7 +328,6 @@ export function CollectionSidebar({
                 )}
                 <span className="truncate">{collection.name}</span>
               </span>
-
               {/* Count and action buttons container */}
               <span className="flex items-center gap-1 ml-2 shrink-0">
                 {/* Action buttons - visible on hover */}
@@ -447,7 +408,6 @@ export function CollectionSidebar({
                     )}
                   </span>
                 )}
-
                 {/* Prompt count */}
                 <span
                   className={cn(
@@ -467,7 +427,9 @@ export function CollectionSidebar({
         ))}
 
         {/* Create new collection button */}
-        {onCreate && <CreateCollectionButton onClick={onCreate} />}
+        {onCreate && (
+          <CreateCollectionButton label={t.create} onClick={onCreate} />
+        )}
       </nav>
     </div>
   )

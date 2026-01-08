@@ -13,7 +13,7 @@ interface PageDescriptionProps {
    * HTML id attribute for accessibility.
    * Useful when referenced by aria-describedby from other elements.
    */
-  id?: string
+  id: string
 }
 
 /**

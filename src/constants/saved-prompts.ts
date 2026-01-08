@@ -10,7 +10,6 @@ export const SAVED_PROMPTS_DB = {
 
 /**
  * Default collection colors for visual distinction.
- * Apple-inspired color palette.
  */
 export const COLLECTION_COLORS = [
   '#007AFF', // Blue (default)

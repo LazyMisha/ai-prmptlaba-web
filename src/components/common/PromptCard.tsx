@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-
+import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
 import CheckIcon from '@/components/icons/CheckIcon'
 import ChevronIcon from '@/components/icons/ChevronIcon'
@@ -10,23 +10,6 @@ import FolderMoveIcon from '@/components/icons/FolderMoveIcon'
 import IconTextButton from '@/components/common/IconTextButton'
 import TrashIcon from '@/components/icons/TrashIcon'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
-
-/**
- * Translations for PromptCard.
- */
-export interface PromptCardTranslations {
-  target: string
-  original: string
-  enhanced: string
-  expandCollapse: string
-  deleteEntry: string
-  copy?: string
-  copied?: string
-  move?: string
-  copyToClipboard?: string
-  copiedToClipboard?: string
-  moveToAnother?: string
-}
 
 export interface PromptCardProps {
   /** Unique identifier for the prompt */
@@ -43,8 +26,6 @@ export interface PromptCardProps {
   onDelete?: (id: string) => void
   /** Callback when move is requested (for saved prompts) */
   onMove?: (id: string) => void
-  /** Translations for the component */
-  translations?: PromptCardTranslations
   /** Additional CSS classes */
   className?: string
 }
@@ -60,26 +41,12 @@ export function PromptCard({
   timestamp,
   onDelete,
   onMove,
-  translations,
   className,
 }: PromptCardProps) {
-  // Default translations
-  const t = translations ?? {
-    target: 'Target',
-    original: 'Original',
-    enhanced: 'Enhanced',
-    expandCollapse: 'Click to expand',
-    deleteEntry: 'Delete this entry',
-    copy: 'Copy',
-    copied: 'Copied',
-    move: 'Move',
-    copyToClipboard: 'Copy to clipboard',
-    copiedToClipboard: 'Copied to clipboard',
-    moveToAnother: 'Move to another collection',
-  }
-
   const [isExpanded, setIsExpanded] = useState(false)
   const { copied, copy } = useCopyToClipboard()
+  const dict = useTranslations()
+  const t = dict.promptCard
 
   const date = new Date(timestamp)
   const formattedDate = date.toLocaleDateString('en-US', {
@@ -211,31 +178,27 @@ export function PromptCard({
                 <CopyIcon className="w-4 h-4" />
               )
             }
-            label={copied ? (t.copied ?? 'Copied') : (t.copy ?? 'Copy')}
+            label={copied ? t.copied : t.copy}
             onClick={(e) => {
               e.stopPropagation()
               copy(enhancedPrompt)
             }}
             variant={copied ? 'success' : 'default'}
-            ariaLabel={
-              copied
-                ? (t.copiedToClipboard ?? 'Copied to clipboard')
-                : (t.copyToClipboard ?? 'Copy to clipboard')
-            }
+            ariaLabel={copied ? t.copiedToClipboard : t.copyToClipboard}
             className={cn('[&]:pl-0', 'lg:[&]:pl-3')}
           />
           {onMove && (
             <IconTextButton
               icon={<FolderMoveIcon className="w-4 h-4" />}
-              label={t.move ?? 'Move'}
+              label={t.move}
               onClick={handleMove}
-              ariaLabel={t.moveToAnother ?? 'Move to another collection'}
+              ariaLabel={t.moveToAnother}
             />
           )}
           {onDelete && (
             <IconTextButton
               icon={<TrashIcon className="w-4 h-4" />}
-              label="Delete"
+              label={t.delete}
               onClick={handleDelete}
               variant="destructive"
               ariaLabel={t.deleteEntry}

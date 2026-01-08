@@ -1,18 +1,7 @@
 'use client'
 
+import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
-
-/**
- * Translations for PromptInput.
- */
-interface PromptInputTranslations {
-  label: string
-  placeholder: string
-  helperText: string
-  moreCharNeeded: string
-  moreCharsNeeded: string
-  overLimit: string
-}
 
 export interface PromptInputProps {
   /** Current value of the textarea */
@@ -25,8 +14,6 @@ export interface PromptInputProps {
   error?: string | null
   /** Callback for keydown events */
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
-  /** Translations for the component */
-  translations?: PromptInputTranslations
   /** Additional CSS classes */
   className?: string
 }
@@ -40,18 +27,10 @@ export default function PromptInput({
   disabled,
   error,
   onKeyDown,
-  translations,
   className,
 }: PromptInputProps) {
-  // Default translations
-  const t = translations ?? {
-    label: 'Your Prompt',
-    placeholder: 'e.g., write a post about my promotion',
-    helperText: 'Press ⌘/Ctrl + Enter to enhance',
-    moreCharNeeded: 'more character needed',
-    moreCharsNeeded: 'more characters needed',
-    overLimit: 'over limit',
-  }
+  const dict = useTranslations()
+  const t = dict.enhance.form
 
   const charCount = value.length
   const minChars = 3
@@ -75,7 +54,7 @@ export default function PromptInput({
           'mb-2',
         )}
       >
-        {t.label}
+        {t.promptLabel}
       </label>
 
       <textarea

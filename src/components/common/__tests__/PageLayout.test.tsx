@@ -5,11 +5,9 @@ import { PageLayout } from '../PageLayout'
 jest.mock('../Header', () => {
   return function MockHeader({
     showLogo,
-    pageTitle,
     locale,
   }: {
     showLogo?: boolean
-    pageTitle?: string
     locale?: string
   }) {
     return (
@@ -24,7 +22,6 @@ jest.mock('../Header', () => {
               AI Prompt Laba
             </a>
           )}
-          {pageTitle && <h1>{pageTitle}</h1>}
           <a
             href={`/${locale}/enhance`}
             aria-label="Go to prompt enhancer page"
@@ -68,7 +65,7 @@ describe('PageLayout', () => {
   describe('Inner page mode', () => {
     it('renders logo when showLogo is true', () => {
       render(
-        <PageLayout showLogo pageTitle="Test Page" locale="en">
+        <PageLayout showLogo locale="en">
           Content
         </PageLayout>,
       )
@@ -76,22 +73,9 @@ describe('PageLayout', () => {
       expect(logo).toBeInTheDocument()
     })
 
-    it('renders page title in Header', () => {
-      render(
-        <PageLayout showLogo pageTitle="Prompt Enhancer" locale="en">
-          Content
-        </PageLayout>,
-      )
-      const heading = screen.getByRole('heading', {
-        level: 1,
-        name: /prompt enhancer/i,
-      })
-      expect(heading).toBeInTheDocument()
-    })
-
     it('does not show brand name text when showLogo is true', () => {
       render(
-        <PageLayout showLogo pageTitle="Test" locale="en">
+        <PageLayout showLogo locale="en">
           Content
         </PageLayout>,
       )
@@ -115,7 +99,7 @@ describe('PageLayout', () => {
   describe('Locale support', () => {
     it('passes locale to child components', () => {
       render(
-        <PageLayout showLogo pageTitle="Test" locale="uk">
+        <PageLayout showLogo locale="uk">
           Content
         </PageLayout>,
       )
