@@ -20,13 +20,16 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Preserve search params for redirects
+  const search = request.nextUrl.search
+
   // Get locale from cookie (user's previous selection)
   const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value as
     | Locale
     | undefined
   if (cookieLocale && locales.includes(cookieLocale)) {
     return NextResponse.redirect(
-      new URL(`/${cookieLocale}${pathname}`, request.url),
+      new URL(`/${cookieLocale}${pathname}${search}`, request.url),
     )
   }
 
@@ -57,9 +60,9 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Redirect to detected locale
+  // Redirect to detected locale with search params preserved
   return NextResponse.redirect(
-    new URL(`/${detectedLocale}${pathname}`, request.url),
+    new URL(`/${detectedLocale}${pathname}${search}`, request.url),
   )
 }
 

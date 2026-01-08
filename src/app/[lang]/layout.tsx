@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import { locales, hasLocale, type Locale } from '@/i18n/locales'
 import { getDictionary } from '@/i18n/dictionaries'
 import { I18nProvider } from '@/i18n/client'
+import { ToastContainer } from '@/components/common/Toast'
+import { cn } from '@/lib/utils'
 
 /**
  * Generate static params for all supported locales.
@@ -22,6 +24,7 @@ interface LangLayoutProps {
 /**
  * Language-specific layout.
  * Sets the html lang attribute and validates the locale.
+ * Contains html/body elements with proper i18n lang attribute.
  */
 export default async function LangLayout({
   children,
@@ -41,14 +44,25 @@ export default async function LangLayout({
   const dict = await getDictionary(locale)
 
   return (
-    <I18nProvider locale={locale} dictionary={dict}>
-      {/* Set lang attribute on the html element via script */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `document.documentElement.lang = "${locale}";`,
-        }}
-      />
-      {children}
-    </I18nProvider>
+    <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body
+        className={cn(
+          // Flexbox column layout
+          'flex',
+          'flex-col',
+          // Full viewport height
+          'min-h-screen',
+          // White background
+          'bg-white',
+          // Antialiased text rendering
+          'antialiased',
+        )}
+      >
+        <I18nProvider locale={locale} dictionary={dict}>
+          {children}
+        </I18nProvider>
+        <ToastContainer />
+      </body>
+    </html>
   )
 }
