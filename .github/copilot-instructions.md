@@ -11,6 +11,22 @@
 
 Automatically use Context7 MCP tools (`resolve-library-id` → `query-docs`) for any library code generation or documentation lookup.
 
+**Installed Package Versions (use these for Context7 queries):**
+
+| Package    | Installed Version | Context7 Library ID       |
+| ---------- | ----------------- | ------------------------- |
+| Next.js    | 16.0.10           | `/vercel/next.js/v16.1.0` |
+| React      | 19.2.3            | `/facebook/react`         |
+| TypeScript | 5.x               | `/microsoft/typescript`   |
+
+**Version Matching (CRITICAL):**
+
+1. **Use the Context7 Library IDs from the table above** — these are pre-validated for this project
+2. When querying Context7, **always use the highest available version** within the same major version
+3. For packages not in the table: call `resolve-library-id`, then pick the **newest** version matching your major version
+4. Never assume API compatibility — always verify against versioned docs
+5. **Next.js 16 uses `proxy.ts`** (not `middleware.ts`) — this is a breaking change from Next.js 15
+
 ### Planning Requirement
 
 **Before writing ANY code**, propose a plan including:
