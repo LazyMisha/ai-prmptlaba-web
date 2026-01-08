@@ -160,23 +160,18 @@ describe('CollectionSidebar', () => {
       const onCreate = jest.fn()
       render(<CollectionSidebar {...defaultProps} onCreate={onCreate} />)
 
-      // Mobile button has shorter label "Create", desktop has full label
-      expect(
-        screen.getByRole('button', { name: /^create$/i }),
-      ).toBeInTheDocument()
-      expect(
-        screen.getByRole('button', { name: /create new collection/i }),
-      ).toBeInTheDocument()
+      // Both mobile and desktop buttons use label "Create Collection"
+      const createButtons = screen.getAllByRole('button', {
+        name: /create collection/i,
+      })
+      expect(createButtons.length).toBeGreaterThanOrEqual(2)
     })
 
     it('does not render create buttons when onCreate is not provided', () => {
       render(<CollectionSidebar {...defaultProps} />)
 
       expect(
-        screen.queryByRole('button', { name: /^create$/i }),
-      ).not.toBeInTheDocument()
-      expect(
-        screen.queryByRole('button', { name: /create new collection/i }),
+        screen.queryByRole('button', { name: /create collection/i }),
       ).not.toBeInTheDocument()
     })
 
@@ -184,11 +179,11 @@ describe('CollectionSidebar', () => {
       const onCreate = jest.fn()
       render(<CollectionSidebar {...defaultProps} onCreate={onCreate} />)
 
-      // Mobile button has shorter label "Create"
-      const mobileCreateButton = screen.getByRole('button', {
-        name: /^create$/i,
+      // Mobile button labeled "Create Collection"
+      const mobileButtons = screen.getAllByRole('button', {
+        name: /create collection/i,
       })
-      fireEvent.click(mobileCreateButton)
+      fireEvent.click(mobileButtons[0]!)
 
       expect(onCreate).toHaveBeenCalled()
     })
@@ -197,11 +192,11 @@ describe('CollectionSidebar', () => {
       const onCreate = jest.fn()
       render(<CollectionSidebar {...defaultProps} onCreate={onCreate} />)
 
-      // Desktop button has full label "Create New Collection"
-      const desktopCreateButton = screen.getByRole('button', {
-        name: /create new collection/i,
+      // Desktop button labeled "Create Collection"
+      const desktopButtons = screen.getAllByRole('button', {
+        name: /create collection/i,
       })
-      fireEvent.click(desktopCreateButton)
+      fireEvent.click(desktopButtons[desktopButtons.length - 1]!)
 
       expect(onCreate).toHaveBeenCalled()
     })
@@ -356,13 +351,10 @@ describe('CollectionSidebar', () => {
       const onCreate = jest.fn()
       render(<CollectionSidebar {...defaultProps} onCreate={onCreate} />)
 
-      // Mobile button ("Create") and desktop button ("Create New Collection")
-      const mobileButton = screen.getByRole('button', { name: /^create$/i })
-      const desktopButton = screen.getByRole('button', {
-        name: /create new collection/i,
+      const buttons = screen.getAllByRole('button', {
+        name: /create collection/i,
       })
-
-      ;[mobileButton, desktopButton].forEach((button) => {
+      buttons.forEach((button) => {
         expect(button).toHaveClass('border-dashed')
         expect(button).toHaveClass('border-gray-300')
         expect(button).toHaveClass('hover:border-[#007aff]')

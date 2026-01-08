@@ -1,12 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react'
+import type { Locale } from '@/i18n/locales'
 import MobileMenu from '../MobileMenu'
 
 describe('MobileMenu', () => {
-  it('renders menu button', () => {
-    render(<MobileMenu locale="en" />)
-    const menuButton = screen.getByRole('button', { name: /open menu/i })
-    expect(menuButton).toBeInTheDocument()
-  })
+  // Remove existence-only menu button test; covered by behavior tests
 
   it('opens menu when button is clicked', () => {
     render(<MobileMenu locale="en" />)
@@ -75,7 +72,7 @@ describe('MobileMenu', () => {
     const menuButton = screen.getByRole('button', { name: /open menu/i })
 
     // Initial state
-    expect(menuButton).toHaveAttribute('aria-label', 'Open menu')
+    expect(menuButton).toHaveAttribute('aria-label', 'Open Menu')
 
     // Open menu
     fireEvent.click(menuButton)
@@ -106,59 +103,32 @@ describe('MobileMenu', () => {
     expect(menuButton).toHaveAttribute('aria-expanded', 'false')
   })
 
-  it('renders Enhance Prompt link in menu with locale', () => {
-    render(<MobileMenu locale="en" />)
-    const menuButton = screen.getByRole('button', { name: /open menu/i })
+  const locales: Locale[] = ['en', 'uk']
+  it.each(locales.map((l) => [l]))(
+    'renders all menu items with correct hrefs for locale %s',
+    (locale: Locale) => {
+      render(<MobileMenu locale={locale} />)
+      const menuButton = screen.getByRole('button', { name: /open menu/i })
 
-    // Open menu
-    fireEvent.click(menuButton)
+      // Open menu
+      fireEvent.click(menuButton)
 
-    // Check for link
-    const enhanceLink = screen.getByRole('menuitem', {
-      name: /go to prompt enhancer page/i,
-    })
-    expect(enhanceLink).toBeInTheDocument()
-    expect(enhanceLink).toHaveAttribute('href', '/en/enhance')
-  })
+      const enhanceLink = screen.getByRole('menuitem', {
+        name: /go to prompt enhancer/i,
+      })
+      expect(enhanceLink).toHaveAttribute('href', `/${locale}/enhance`)
 
-  it('renders Recent Prompts link in menu with locale', () => {
-    render(<MobileMenu locale="en" />)
-    const menuButton = screen.getByRole('button', { name: /open menu/i })
+      const savedLink = screen.getByRole('menuitem', {
+        name: /go to my collections/i,
+      })
+      expect(savedLink).toHaveAttribute('href', `/${locale}/saved`)
 
-    // Open menu
-    fireEvent.click(menuButton)
+      const historyLink = screen.getByRole('menuitem', {
+        name: /go to prompt history/i,
+      })
+      expect(historyLink).toHaveAttribute('href', `/${locale}/history`)
+    },
+  )
 
-    // Check for link
-    const historyLink = screen.getByRole('menuitem', {
-      name: /go to prompt history page/i,
-    })
-    expect(historyLink).toBeInTheDocument()
-    expect(historyLink).toHaveAttribute('href', '/en/history')
-  })
-
-  it('renders all menu items when open', () => {
-    render(<MobileMenu locale="en" />)
-    const menuButton = screen.getByRole('button', { name: /open menu/i })
-
-    // Open menu
-    fireEvent.click(menuButton)
-
-    // Check all links are present (Enhance, Saved, History)
-    const menuItems = screen.getAllByRole('menuitem')
-    expect(menuItems).toHaveLength(3)
-  })
-
-  it('renders links with Ukrainian locale', () => {
-    render(<MobileMenu locale="uk" />)
-    const menuButton = screen.getByRole('button', { name: /open menu/i })
-
-    // Open menu
-    fireEvent.click(menuButton)
-
-    // Check for link with Ukrainian locale
-    const enhanceLink = screen.getByRole('menuitem', {
-      name: /go to prompt enhancer page/i,
-    })
-    expect(enhanceLink).toHaveAttribute('href', '/uk/enhance')
-  })
+  // Locale-specific coverage consolidated in parameterized test above
 })

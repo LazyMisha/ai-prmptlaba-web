@@ -9,64 +9,23 @@ jest.mock('@/lib/db/prompt-history', () => ({
   savePromptHistory: jest.fn().mockResolvedValue(undefined),
 }))
 
-const mockTranslations = {
-  form: {
-    ariaLabel: 'Enhance form',
-    targetLabel: 'Target',
-    promptLabel: 'Prompt',
-    placeholder: 'Enter prompt',
-    helperText: 'Press Cmd+Enter',
-    moreCharNeeded: 'more char needed',
-    moreCharsNeeded: 'more chars needed',
-    overLimit: 'over limit',
-    enhanceButton: 'Enhance',
-    enhancing: 'Enhancing...',
-    enhancingAriaLabel: 'Enhancing',
-    enhanceDisabledAriaLabel: 'Disabled',
-    enhanceAriaLabel: 'Enhance prompt',
-  },
-  result: {
-    ariaLabel: 'Result',
-    title: 'Enhanced',
-    error: 'Error',
-    viewOriginal: 'View original',
-    copyToClipboard: 'Copy',
-    copiedToClipboard: 'Copied',
-    promptSaved: 'Saved',
-    saveToCollection: 'Save',
-  },
-  validation: {
-    enterPrompt: 'Enter a prompt',
-    minLength: 'Min 3 chars',
-    maxLength: 'Max 2000 chars',
-    networkError: 'Network error',
-    unexpectedError: 'Unexpected error',
-  },
-  actions: {
-    copy: 'Copy',
-    copied: 'Copied',
-    save: 'Save',
-    saved: 'Saved',
-  },
-}
-
 describe('EnhanceForm', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('renders form with all inputs', () => {
-    render(<EnhanceForm translations={mockTranslations} />)
+    render(<EnhanceForm />)
 
     expect(
-      screen.getByRole('combobox', { name: /target/i }),
+      screen.getByRole('combobox', { name: /context/i }),
     ).toBeInTheDocument()
     expect(screen.getByRole('textbox', { name: /prompt/i })).toBeInTheDocument()
     expect(screen.getByRole('button')).toBeDisabled()
   })
 
   it('enables button when valid prompt entered', () => {
-    render(<EnhanceForm translations={mockTranslations} />)
+    render(<EnhanceForm />)
 
     const textarea = screen.getByRole('textbox')
     fireEvent.change(textarea, { target: { value: 'Valid prompt text' } })
@@ -80,7 +39,7 @@ describe('EnhanceForm', () => {
       json: () => Promise.resolve({ enhanced: 'Enhanced result' }),
     })
 
-    render(<EnhanceForm translations={mockTranslations} />)
+    render(<EnhanceForm />)
 
     fireEvent.change(screen.getByRole('textbox'), {
       target: { value: 'Test prompt' },
@@ -99,7 +58,7 @@ describe('EnhanceForm', () => {
       json: () => Promise.resolve({ error: 'Server error' }),
     })
 
-    render(<EnhanceForm translations={mockTranslations} />)
+    render(<EnhanceForm />)
 
     fireEvent.change(screen.getByRole('textbox'), {
       target: { value: 'Test prompt' },
@@ -117,7 +76,7 @@ describe('EnhanceForm', () => {
       json: () => Promise.resolve({ enhanced: 'Result' }),
     })
 
-    render(<EnhanceForm translations={mockTranslations} />)
+    render(<EnhanceForm />)
 
     const textarea = screen.getByRole('textbox')
     fireEvent.change(textarea, { target: { value: 'Test prompt' } })
@@ -129,7 +88,7 @@ describe('EnhanceForm', () => {
   })
 
   it('keeps button disabled for empty prompt', () => {
-    render(<EnhanceForm translations={mockTranslations} />)
+    render(<EnhanceForm />)
 
     // Enter then clear
     const textarea = screen.getByRole('textbox')

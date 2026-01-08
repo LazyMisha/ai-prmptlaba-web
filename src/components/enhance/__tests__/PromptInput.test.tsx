@@ -14,7 +14,7 @@ describe('PromptInput', () => {
   it('renders textarea with label and calls onChange', () => {
     render(<PromptInput {...defaultProps} />)
 
-    const textarea = screen.getByRole('textbox', { name: /your prompt/i })
+    const textarea = screen.getByRole('textbox', { name: /prompt/i })
     expect(textarea).toBeInTheDocument()
 
     fireEvent.change(textarea, { target: { value: 'test' } })
@@ -37,7 +37,7 @@ describe('PromptInput', () => {
     const longText = 'a'.repeat(2001)
     render(<PromptInput {...defaultProps} value={longText} />)
 
-    expect(screen.getByText(/1 over limit/i)).toBeInTheDocument()
+    expect(screen.getByText(/1 over the limit/i)).toBeInTheDocument()
   })
 
   it('displays error message', () => {

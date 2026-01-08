@@ -5,9 +5,9 @@ describe('EmptyHistoryState', () => {
   it('renders empty state message', () => {
     render(<EmptyHistoryState />)
 
-    expect(screen.getByText(/no prompt history yet/i)).toBeInTheDocument()
+    expect(screen.getByText(/no history yet/i)).toBeInTheDocument()
     expect(
-      screen.getByText(/your enhanced prompts will appear here/i),
+      screen.getByText(/enhanced prompts will appear here/i),
     ).toBeInTheDocument()
   })
 

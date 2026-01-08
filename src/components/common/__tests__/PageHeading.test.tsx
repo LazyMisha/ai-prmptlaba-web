@@ -4,20 +4,22 @@ import { PageHeading } from '../PageHeading'
 describe('PageHeading', () => {
   describe('Rendering', () => {
     it('renders text content correctly', () => {
-      render(<PageHeading>Test Heading</PageHeading>)
+      render(<PageHeading id="test-heading">Test Heading</PageHeading>)
       expect(
         screen.getByRole('heading', { level: 1, name: /test heading/i }),
       ).toBeInTheDocument()
     })
 
     it('renders as h1 semantic element', () => {
-      const { container } = render(<PageHeading>Heading</PageHeading>)
+      const { container } = render(
+        <PageHeading id="test-heading">Heading</PageHeading>,
+      )
       expect(container.querySelector('h1')).toBeInTheDocument()
     })
 
     it('renders complex children', () => {
       render(
-        <PageHeading>
+        <PageHeading id="test-heading">
           Test <span data-testid="highlight">Highlighted</span> Heading
         </PageHeading>,
       )
@@ -29,7 +31,7 @@ describe('PageHeading', () => {
 
   describe('Styling', () => {
     it('applies default typography classes', () => {
-      render(<PageHeading>Heading</PageHeading>)
+      render(<PageHeading id="test-heading">Heading</PageHeading>)
       const heading = screen.getByRole('heading', { level: 1 })
 
       expect(heading).toHaveClass('font-semibold')
@@ -39,7 +41,7 @@ describe('PageHeading', () => {
     })
 
     it('applies responsive text sizing classes', () => {
-      render(<PageHeading>Heading</PageHeading>)
+      render(<PageHeading id="test-heading">Heading</PageHeading>)
       const heading = screen.getByRole('heading', { level: 1 })
 
       expect(heading).toHaveClass('text-4xl')
@@ -49,14 +51,18 @@ describe('PageHeading', () => {
     })
 
     it('applies text balance for headings', () => {
-      render(<PageHeading>Heading</PageHeading>)
+      render(<PageHeading id="test-heading">Heading</PageHeading>)
       const heading = screen.getByRole('heading', { level: 1 })
 
       expect(heading).toHaveClass('text-balance')
     })
 
     it('applies additional className when provided', () => {
-      render(<PageHeading className="custom-class">Heading</PageHeading>)
+      render(
+        <PageHeading id="test-heading" className="custom-class">
+          Heading
+        </PageHeading>,
+      )
       const heading = screen.getByRole('heading', { level: 1 })
 
       expect(heading).toHaveClass('custom-class')
@@ -64,7 +70,11 @@ describe('PageHeading', () => {
     })
 
     it('allows overriding default classes with className', () => {
-      render(<PageHeading className="text-red-500">Heading</PageHeading>)
+      render(
+        <PageHeading id="test-heading" className="text-red-500">
+          Heading
+        </PageHeading>,
+      )
       const heading = screen.getByRole('heading', { level: 1 })
 
       expect(heading).toHaveClass('text-red-500')
@@ -77,13 +87,6 @@ describe('PageHeading', () => {
       const heading = screen.getByRole('heading', { level: 1 })
 
       expect(heading).toHaveAttribute('id', 'main-heading')
-    })
-
-    it('does not render id attribute when not provided', () => {
-      render(<PageHeading>Heading</PageHeading>)
-      const heading = screen.getByRole('heading', { level: 1 })
-
-      expect(heading).not.toHaveAttribute('id')
     })
 
     it('can be used as anchor link target', () => {

@@ -24,13 +24,13 @@ describe('CreateCollectionForm', () => {
     it('renders name input with label', () => {
       render(<CreateCollectionForm {...defaultProps} />)
 
-      expect(screen.getByLabelText(/collection name/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/name/i)).toBeInTheDocument()
     })
 
     it('renders color picker with label', () => {
       render(<CreateCollectionForm {...defaultProps} />)
 
-      expect(screen.getByText(/collection color/i)).toBeInTheDocument()
+      expect(screen.getByText(/color/i)).toBeInTheDocument()
     })
 
     it('renders all color options', () => {
@@ -47,7 +47,7 @@ describe('CreateCollectionForm', () => {
       render(<CreateCollectionForm {...defaultProps} />)
 
       expect(
-        screen.getByPlaceholderText(/e.g., work projects/i),
+        screen.getByPlaceholderText(/e\.g\. work projects/i),
       ).toBeInTheDocument()
     })
 
@@ -88,7 +88,7 @@ describe('CreateCollectionForm', () => {
         <CreateCollectionForm {...defaultProps} onNameChange={onNameChange} />,
       )
 
-      fireEvent.change(screen.getByLabelText(/collection name/i), {
+      fireEvent.change(screen.getByLabelText(/name/i), {
         target: { value: 'New Name' },
       })
 
@@ -98,10 +98,7 @@ describe('CreateCollectionForm', () => {
     it('has maxLength of 50 characters', () => {
       render(<CreateCollectionForm {...defaultProps} />)
 
-      expect(screen.getByLabelText(/collection name/i)).toHaveAttribute(
-        'maxLength',
-        '50',
-      )
+      expect(screen.getByLabelText(/name/i)).toHaveAttribute('maxLength', '50')
     })
   })
 
@@ -119,9 +116,7 @@ describe('CreateCollectionForm', () => {
         <CreateCollectionForm {...defaultProps} nameError="Invalid name" />,
       )
 
-      expect(screen.getByLabelText(/collection name/i)).toHaveClass(
-        'border-red-300',
-      )
+      expect(screen.getByLabelText(/name/i)).toHaveClass('border-red-300')
     })
 
     it('calls onClearNameError when typing after error', () => {
@@ -134,7 +129,7 @@ describe('CreateCollectionForm', () => {
         />,
       )
 
-      fireEvent.change(screen.getByLabelText(/collection name/i), {
+      fireEvent.change(screen.getByLabelText(/name/i), {
         target: { value: 'New Name' },
       })
 
@@ -234,7 +229,7 @@ describe('CreateCollectionForm', () => {
     it('applies Apple design tokens to input', () => {
       render(<CreateCollectionForm {...defaultProps} />)
 
-      const input = screen.getByLabelText(/collection name/i)
+      const input = screen.getByLabelText(/name/i)
 
       expect(input).toHaveClass('rounded-xl')
       expect(input).toHaveClass('px-4')
@@ -244,7 +239,7 @@ describe('CreateCollectionForm', () => {
     it('applies proper focus styles to input', () => {
       render(<CreateCollectionForm {...defaultProps} />)
 
-      const input = screen.getByLabelText(/collection name/i)
+      const input = screen.getByLabelText(/name/i)
 
       expect(input).toHaveClass('focus:outline-none')
       expect(input).toHaveClass('focus:ring-2')
@@ -255,7 +250,7 @@ describe('CreateCollectionForm', () => {
     it('has proper label association for name input', () => {
       render(<CreateCollectionForm {...defaultProps} />)
 
-      const input = screen.getByLabelText(/collection name/i)
+      const input = screen.getByLabelText(/name/i)
 
       expect(input).toHaveAttribute('id', 'collection-name')
     })

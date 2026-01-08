@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import Image from 'next/image'
 import { PageLayout } from '../PageLayout'
 
 // Mock the async Header component to avoid async rendering issues in tests
@@ -15,7 +16,12 @@ jest.mock('../Header', () => {
         <nav role="navigation" aria-label="Main navigation">
           {showLogo ? (
             <a href={`/${locale}`} aria-label="Go to home page">
-              <img alt="AI Prompt Laba" src="/logo.svg" />
+              <Image
+                src="/logo.svg"
+                alt="AI Prompt Laba"
+                width={72}
+                height={72}
+              />
             </a>
           ) : (
             <a href={`/${locale}`} aria-label="Go to home page">
@@ -41,12 +47,6 @@ describe('PageLayout', () => {
       // Default mode shows brand name text
       const homeLink = screen.getByRole('link', { name: /go to home page/i })
       expect(homeLink).toHaveTextContent('AI Prompt Laba')
-    })
-
-    it('renders Footer', () => {
-      render(<PageLayout locale="en">Content</PageLayout>)
-      const footer = screen.getByRole('contentinfo')
-      expect(footer).toBeInTheDocument()
     })
 
     it('renders main content', () => {

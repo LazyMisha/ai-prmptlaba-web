@@ -28,11 +28,6 @@ export default function HistoryList() {
   const [error, setError] = useState<string | null>(null)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
 
-  // Load history entries on mount
-  useEffect(() => {
-    loadHistory()
-  }, [])
-
   const loadHistory = async () => {
     try {
       setIsLoading(true)
@@ -47,6 +42,11 @@ export default function HistoryList() {
       setIsLoading(false)
     }
   }
+
+  // Load history entries on mount. React Compiler handles automatic memoization.
+  useEffect(() => {
+    loadHistory()
+  })
 
   const handleDelete = async (id: string) => {
     try {

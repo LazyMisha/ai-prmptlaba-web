@@ -8,7 +8,7 @@ describe('EmptySavedState', () => {
       render(<EmptySavedState />)
 
       expect(
-        screen.getByRole('heading', { name: /no saved prompts yet/i }),
+        screen.getByRole('heading', { name: /no saved prompts/i }),
       ).toBeInTheDocument()
     })
 
@@ -17,7 +17,7 @@ describe('EmptySavedState', () => {
 
       expect(
         screen.getByText(
-          /save your enhanced prompts to organize them into collections/i,
+          /save enhanced prompts to collections and access them anytime\./i,
         ),
       ).toBeInTheDocument()
     })

@@ -39,12 +39,12 @@ describe('PromptCard', () => {
       expect(timeElement).toHaveAttribute('datetime')
     })
 
-    it('shows labels for Target, Original, and Enhanced', () => {
+    it('shows labels for Context, Before, and After', () => {
       render(<PromptCard {...mockPrompt} />)
 
-      expect(screen.getByText('Target')).toBeInTheDocument()
-      expect(screen.getByText('Original')).toBeInTheDocument()
-      expect(screen.getByText('Enhanced')).toBeInTheDocument()
+      expect(screen.getByText('Context')).toBeInTheDocument()
+      expect(screen.getByText('Before')).toBeInTheDocument()
+      expect(screen.getByText('After')).toBeInTheDocument()
     })
 
     it('renders Copy button with correct label', () => {

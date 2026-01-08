@@ -86,7 +86,7 @@ describe('SaveToCollectionDialog', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByRole('button', { name: /quick save to/i }),
+          screen.getByRole('button', { name: /quick save/i }),
         ).toBeInTheDocument()
       })
     })
@@ -137,7 +137,7 @@ describe('SaveToCollectionDialog', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('No collections yet. Create your first one!'),
+          screen.getByText('No collections yet. Create your first one.'),
         ).toBeInTheDocument()
       })
     })
@@ -207,12 +207,12 @@ describe('SaveToCollectionDialog', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByRole('button', { name: /quick save to/i }),
+          screen.getByRole('button', { name: /quick save/i }),
         ).toBeInTheDocument()
       })
 
       const quickSaveButton = screen.getByRole('button', {
-        name: /quick save to/i,
+        name: /quick save/i,
       })
       fireEvent.click(quickSaveButton)
 
@@ -250,11 +250,11 @@ describe('SaveToCollectionDialog', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByRole('button', { name: /quick save to/i }),
+          screen.getByRole('button', { name: /quick save/i }),
         ).toBeInTheDocument()
       })
 
-      fireEvent.click(screen.getByRole('button', { name: /quick save to/i }))
+      fireEvent.click(screen.getByRole('button', { name: /quick save/i }))
 
       await waitFor(() => {
         expect(defaultProps.onSaved).toHaveBeenCalled()
@@ -300,38 +300,48 @@ describe('SaveToCollectionDialog', () => {
     it('switches to create mode when clicking create button', async () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
+      // Click the dashed create button labeled "or choose a collection"
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
-
-      fireEvent.click(screen.getByText('Create New Collection'))
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
 
       expect(screen.getByText('New Collection')).toBeInTheDocument()
-      expect(screen.getByLabelText('Collection Name')).toBeInTheDocument()
-      expect(screen.getByText('Collection Color')).toBeInTheDocument()
+      expect(screen.getByLabelText('Name')).toBeInTheDocument()
+      expect(screen.getByText('Color')).toBeInTheDocument()
     })
 
     it('shows back button in create mode', async () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
 
-      fireEvent.click(screen.getByText('Create New Collection'))
-
-      expect(screen.getByText('Back to collections')).toBeInTheDocument()
+      expect(screen.getByText('Back to Collections')).toBeInTheDocument()
     })
 
     it('returns to select mode when clicking back', async () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
-
-      fireEvent.click(screen.getByText('Create New Collection'))
-      fireEvent.click(screen.getByText('Back to collections'))
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
+      fireEvent.click(screen.getByText('Back to Collections'))
 
       expect(screen.getByText('Save to Collection')).toBeInTheDocument()
     })
@@ -340,10 +350,13 @@ describe('SaveToCollectionDialog', () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
-
-      fireEvent.click(screen.getByText('Create New Collection'))
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
 
       // Check that color buttons exist (10 colors)
       const colorButtons = screen.getAllByRole('button', {
@@ -356,10 +369,13 @@ describe('SaveToCollectionDialog', () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
-
-      fireEvent.click(screen.getByText('Create New Collection'))
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
 
       // The Create & Save button should be disabled when the name is empty
       const createButton = screen.getByRole('button', {
@@ -372,17 +388,20 @@ describe('SaveToCollectionDialog', () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
-
-      fireEvent.click(screen.getByText('Create New Collection'))
-      fireEvent.change(screen.getByLabelText('Collection Name'), {
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
+      fireEvent.change(screen.getByLabelText('Name'), {
         target: { value: 'ChatGPT' },
       })
       fireEvent.click(screen.getByRole('button', { name: /Create & Save/i }))
 
       expect(
-        screen.getByText('A collection with this name already exists'),
+        screen.getByText('Collection name already exists'),
       ).toBeInTheDocument()
     })
 
@@ -406,11 +425,14 @@ describe('SaveToCollectionDialog', () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
-
-      fireEvent.click(screen.getByText('Create New Collection'))
-      fireEvent.change(screen.getByLabelText('Collection Name'), {
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
+      fireEvent.change(screen.getByLabelText('Name'), {
         target: { value: 'My New Collection' },
       })
       fireEvent.click(screen.getByRole('button', { name: /Create & Save/i }))
@@ -474,10 +496,13 @@ describe('SaveToCollectionDialog', () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
-
-      fireEvent.click(screen.getByText('Create New Collection'))
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
       expect(screen.getByText('New Collection')).toBeInTheDocument()
 
       fireEvent.keyDown(document, { key: 'Escape' })
@@ -510,12 +535,12 @@ describe('SaveToCollectionDialog', () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        // Find the quick save button by looking for button with spinner or "Quick Save to" text
+        // Find the quick save button by looking for button with spinner or "Quick Save" text
         const quickSaveButton = screen
           .getAllByRole('button')
           .find(
             (btn) =>
-              btn.textContent?.includes('Quick Save to') ||
+              btn.textContent?.includes('Quick Save') ||
               btn.querySelector('.animate-spin') !== null,
           )
         expect(quickSaveButton).toBeInTheDocument()
@@ -524,7 +549,7 @@ describe('SaveToCollectionDialog', () => {
       // Click the quick save button
       const buttons = screen.getAllByRole('button')
       const quickSaveButton = buttons.find((btn) =>
-        btn.textContent?.includes('Quick Save to'),
+        btn.textContent?.includes('Quick Save'),
       )
       if (quickSaveButton) {
         fireEvent.click(quickSaveButton)
@@ -567,10 +592,13 @@ describe('SaveToCollectionDialog', () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
 
       await waitFor(() => {
-        expect(screen.getByText('Create New Collection')).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /or choose a collection/i }),
+        ).toBeInTheDocument()
       })
-
-      fireEvent.click(screen.getByText('Create New Collection'))
+      fireEvent.click(
+        screen.getByRole('button', { name: /or choose a collection/i }),
+      )
 
       const colorButtons = screen.getAllByRole('button', {
         name: /Select color/i,

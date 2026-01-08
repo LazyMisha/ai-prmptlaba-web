@@ -6,6 +6,7 @@ describe('TargetSelector', () => {
   const defaultProps = {
     value: TOOL_CATEGORIES.GENERAL,
     onChange: jest.fn(),
+    label: 'Target Platform',
   }
 
   beforeEach(() => {

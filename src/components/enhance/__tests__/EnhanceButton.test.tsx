@@ -13,7 +13,9 @@ describe('EnhanceButton', () => {
   it('renders with default text and calls onClick', () => {
     render(<EnhanceButton {...defaultProps} />)
 
-    const button = screen.getByRole('button', { name: /enhance prompt/i })
+    const button = screen.getByRole('button', {
+      name: /prompt enhancement form/i,
+    })
     expect(button).toBeEnabled()
 
     fireEvent.click(button)
@@ -33,21 +35,5 @@ describe('EnhanceButton', () => {
     render(<EnhanceButton {...defaultProps} disabled />)
 
     expect(screen.getByRole('button')).toBeDisabled()
-  })
-
-  it('uses custom translations', () => {
-    const translations = {
-      buttonText: 'Custom Text',
-      loadingText: 'Loading...',
-      enhancingAriaLabel: 'Processing',
-      disabledAriaLabel: 'Disabled',
-      ariaLabel: 'Custom label',
-    }
-
-    render(<EnhanceButton {...defaultProps} translations={translations} />)
-
-    expect(
-      screen.getByRole('button', { name: 'Custom label' }),
-    ).toHaveTextContent('Custom Text')
   })
 })

@@ -3,13 +3,21 @@ import NavLink from '../NavLink'
 
 describe('NavLink', () => {
   it('renders with children text', () => {
-    render(<NavLink href="/test">Test Link</NavLink>)
-    const link = screen.getByRole('link', { name: /test link/i })
+    render(
+      <NavLink href="/test" ariaLabel="Go to test page">
+        Test Link
+      </NavLink>,
+    )
+    const link = screen.getByRole('link', { name: /go to test page/i })
     expect(link).toBeInTheDocument()
   })
 
   it('renders with correct href', () => {
-    render(<NavLink href="/enhance">Enhance Prompt</NavLink>)
+    render(
+      <NavLink href="/enhance" ariaLabel="Go to enhance page">
+        Enhance Prompt
+      </NavLink>,
+    )
     const link = screen.getByRole('link')
     expect(link).toHaveAttribute('href', '/enhance')
   })
@@ -26,7 +34,11 @@ describe('NavLink', () => {
 
   it('applies custom className', () => {
     render(
-      <NavLink href="/test" className="custom-class">
+      <NavLink
+        href="/test"
+        ariaLabel="Go to test page"
+        className="custom-class"
+      >
         Test
       </NavLink>,
     )
@@ -35,7 +47,11 @@ describe('NavLink', () => {
   })
 
   it('applies default styling classes', () => {
-    render(<NavLink href="/test">Test</NavLink>)
+    render(
+      <NavLink href="/test" ariaLabel="Go to test page">
+        Test
+      </NavLink>,
+    )
     const link = screen.getByRole('link')
     expect(link).toHaveClass('text-sm')
     expect(link).toHaveClass('font-normal')
@@ -45,7 +61,7 @@ describe('NavLink', () => {
   it('calls onClick handler when clicked', () => {
     const handleClick = jest.fn()
     render(
-      <NavLink href="/test" onClick={handleClick}>
+      <NavLink href="/test" ariaLabel="Go to test page" onClick={handleClick}>
         Test
       </NavLink>,
     )
@@ -56,7 +72,7 @@ describe('NavLink', () => {
 
   it('applies role when provided', () => {
     render(
-      <NavLink href="/test" role="menuitem">
+      <NavLink href="/test" ariaLabel="Go to test page" role="menuitem">
         Test
       </NavLink>,
     )
@@ -66,7 +82,7 @@ describe('NavLink', () => {
 
   it('combines custom className with default classes', () => {
     render(
-      <NavLink href="/test" className="block px-4">
+      <NavLink href="/test" ariaLabel="Go to test page" className="block px-4">
         Test
       </NavLink>,
     )

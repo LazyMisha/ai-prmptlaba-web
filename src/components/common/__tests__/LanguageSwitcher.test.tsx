@@ -51,7 +51,6 @@ describe('LanguageSwitcher', () => {
 
       expect(screen.getByText('English')).toBeInTheDocument()
       expect(screen.getByText('Українська')).toBeInTheDocument()
-      expect(screen.getByText('Polski')).toBeInTheDocument()
     })
 
     it('shows locale codes alongside full names', () => {
@@ -61,7 +60,7 @@ describe('LanguageSwitcher', () => {
 
       // Check for locale codes in the dropdown
       const options = screen.getAllByRole('option')
-      expect(options).toHaveLength(3)
+      expect(options).toHaveLength(2)
     })
 
     it('closes dropdown when clicking the button again', () => {
@@ -127,9 +126,9 @@ describe('LanguageSwitcher', () => {
       const button = screen.getByRole('button')
       fireEvent.click(button)
 
-      const plOption = screen.getByRole('option', { name: /polski/i })
-      expect(plOption).not.toHaveClass('text-[#007aff]')
-      expect(plOption).toHaveClass('text-[#1d1d1f]')
+      const ukOption = screen.getByRole('option', { name: /українська/i })
+      expect(ukOption).not.toHaveClass('text-[#007aff]')
+      expect(ukOption).toHaveClass('text-[#1d1d1f]')
     })
   })
 
@@ -213,7 +212,7 @@ describe('LanguageSwitcher', () => {
       render(<LanguageSwitcher currentLocale="en" />)
       const button = screen.getByRole('button')
       fireEvent.click(button)
-      expect(screen.getAllByRole('option')).toHaveLength(3)
+      expect(screen.getAllByRole('option')).toHaveLength(2)
     })
   })
 
@@ -236,25 +235,13 @@ describe('LanguageSwitcher', () => {
       expect(ukOption).toHaveAttribute('href', '/uk/enhance')
     })
 
-    it('generates correct href for Polish', () => {
-      render(<LanguageSwitcher currentLocale="en" />)
-      const button = screen.getByRole('button')
-      fireEvent.click(button)
-
-      const plOption = screen.getByRole('option', { name: /polski/i })
-      expect(plOption).toHaveAttribute('href', '/pl/enhance')
-    })
+    // Polish locale is not supported; href tests cover English and Ukrainian
   })
 
   describe('Different current locales', () => {
     it('shows UA in button when currentLocale is uk', () => {
       render(<LanguageSwitcher currentLocale="uk" />)
       expect(screen.getByText('UA')).toBeInTheDocument()
-    })
-
-    it('shows PL in button when currentLocale is pl', () => {
-      render(<LanguageSwitcher currentLocale="pl" />)
-      expect(screen.getByText('PL')).toBeInTheDocument()
     })
 
     it('has correct aria-label for Ukrainian', () => {
@@ -265,10 +252,10 @@ describe('LanguageSwitcher', () => {
       expect(button).toBeInTheDocument()
     })
 
-    it('has correct aria-label for Polish', () => {
-      render(<LanguageSwitcher currentLocale="pl" />)
+    it('has correct aria-label for English', () => {
+      render(<LanguageSwitcher currentLocale="en" />)
       const button = screen.getByRole('button', {
-        name: /current language: polski\. select language/i,
+        name: /current language: english\. select language/i,
       })
       expect(button).toBeInTheDocument()
     })
