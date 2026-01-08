@@ -51,6 +51,8 @@ export default async function HomePage({ params }: HomePageProps) {
           'drop-shadow-lg',
           // Rounded corners
           'rounded-[22%]',
+          // Force proper GPU rendering on mobile
+          'transform-gpu',
         )}
       />
       <PageHeading id="home-title">{dict.home.title}</PageHeading>
