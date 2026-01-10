@@ -124,8 +124,8 @@
   },
   "promptCard": {
     "target": "Контекст",
-    "original": "До",
-    "enhanced": "Після",
+    "original": "ДО",
+    "enhanced": "ПІСЛЯ",
     "expandCollapse": "Торкніться, щоб розгорнути",
     "deleteEntry": "Видалити запис",
     "copy": "Копіювати",

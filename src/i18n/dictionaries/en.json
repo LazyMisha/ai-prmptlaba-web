@@ -124,8 +124,8 @@
   },
   "promptCard": {
     "target": "Context",
-    "original": "Before",
-    "enhanced": "After",
+    "original": "BEFORE",
+    "enhanced": "AFTER",
     "expandCollapse": "Tap to expand",
     "deleteEntry": "Delete entry",
     "copy": "Copy",
