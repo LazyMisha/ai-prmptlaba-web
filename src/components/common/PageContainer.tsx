@@ -22,6 +22,11 @@ export function PageContainer({
   return (
     <div
       className={cn(
+        // Flex
+        'flex',
+        'flex-col',
+        // Fill parent height
+        'flex-1',
         // Max width - content constraint
         'max-w-4xl',
         // Center horizontally
@@ -41,7 +46,6 @@ export function PageContainer({
           'items-center',
           'justify-center',
           'text-center',
-          'min-h-[60vh]',
         ],
         className,
       )}

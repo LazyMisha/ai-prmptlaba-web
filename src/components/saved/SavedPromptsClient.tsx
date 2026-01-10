@@ -23,6 +23,7 @@ import ConfirmDialog from '@/components/common/ConfirmDialog'
 import ResponsiveDialog from '@/components/common/ResponsiveDialog'
 import CreateCollectionForm from '@/components/common/CreateCollectionForm'
 import { ToastContainer, showToast } from '@/components/common/Toast'
+import Loading from '@/components/common/Loading'
 
 // Hydration-safe client detection
 function useIsClient() {
@@ -239,30 +240,7 @@ export default function SavedPromptsClient({
   }
 
   if (isLoading) {
-    return (
-      <div
-        className={cn(
-          'mt-8',
-          'md:mt-10',
-          'flex',
-          'items-center',
-          'justify-center',
-          'py-16',
-        )}
-      >
-        <div
-          className={cn(
-            'w-8',
-            'h-8',
-            'border-2',
-            'border-[#007aff]',
-            'border-t-transparent',
-            'rounded-full',
-            'animate-spin',
-          )}
-        />
-      </div>
-    )
+    return <Loading />
   }
 
   if (savedPrompts.length === 0) {

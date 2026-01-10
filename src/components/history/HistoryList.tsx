@@ -12,6 +12,7 @@ import {
 import ConfirmDialog from '@/components/common/ConfirmDialog'
 import PromptCard from '@/components/common/PromptCard'
 import EmptyHistoryState from './EmptyHistoryState'
+import Loading from '@/components/common/Loading'
 
 /**
  * Displays the list of all prompt history entries.
@@ -46,7 +47,8 @@ export default function HistoryList() {
   // Load history entries on mount. React Compiler handles automatic memoization.
   useEffect(() => {
     loadHistory()
-  })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleDelete = async (id: string) => {
     try {
@@ -76,30 +78,7 @@ export default function HistoryList() {
   }
 
   if (isLoading) {
-    return (
-      <div
-        className={cn(
-          // Layout
-          'flex',
-          'items-center',
-          'justify-center',
-          // Spacing
-          'py-20',
-        )}
-      >
-        <p
-          className={cn(
-            // Typography
-            'text-base',
-            'font-normal',
-            'text-[#86868b]',
-            'tracking-tight',
-          )}
-        >
-          {historyT.loading}
-        </p>
-      </div>
-    )
+    return <Loading />
   }
 
   if (error) {

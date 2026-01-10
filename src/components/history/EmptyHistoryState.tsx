@@ -1,60 +1,41 @@
+'use client'
+
+import { useParams } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
+import { EmptyState } from '@/components/common/EmptyState'
+import { ClockIcon } from '@/components/icons/ClockIcon'
+import type { Locale } from '@/i18n/locales'
 
 /**
  * Empty state component displayed when no history entries are found.
  * Features subtle visual styling with centered content.
  */
 export default function EmptyHistoryState() {
+  const params = useParams()
+  const locale = params.lang as Locale
   const dict = useTranslations()
   const t = dict.history.empty
 
   return (
-    <div
-      className={cn(
-        // Container
-        'flex',
-        'flex-col',
-        'items-center',
-        'justify-center',
-        // Spacing
-        'py-20',
-        'px-6',
-        // Border
-        'border',
-        'border-dashed',
-        'border-black/[0.12]',
-        'rounded-2xl',
-        // Background
-        'bg-[#f5f5f7]/50',
-      )}
-    >
-      <p
-        className={cn(
-          // Typography
-          'text-lg',
-          'font-medium',
-          'text-[#1d1d1f]',
-          'text-center',
-          'tracking-tight',
-          // Spacing
-          'mb-2',
-        )}
-      >
-        {t.title}
-      </p>
-      <p
-        className={cn(
-          // Typography
-          'text-sm',
-          'font-normal',
-          'text-[#86868b]',
-          'text-center',
-          'tracking-tight',
-        )}
-      >
-        {t.description}
-      </p>
-    </div>
+    <EmptyState
+      icon={
+        <ClockIcon
+          className={cn(
+            // Size
+            'w-10',
+            'h-10',
+            'md:w-12',
+            'md:h-12',
+            // Color
+            'text-[#86868b]',
+          )}
+        />
+      }
+      title={t.title}
+      description={t.description}
+      ctaText={t.cta}
+      ctaHref={`/${locale}/enhance`}
+    />
   )
 }

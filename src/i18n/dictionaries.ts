@@ -120,6 +120,7 @@ export type Dictionary = {
     empty: {
       title: string
       description: string
+      cta: string
     }
     clearAll: {
       title: string

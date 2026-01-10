@@ -32,6 +32,9 @@ export function PageLayout({
           'w-full',
           // Grow to fill available space
           'flex-grow',
+          // Flex container with column direction
+          'flex',
+          'flex-col',
           // Smooth content transitions
           'transition-opacity',
           'duration-300',
