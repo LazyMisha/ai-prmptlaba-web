@@ -37,6 +37,8 @@ export function PageDescription({
         'text-[#86868b]',
         // Subtle letter spacing
         'tracking-tight',
+        // Width - take full width of container
+        'w-full',
         // Max width - Optimal reading length (65-75 characters)
         'max-w-2xl',
         // Responsive text sizing

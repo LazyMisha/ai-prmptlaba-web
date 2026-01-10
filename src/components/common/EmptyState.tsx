@@ -38,8 +38,6 @@ export function EmptyState({
         'items-center',
         'justify-center',
         // Spacing
-        'mt-8',
-        'md:mt-10',
         'py-16',
         'px-4',
         'md:py-24',

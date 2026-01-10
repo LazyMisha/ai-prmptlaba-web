@@ -27,6 +27,8 @@ export function PageContainer({
         'flex-col',
         // Fill parent height
         'flex-1',
+        // Width - full width with constraint
+        'w-full',
         // Max width - content constraint
         'max-w-4xl',
         // Center horizontally
