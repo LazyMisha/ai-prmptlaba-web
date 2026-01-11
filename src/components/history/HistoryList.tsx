@@ -11,6 +11,9 @@ import {
 } from '@/lib/db/prompt-history'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
 import PromptCard from '@/components/common/PromptCard/PromptCard'
+import PromptCardHeader from '../common/PromptCard/PromptCardHeader'
+import PromptCardInfo from '../common/PromptCard/PromptCardInfo'
+import HistoryPromptActions from './HistoryPromptActions'
 import EmptyHistoryState from './EmptyHistoryState'
 import Loading from '@/components/common/Loading'
 
@@ -212,13 +215,25 @@ export default function HistoryList() {
         {entries.map((entry) => (
           <PromptCard
             key={entry.id}
-            id={entry.id}
             originalPrompt={entry.originalPrompt}
             enhancedPrompt={entry.enhancedPrompt}
-            target={entry.target}
-            timestamp={entry.timestamp}
-            onDelete={handleDelete}
-          />
+          >
+            <PromptCardHeader
+              LeftSideComponent={
+                <PromptCardInfo
+                  timestamp={entry.timestamp}
+                  target={entry.target}
+                />
+              }
+              RightSideComponent={
+                <HistoryPromptActions
+                  id={entry.id}
+                  enhancedPrompt={entry.enhancedPrompt}
+                  onDelete={handleDelete}
+                />
+              }
+            />
+          </PromptCard>
         ))}
       </div>
 

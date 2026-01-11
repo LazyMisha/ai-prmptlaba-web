@@ -1,15 +1,21 @@
 import { render, screen, fireEvent } from '@testing-library/react'
+import { PromptCard } from '../PromptCard'
 
-import type { PromptCardProps } from '../PromptCard'
-import PromptCard from '../PromptCard'
+// Mock translations
+jest.mock('@/i18n/client', () => ({
+  useTranslations: () => ({
+    promptCard: {
+      original: 'BEFORE',
+      enhanced: 'AFTER',
+    },
+  }),
+}))
 
-const mockPrompt: PromptCardProps = {
-  id: 'test-id-1',
+const defaultProps = {
   originalPrompt: 'Write a function to calculate fibonacci numbers',
   enhancedPrompt:
     'Create an efficient TypeScript function that calculates fibonacci numbers using dynamic programming with memoization for optimal performance.',
-  target: 'ChatGPT',
-  timestamp: 1704067200000, // Jan 1, 2024
+  children: <div>Header content</div>,
 }
 
 describe('PromptCard', () => {
@@ -18,238 +24,268 @@ describe('PromptCard', () => {
   })
 
   describe('Rendering', () => {
-    it('renders with all required fields', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      expect(
-        screen.getByRole('button', { name: /prompt entry/i }),
-      ).toBeInTheDocument()
-      expect(screen.getByText('ChatGPT')).toBeInTheDocument()
-      expect(screen.getByText(mockPrompt.originalPrompt)).toBeInTheDocument()
-      expect(screen.getByText(mockPrompt.enhancedPrompt)).toBeInTheDocument()
+    it('renders with header content', () => {
+      render(<PromptCard {...defaultProps} />)
+      expect(screen.getByText('Header content')).toBeInTheDocument()
     })
 
-    it('displays formatted date', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      // Format: "Jan 1, 2024, 12:00 AM" (time may vary by timezone)
-      const article = screen.getByRole('button', { name: /prompt entry/i })
-      const timeElement = article.querySelector('time')
-      expect(timeElement).toBeInTheDocument()
-      expect(timeElement).toHaveAttribute('datetime')
+    it('renders BEFORE and AFTER labels', () => {
+      render(<PromptCard {...defaultProps} />)
+      expect(screen.getByText('BEFORE')).toBeInTheDocument()
+      expect(screen.getByText('AFTER')).toBeInTheDocument()
     })
 
-    it('shows labels for Context, Before, and After', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      expect(screen.getByText('Context')).toBeInTheDocument()
-      expect(screen.getByText('Before')).toBeInTheDocument()
-      expect(screen.getByText('After')).toBeInTheDocument()
-    })
-
-    it('renders Copy button with correct label', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      expect(
-        screen.getByRole('button', { name: /copy to clipboard/i }),
-      ).toBeInTheDocument()
-      expect(screen.getByText('Copy')).toBeInTheDocument()
+    it('shows preview text when sections are collapsed', () => {
+      const { container } = render(<PromptCard {...defaultProps} />)
+      // Both previews should be visible when collapsed
+      const previews = container.querySelectorAll('.truncate')
+      expect(previews.length).toBe(2)
     })
 
     it('applies custom className', () => {
-      render(<PromptCard {...mockPrompt} className="custom-class" />)
-
-      expect(screen.getByRole('button', { name: /prompt entry/i })).toHaveClass(
-        'custom-class',
+      const { container } = render(
+        <PromptCard {...defaultProps} className="custom-class" />,
       )
+      const article = container.querySelector('article')
+      expect(article).toHaveClass('custom-class')
     })
   })
 
-  describe('Expand/Collapse', () => {
+  describe('BEFORE Section - Expand/Collapse', () => {
     it('starts in collapsed state', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      expect(
-        screen.getByRole('button', { name: /prompt entry/i }),
-      ).toHaveAttribute('aria-expanded', 'false')
+      render(<PromptCard {...defaultProps} />)
+      const beforeButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to expand/i,
+      })
+      expect(beforeButton).toHaveAttribute('aria-expanded', 'false')
     })
 
     it('expands when clicked', () => {
-      render(<PromptCard {...mockPrompt} />)
+      render(<PromptCard {...defaultProps} />)
+      const beforeButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to expand/i,
+      })
 
-      const article = screen.getByRole('button', { name: /prompt entry/i })
-      fireEvent.click(article)
+      fireEvent.click(beforeButton)
 
-      expect(article).toHaveAttribute('aria-expanded', 'true')
+      expect(
+        screen.getByRole('button', {
+          name: /BEFORE\. Click to collapse/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    it('hides preview when expanded', () => {
+      render(<PromptCard {...defaultProps} />)
+      const beforeButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to expand/i,
+      })
+
+      fireEvent.click(beforeButton)
+
+      // Preview should not be in the BEFORE button
+      const beforeSection = beforeButton.closest('button')
+      const preview = beforeSection?.querySelector('.text-\\[\\#86868b\\]\\/60')
+      expect(preview).not.toBeInTheDocument()
+    })
+
+    it('shows full text when expanded', () => {
+      render(<PromptCard {...defaultProps} />)
+      const beforeButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to expand/i,
+      })
+
+      fireEvent.click(beforeButton)
+
+      // Full text should be visible
+      expect(
+        screen.getByText(defaultProps.originalPrompt, {
+          selector: 'p.text-sm',
+        }),
+      ).toBeInTheDocument()
     })
 
     it('collapses when clicked again', () => {
-      render(<PromptCard {...mockPrompt} />)
+      render(<PromptCard {...defaultProps} />)
+      const beforeButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to expand/i,
+      })
 
-      const article = screen.getByRole('button', { name: /prompt entry/i })
-      fireEvent.click(article)
-      fireEvent.click(article)
+      fireEvent.click(beforeButton)
+      const expandedButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to collapse/i,
+      })
+      fireEvent.click(expandedButton)
 
-      expect(article).toHaveAttribute('aria-expanded', 'false')
-    })
-
-    it('expands when Enter key is pressed', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      const article = screen.getByRole('button', { name: /prompt entry/i })
-      fireEvent.keyDown(article, { key: 'Enter' })
-
-      expect(article).toHaveAttribute('aria-expanded', 'true')
-    })
-
-    it('expands when Space key is pressed', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      const article = screen.getByRole('button', { name: /prompt entry/i })
-      fireEvent.keyDown(article, { key: ' ' })
-
-      expect(article).toHaveAttribute('aria-expanded', 'true')
+      expect(
+        screen.getByRole('button', {
+          name: /BEFORE\. Click to expand/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'false')
     })
   })
 
-  describe('Delete Action', () => {
-    it('renders delete button when onDelete is provided', () => {
-      const onDelete = jest.fn()
-      render(<PromptCard {...mockPrompt} onDelete={onDelete} />)
+  describe('AFTER Section - Expand/Collapse', () => {
+    it('starts in collapsed state', () => {
+      render(<PromptCard {...defaultProps} />)
+      const afterButton = screen.getByRole('button', {
+        name: /AFTER\. Click to expand/i,
+      })
+      expect(afterButton).toHaveAttribute('aria-expanded', 'false')
+    })
+
+    it('expands when clicked', () => {
+      render(<PromptCard {...defaultProps} />)
+      const afterButton = screen.getByRole('button', {
+        name: /AFTER\. Click to expand/i,
+      })
+
+      fireEvent.click(afterButton)
 
       expect(
-        screen.getByRole('button', { name: /delete/i }),
+        screen.getByRole('button', {
+          name: /AFTER\. Click to collapse/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    it('hides preview when expanded', () => {
+      render(<PromptCard {...defaultProps} />)
+      const afterButton = screen.getByRole('button', {
+        name: /AFTER\. Click to expand/i,
+      })
+
+      fireEvent.click(afterButton)
+
+      // Preview should not be in the AFTER button
+      const afterSection = afterButton.closest('button')
+      const preview = afterSection?.querySelector('.text-\\[\\#007aff\\]\\/50')
+      expect(preview).not.toBeInTheDocument()
+    })
+
+    it('shows full text when expanded', () => {
+      render(<PromptCard {...defaultProps} />)
+      const afterButton = screen.getByRole('button', {
+        name: /AFTER\. Click to expand/i,
+      })
+
+      fireEvent.click(afterButton)
+
+      // Full text should be visible
+      expect(
+        screen.getByText(defaultProps.enhancedPrompt, {
+          selector: 'p.text-sm',
+        }),
       ).toBeInTheDocument()
     })
 
-    it('does not render delete button when onDelete is not provided', () => {
-      render(<PromptCard {...mockPrompt} />)
+    it('collapses when clicked again', () => {
+      render(<PromptCard {...defaultProps} />)
+      const afterButton = screen.getByRole('button', {
+        name: /AFTER\. Click to expand/i,
+      })
+
+      fireEvent.click(afterButton)
+      const expandedButton = screen.getByRole('button', {
+        name: /AFTER\. Click to collapse/i,
+      })
+      fireEvent.click(expandedButton)
 
       expect(
-        screen.queryByRole('button', { name: /delete/i }),
-      ).not.toBeInTheDocument()
-    })
-
-    it('calls onDelete with id when delete button is clicked', () => {
-      const onDelete = jest.fn()
-      render(<PromptCard {...mockPrompt} onDelete={onDelete} />)
-
-      const deleteButton = screen.getByRole('button', { name: /delete/i })
-      fireEvent.click(deleteButton)
-
-      expect(onDelete).toHaveBeenCalledWith('test-id-1')
-      expect(onDelete).toHaveBeenCalledTimes(1)
-    })
-
-    it('does not toggle expand when delete button is clicked', () => {
-      const onDelete = jest.fn()
-      render(<PromptCard {...mockPrompt} onDelete={onDelete} />)
-
-      const article = screen.getByRole('button', {
-        name: /prompt entry/i,
-      })
-      const deleteButton = screen.getByRole('button', { name: /delete/i })
-      fireEvent.click(deleteButton)
-
-      expect(article).toHaveAttribute('aria-expanded', 'false')
+        screen.getByRole('button', {
+          name: /AFTER\. Click to expand/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'false')
     })
   })
 
-  describe('Move Action', () => {
-    it('renders move button when onMove is provided', () => {
-      const onMove = jest.fn()
-      render(<PromptCard {...mockPrompt} onMove={onMove} />)
+  describe('Independent Expansion', () => {
+    it('both sections can be expanded independently', () => {
+      render(<PromptCard {...defaultProps} />)
 
-      expect(screen.getByRole('button', { name: /move/i })).toBeInTheDocument()
-    })
-
-    it('does not render move button when onMove is not provided', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      expect(
-        screen.queryByRole('button', { name: /move/i }),
-      ).not.toBeInTheDocument()
-    })
-
-    it('calls onMove with id when move button is clicked', () => {
-      const onMove = jest.fn()
-      render(<PromptCard {...mockPrompt} onMove={onMove} />)
-
-      const moveButton = screen.getByRole('button', { name: /move/i })
-      fireEvent.click(moveButton)
-
-      expect(onMove).toHaveBeenCalledWith('test-id-1')
-      expect(onMove).toHaveBeenCalledTimes(1)
-    })
-
-    it('does not toggle expand when move button is clicked', () => {
-      const onMove = jest.fn()
-      render(<PromptCard {...mockPrompt} onMove={onMove} />)
-
-      const article = screen.getByRole('button', {
-        name: /prompt entry/i,
+      const beforeButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to expand/i,
       })
-      const moveButton = screen.getByRole('button', { name: /move/i })
-      fireEvent.click(moveButton)
+      const afterButton = screen.getByRole('button', {
+        name: /AFTER\. Click to expand/i,
+      })
 
-      expect(article).toHaveAttribute('aria-expanded', 'false')
-    })
-  })
+      // Expand both
+      fireEvent.click(beforeButton)
+      fireEvent.click(afterButton)
 
-  describe('Both Actions', () => {
-    it('renders both delete and move buttons when both handlers are provided', () => {
-      const onDelete = jest.fn()
-      const onMove = jest.fn()
-      render(<PromptCard {...mockPrompt} onDelete={onDelete} onMove={onMove} />)
-
+      // Both should be expanded
       expect(
-        screen.getByRole('button', { name: /delete/i }),
-      ).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /move/i })).toBeInTheDocument()
+        screen.getByRole('button', {
+          name: /BEFORE\. Click to collapse/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'true')
+      expect(
+        screen.getByRole('button', {
+          name: /AFTER\. Click to collapse/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    it('expanding one section does not affect the other', () => {
+      render(<PromptCard {...defaultProps} />)
+
+      const beforeButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to expand/i,
+      })
+      const afterButton = screen.getByRole('button', {
+        name: /AFTER\. Click to expand/i,
+      })
+
+      // Expand only BEFORE
+      fireEvent.click(beforeButton)
+
+      // BEFORE expanded, AFTER still collapsed
+      expect(
+        screen.getByRole('button', {
+          name: /BEFORE\. Click to collapse/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'true')
+      expect(afterButton).toHaveAttribute('aria-expanded', 'false')
     })
   })
 
   describe('Accessibility', () => {
-    it('has proper aria-label with expand instruction when collapsed', () => {
-      render(<PromptCard {...mockPrompt} />)
+    it('has proper aria-labels for sections', () => {
+      render(<PromptCard {...defaultProps} />)
 
       expect(
-        screen.getByRole('button', { name: /prompt entry/i }),
-      ).toHaveAttribute(
-        'aria-label',
-        expect.stringContaining('Click to expand'),
-      )
+        screen.getByRole('button', {
+          name: /BEFORE\. Click to expand/i,
+        }),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', {
+          name: /AFTER\. Click to expand/i,
+        }),
+      ).toBeInTheDocument()
     })
 
-    it('has proper aria-label with collapse instruction when expanded', () => {
-      render(<PromptCard {...mockPrompt} />)
+    it('updates aria-labels when expanded', () => {
+      render(<PromptCard {...defaultProps} />)
+      const beforeButton = screen.getByRole('button', {
+        name: /BEFORE\. Click to expand/i,
+      })
 
-      const article = screen.getByRole('button', { name: /prompt entry/i })
-      fireEvent.click(article)
-
-      expect(article).toHaveAttribute(
-        'aria-label',
-        expect.stringContaining('Click to collapse'),
-      )
-    })
-
-    it('has tabIndex for keyboard navigation', () => {
-      render(<PromptCard {...mockPrompt} />)
+      fireEvent.click(beforeButton)
 
       expect(
-        screen.getByRole('button', { name: /prompt entry/i }),
-      ).toHaveAttribute('tabIndex', '0')
+        screen.getByRole('button', {
+          name: /BEFORE\. Click to collapse/i,
+        }),
+      ).toBeInTheDocument()
     })
 
-    it('time element has datetime attribute', () => {
-      render(<PromptCard {...mockPrompt} />)
-
-      const article = screen.getByRole('button', { name: /prompt entry/i })
-      const timeElement = article.querySelector('time')
-      expect(timeElement).toHaveAttribute(
-        'datetime',
-        new Date(mockPrompt.timestamp).toISOString(),
-      )
+    it('renders chevron icons for both sections', () => {
+      const { container } = render(<PromptCard {...defaultProps} />)
+      // Should have at least 2 chevron icons (one for each section)
+      const svgElements = container.querySelectorAll('svg')
+      expect(svgElements.length).toBeGreaterThanOrEqual(2)
     })
   })
 })

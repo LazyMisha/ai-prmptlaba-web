@@ -3,71 +3,33 @@
 import { useState } from 'react'
 import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
-import CheckIcon from '@/components/icons/CheckIcon'
 import ChevronIcon from '@/components/icons/ChevronIcon'
-import CopyIcon from '@/components/icons/CopyIcon'
-import FolderMoveIcon from '@/components/icons/FolderMoveIcon'
-import TrashIcon from '@/components/icons/TrashIcon'
-import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
 export interface PromptCardProps {
-  /** Unique identifier for the prompt */
-  id: string
   /** Original prompt text before enhancement */
   originalPrompt: string
   /** Enhanced prompt text */
   enhancedPrompt: string
-  /** Target tool/platform used for enhancement */
-  target: string
-  /** Timestamp when the prompt was created/saved */
-  timestamp: number
-  /** Callback when delete is requested */
-  onDelete?: (id: string) => void
-  /** Callback when move is requested (for saved prompts) */
-  onMove?: (id: string) => void
   /** Additional CSS classes */
   className?: string
+  /** Header content */
+  children: React.ReactNode
 }
 
 /**
  * Reusable prompt card component for displaying enhanced prompts.
  */
 export function PromptCard({
-  id,
   originalPrompt,
   enhancedPrompt,
-  target,
-  timestamp,
-  onDelete,
-  onMove,
   className,
+  children,
 }: PromptCardProps) {
   const [isOriginalExpanded, setIsOriginalExpanded] = useState(false)
   const [isEnhancedExpanded, setIsEnhancedExpanded] = useState(false)
-  const { copied, copy } = useCopyToClipboard()
+
   const dict = useTranslations()
   const t = dict.promptCard
-
-  const date = new Date(timestamp)
-  const formattedDate = date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-  })
-
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onDelete?.(id)
-  }
-
-  const handleMove = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onMove?.(id)
-  }
-
-  const handleCopy = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    copy(enhancedPrompt)
-  }
 
   const toggleOriginalExpanded = () => {
     setIsOriginalExpanded((prev) => !prev)
@@ -96,135 +58,8 @@ export function PromptCard({
         className,
       )}
     >
-      {/* Header with date, context tag, and action buttons */}
-      <header
-        className={cn(
-          // Layout
-          'flex',
-          'items-center',
-          'justify-between',
-          // Spacing
-          'px-4',
-          // Border
-          'border-b',
-          'border-black/[0.05]',
-        )}
-      >
-        {/* Left side: Date + Context tag */}
-        <div className={cn('flex', 'items-center', 'gap-2')}>
-          <time
-            dateTime={date.toISOString()}
-            className={cn(
-              'text-xs',
-              'text-[#86868b]',
-              'font-normal',
-              'tracking-tight',
-            )}
-          >
-            {formattedDate}
-          </time>
-          <span
-            className={cn(
-              'px-2',
-              'py-0.5',
-              'bg-[#007aff]/10',
-              'text-[#007aff]',
-              'text-xs',
-              'font-medium',
-              'rounded-full',
-            )}
-          >
-            {target}
-          </span>
-        </div>
-
-        {/* Right side: Action buttons */}
-        <div className={cn('flex', 'items-center', 'gap-1')}>
-          <button
-            onClick={handleCopy}
-            className={cn(
-              'p-2',
-              'rounded-lg',
-              'transition-colors',
-              'duration-200',
-              'min-h-[44px]',
-              'min-w-[44px]',
-              'flex',
-              'items-center',
-              'justify-center',
-              copied ? 'bg-[#34c759]/10' : 'hover:bg-black/[0.05]',
-              'focus:outline-none',
-              'focus-visible:ring-2',
-              'focus-visible:ring-[#007aff]',
-              'focus-visible:ring-offset-2',
-            )}
-            aria-label={copied ? t.copiedToClipboard : t.copyToClipboard}
-          >
-            {copied ? (
-              <CheckIcon className={cn('w-4', 'h-4', 'text-[#34c759]')} />
-            ) : (
-              <CopyIcon className={cn('w-4', 'h-4', 'text-[#86868b]')} />
-            )}
-          </button>
-
-          {onMove && (
-            <button
-              onClick={handleMove}
-              className={cn(
-                'p-2',
-                'rounded-lg',
-                'hover:bg-black/[0.05]',
-                'transition-colors',
-                'duration-200',
-                'min-h-[44px]',
-                'min-w-[44px]',
-                'flex',
-                'items-center',
-                'justify-center',
-                'focus:outline-none',
-                'focus-visible:ring-2',
-                'focus-visible:ring-[#007aff]',
-                'focus-visible:ring-offset-2',
-              )}
-              aria-label={t.moveToAnother}
-            >
-              <FolderMoveIcon className={cn('w-4', 'h-4', 'text-[#86868b]')} />
-            </button>
-          )}
-
-          {onDelete && (
-            <button
-              onClick={handleDelete}
-              className={cn(
-                'p-2',
-                'rounded-lg',
-                'hover:bg-[#ff3b30]/10',
-                'transition-colors',
-                'duration-200',
-                'min-h-[44px]',
-                'min-w-[44px]',
-                'flex',
-                'items-center',
-                'justify-center',
-                'focus:outline-none',
-                'focus-visible:ring-2',
-                'focus-visible:ring-[#ff3b30]',
-                'focus-visible:ring-offset-2',
-              )}
-              aria-label={t.deleteEntry}
-            >
-              <TrashIcon
-                className={cn(
-                  'w-4',
-                  'h-4',
-                  'text-[#86868b]',
-                  'hover:text-[#ff3b30]',
-                )}
-              />
-            </button>
-          )}
-        </div>
-      </header>
+      {/* Header */}
+      {children}
 
       {/* Content */}
       <div className={cn('p-4', 'space-y-4')}>

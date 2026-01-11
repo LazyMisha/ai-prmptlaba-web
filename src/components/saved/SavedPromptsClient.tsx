@@ -18,6 +18,9 @@ import {
 import { EmptySavedState } from './EmptySavedState'
 import { CollectionSidebar } from './CollectionSidebar'
 import PromptCard from '../common/PromptCard/PromptCard'
+import PromptCardHeader from '../common/PromptCard/PromptCardHeader'
+import PromptCardInfo from '../common/PromptCard/PromptCardInfo'
+import SavedPromptActions from './SavedPromptActions'
 import MoveToCollectionSheet from './MoveToCollectionSheet'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
 import ResponsiveDialog from '@/components/common/ResponsiveDialog'
@@ -303,14 +306,26 @@ export default function SavedPromptsClient({
               {filteredPrompts.map((prompt) => (
                 <PromptCard
                   key={prompt.id}
-                  id={prompt.id}
                   originalPrompt={prompt.originalPrompt}
                   enhancedPrompt={prompt.enhancedPrompt}
-                  target={prompt.target}
-                  timestamp={prompt.createdAt}
-                  onDelete={setDeletePromptId}
-                  onMove={setMovePromptId}
-                />
+                >
+                  <PromptCardHeader
+                    LeftSideComponent={
+                      <PromptCardInfo
+                        timestamp={prompt.createdAt}
+                        target={prompt.target}
+                      />
+                    }
+                    RightSideComponent={
+                      <SavedPromptActions
+                        id={prompt.id}
+                        enhancedPrompt={prompt.enhancedPrompt}
+                        onDelete={setDeletePromptId}
+                        onMove={setMovePromptId}
+                      />
+                    }
+                  />
+                </PromptCard>
               ))}
             </div>
           )}
