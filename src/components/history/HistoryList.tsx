@@ -10,7 +10,7 @@ import {
   clearAllPromptHistory,
 } from '@/lib/db/prompt-history'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
-import PromptCard from '@/components/common/PromptCard'
+import PromptCard from '@/components/common/PromptCard/PromptCard'
 import EmptyHistoryState from './EmptyHistoryState'
 import Loading from '@/components/common/Loading'
 

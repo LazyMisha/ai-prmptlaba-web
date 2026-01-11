@@ -17,7 +17,7 @@ import {
 } from '@/lib/db/saved-prompts'
 import { EmptySavedState } from './EmptySavedState'
 import { CollectionSidebar } from './CollectionSidebar'
-import PromptCard from '../common/PromptCard'
+import PromptCard from '../common/PromptCard/PromptCard'
 import MoveToCollectionSheet from './MoveToCollectionSheet'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
 import ResponsiveDialog from '@/components/common/ResponsiveDialog'
