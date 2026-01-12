@@ -18,7 +18,10 @@ import { savePromptHistory } from '@/lib/db/prompt-history'
 import TargetSelector from './TargetSelector'
 import PromptInput from './PromptInput'
 import EnhanceButton from './EnhanceButton'
-import EnhancedResult from './EnhancedResult'
+import PromptCard from '@/components/common/PromptCard/PromptCard'
+import PromptCardHeader from '@/components/common/PromptCard/PromptCardHeader'
+import EnhanceResultInfo from './EnhanceResultInfo'
+import EnhanceResultActions from './EnhanceResultActions'
 
 /**
  * Main form component that orchestrates the prompt enhancement flow.
@@ -180,15 +183,26 @@ export default function EnhanceForm() {
       </form>
 
       {/* Result Display */}
-      <div ref={resultRef} tabIndex={-1} className={cn('focus:outline-none')}>
-        <EnhancedResult
-          enhanced={enhanced}
-          error={error && enhanced ? error : null}
-          originalPrompt={prompt}
-          target={TOOL_CATEGORY_NAMES[target]}
-          isLoading={isLoading}
-        />
-      </div>
+      {enhanced && (
+        <div
+          ref={resultRef}
+          tabIndex={-1}
+          className={cn('focus:outline-none', 'mt-6')}
+        >
+          <PromptCard originalPrompt={prompt} enhancedPrompt={enhanced}>
+            <PromptCardHeader
+              LeftSideComponent={<EnhanceResultInfo />}
+              RightSideComponent={
+                <EnhanceResultActions
+                  enhancedPrompt={enhanced}
+                  originalPrompt={prompt}
+                  target={TOOL_CATEGORY_NAMES[target]}
+                />
+              }
+            />
+          </PromptCard>
+        </div>
+      )}
     </div>
   )
 }
