@@ -170,6 +170,7 @@ export type Dictionary = {
     closeDialog: string
     quickSaveTo: string
     orChooseCollection: string
+    orCreateNew: string
     noCollectionsYet: string
     prompt: string
     prompts: string

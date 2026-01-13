@@ -443,7 +443,7 @@ export default function SaveToCollectionDialog({
 
             {/* Create new collection button */}
             <CreateCollectionButton
-              label={t.saveDialog.orChooseCollection}
+              label={t.saveDialog.orCreateNew}
               onClick={() => {
                 setMode('create')
                 modeRef.current = 'create'
