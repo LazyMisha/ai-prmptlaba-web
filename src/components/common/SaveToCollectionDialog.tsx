@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
-import { createPortal } from 'react-dom'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
 import { DEFAULT_COLLECTION_COLOR } from '@/constants/saved-prompts'
@@ -12,6 +11,7 @@ import {
   getOrCreateDefaultCollection,
 } from '@/lib/db/saved-prompts'
 import { showToast } from '@/components/common/Toast'
+import Dialog from '@/components/common/Dialog'
 import CheckIcon from '@/components/icons/CheckIcon'
 import CloseIcon from '@/components/icons/CloseIcon'
 import CreateCollectionButton from '@/components/common/CreateCollectionButton'
@@ -42,8 +42,8 @@ interface SaveToCollectionDialogProps {
 type DialogMode = 'select' | 'create'
 
 /**
- * Dialog for saving an enhanced prompt to a collection.
- * Allows selecting an existing collection or creating a new one.
+ * Dialog for saving enhanced prompts to collections.
+ * Supports quick save to default collection or selecting/creating custom collections.
  */
 export default function SaveToCollectionDialog({
   isOpen,
@@ -53,7 +53,6 @@ export default function SaveToCollectionDialog({
   enhancedPrompt,
   target,
 }: SaveToCollectionDialogProps) {
-  const dialogRef = useRef<HTMLDivElement>(null)
   const modeRef = useRef<DialogMode>('select')
   const t = useTranslations()
 
@@ -100,34 +99,25 @@ export default function SaveToCollectionDialog({
     }
   }
 
-  // Handle escape key to close dialog
+  // Handle escape key for going back from create to select mode
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      if (modeRef.current === 'create') {
-        setMode('select')
-        modeRef.current = 'select'
-        setNewCollectionName('')
-        setNameError(null)
-      } else {
-        onClose()
-      }
+    if (event.key === 'Escape' && modeRef.current === 'create') {
+      event.stopPropagation()
+      setMode('select')
+      modeRef.current = 'select'
+      setNewCollectionName('')
+      setNameError(null)
     }
   }
 
-  // Focus management and keyboard listener
+  // Load collections and setup escape key listener for mode switching
   useEffect(() => {
     if (isOpen) {
       loadCollections()
-
-      // Add escape key listener
       document.addEventListener('keydown', handleKeyDown)
-
-      // Prevent body scroll when dialog is open
-      document.body.style.overflow = 'hidden'
 
       return () => {
         document.removeEventListener('keydown', handleKeyDown)
-        document.body.style.overflow = ''
       }
     } else {
       // Reset state when closing
@@ -140,13 +130,6 @@ export default function SaveToCollectionDialog({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
-
-  // Handle backdrop click
-  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) {
-      onClose()
-    }
-  }
 
   // Handle saving to selected collection
   const handleSaveToCollection = async () => {
@@ -263,403 +246,321 @@ export default function SaveToCollectionDialog({
     }
   }
 
-  // Client-side mounting detection for portal
-  const subscribeToNothing = () => () => {}
-  const getIsMounted = () => true
-  const getServerSnapshot = () => false
-  const isMounted = useSyncExternalStore(
-    subscribeToNothing,
-    getIsMounted,
-    getServerSnapshot,
-  )
-
-  if (!isOpen) {
-    return null
-  }
-
-  // Don't render on server
-  if (!isMounted) {
-    return null
-  }
-
-  const dialogContent = (
-    <div
-      className={cn(
-        // Position
-        'fixed',
-        'inset-0',
-        'z-[100]',
-        // Layout
-        'flex',
-        'items-end',
-        'sm:items-center',
-        'justify-center',
-        // Background overlay
-        'bg-black/50',
-        'backdrop-blur-sm',
-        // Animation
-        'animate-in',
-        'fade-in',
-        'duration-200',
-      )}
-      onClick={handleBackdropClick}
-      role="presentation"
-    >
+  return (
+    <Dialog isOpen={isOpen} onClose={onClose}>
+      {/* Header */}
       <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="save-dialog-title"
         className={cn(
-          // Sizing
-          'w-full',
-          'sm:max-w-md',
-          // Height
-          'max-h-[90dvh]',
-          'sm:max-h-[80vh]',
-          // Background
-          'bg-white',
-          // Rounded corners - only top on mobile, all corners on desktop
-          'rounded-t-3xl',
-          'sm:rounded-2xl',
-          // Shadow
-          'shadow-2xl',
-          // Animation
-          'animate-in',
-          'slide-in-from-bottom',
-          'sm:zoom-in-95',
-          'duration-200',
-          // Overflow - clip footer to rounded corners
-          'overflow-hidden',
           'flex',
-          'flex-col',
+          'items-center',
+          'justify-between',
+          'px-6',
+          'pt-5',
+          'pb-4',
+          'border-b',
+          'border-gray-100',
         )}
       >
-        {/* Mobile drag handle */}
-        <div className="sm:hidden flex justify-center pt-3 pb-1">
-          <div className="w-10 h-1 bg-gray-300 rounded-full" />
-        </div>
-        {/* Header */}
-        <div
+        <h2
+          id="save-dialog-title"
+          className={cn('text-lg', 'font-semibold', 'text-gray-900')}
+        >
+          {mode === 'select'
+            ? t.saveDialog.title
+            : t.saveDialog.newCollectionTitle}
+        </h2>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t.saveDialog.closeDialog}
           className={cn(
-            'flex',
-            'items-center',
-            'justify-between',
-            'px-5',
-            'pt-2',
-            'pb-4',
-            'sm:py-4',
-            'border-b',
-            'border-gray-100',
-            'flex-shrink-0',
+            'p-2',
+            '-mr-2',
+            'rounded-full',
+            'text-gray-400',
+            'hover:text-gray-600',
+            'hover:bg-gray-100',
+            'transition-colors',
+            'focus:outline-none',
+            'focus-visible:ring-2',
+            'focus-visible:ring-[#007aff]',
           )}
         >
-          <h2
-            id="save-dialog-title"
-            className={cn('text-lg', 'font-semibold', 'text-gray-900')}
-          >
-            {mode === 'select'
-              ? t.saveDialog.title
-              : t.saveDialog.newCollectionTitle}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={t.saveDialog.closeDialog}
-            className={cn(
-              'p-2',
-              '-mr-2',
-              'rounded-full',
-              'text-gray-500',
-              'hover:bg-gray-100',
-              'hover:text-gray-700',
-              'transition-colors',
-              'focus:outline-none',
-              'focus-visible:ring-2',
-              'focus-visible:ring-[#007aff]',
-            )}
-          >
-            <CloseIcon className="w-5 h-5" />
-          </button>
-        </div>
+          <CloseIcon className="w-5 h-5" />
+        </button>
+      </div>
 
-        {/* Content */}
-        <div className={cn('flex-1', 'overflow-y-auto', 'overscroll-contain')}>
-          {mode === 'select' ? (
-            <div className="px-5 py-4">
-              {/* Quick save button */}
-              <button
-                type="button"
-                onClick={handleQuickSave}
-                disabled={isSaving}
+      {/* Content */}
+      <div
+        className={cn(
+          'flex-1',
+          'overflow-y-auto',
+          'overscroll-contain',
+          'max-h-[400px]',
+        )}
+      >
+        {mode === 'select' ? (
+          <div className="px-6 py-4">
+            {/* Quick save button */}
+            <button
+              type="button"
+              onClick={handleQuickSave}
+              disabled={isSaving}
+              className={cn(
+                'w-full',
+                'flex',
+                'items-center',
+                'justify-center',
+                'gap-2',
+                'px-4',
+                'py-3',
+                'mb-4',
+                'bg-[#007aff]',
+                'text-white',
+                'rounded-xl',
+                'font-medium',
+                'transition-colors',
+                'hover:bg-[#0071e3]',
+                'active:opacity-80',
+                'focus:outline-none',
+                'focus-visible:ring-2',
+                'focus-visible:ring-[#007aff]',
+                'focus-visible:ring-offset-2',
+                'disabled:opacity-50',
+                'disabled:cursor-not-allowed',
+              )}
+            >
+              {isSaving ? (
+                <SpinnerIcon className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  <CheckIcon className="w-5 h-5" strokeWidth={2} />
+                  {t.saveDialog.quickSaveTo} &ldquo;{target}&rdquo;
+                </>
+              )}
+            </button>
+
+            <div className={cn('flex', 'items-center', 'gap-3', 'mb-4')}>
+              <div className={cn('flex-1', 'h-px', 'bg-gray-200')} />
+              <span
                 className={cn(
-                  'w-full',
-                  'flex',
-                  'items-center',
-                  'justify-center',
-                  'gap-2',
-                  'px-4',
-                  'py-3',
-                  'mb-4',
-                  'bg-[#007aff]',
-                  'text-white',
-                  'rounded-xl',
-                  'font-medium',
-                  'transition-colors',
-                  'hover:bg-[#0071e3]',
-                  'active:opacity-80',
-                  'focus:outline-none',
-                  'focus-visible:ring-2',
-                  'focus-visible:ring-[#007aff]',
-                  'focus-visible:ring-offset-2',
-                  'disabled:opacity-50',
-                  'disabled:cursor-not-allowed',
+                  'text-xs',
+                  'text-gray-500',
+                  'uppercase',
+                  'tracking-wider',
                 )}
               >
-                {isSaving ? (
-                  <SpinnerIcon className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    <CheckIcon className="w-5 h-5" strokeWidth={2} />
-                    {t.saveDialog.quickSaveTo} &ldquo;{target}&rdquo;
-                  </>
-                )}
-              </button>
+                {t.saveDialog.orChooseCollection}
+              </span>
+              <div className={cn('flex-1', 'h-px', 'bg-gray-200')} />
+            </div>
 
-              <div className={cn('flex', 'items-center', 'gap-3', 'mb-4')}>
-                <div className={cn('flex-1', 'h-px', 'bg-gray-200')} />
-                <span
-                  className={cn(
-                    'text-xs',
-                    'text-gray-500',
-                    'uppercase',
-                    'tracking-wider',
-                  )}
-                >
-                  {t.saveDialog.orChooseCollection}
-                </span>
-                <div className={cn('flex-1', 'h-px', 'bg-gray-200')} />
+            {/* Collections list */}
+            {isLoadingCollections ? (
+              <div
+                className={cn('flex', 'items-center', 'justify-center', 'py-8')}
+              >
+                <SpinnerIcon className="w-6 h-6 text-gray-400 animate-spin" />
               </div>
-
-              {/* Collections list */}
-              {isLoadingCollections ? (
-                <div
-                  className={cn(
-                    'flex',
-                    'items-center',
-                    'justify-center',
-                    'py-8',
-                  )}
-                >
-                  <SpinnerIcon className="w-6 h-6 text-gray-400 animate-spin" />
-                </div>
-              ) : collections.length === 0 ? (
-                <div
-                  className={cn(
-                    'text-center',
-                    'py-8',
-                    'text-gray-500',
-                    'text-sm',
-                  )}
-                >
-                  {t.saveDialog.noCollectionsYet}
-                </div>
-              ) : (
-                <div className={cn('space-y-2', 'mb-4')}>
-                  {collections.map((collection) => (
-                    <button
-                      key={collection.id}
-                      type="button"
-                      onClick={() => setSelectedCollectionId(collection.id)}
+            ) : collections.length === 0 ? (
+              <div
+                className={cn(
+                  'text-center',
+                  'py-8',
+                  'text-gray-500',
+                  'text-sm',
+                )}
+              >
+                {t.saveDialog.noCollectionsYet}
+              </div>
+            ) : (
+              <div className={cn('space-y-2', 'mb-4')}>
+                {collections.map((collection) => (
+                  <button
+                    key={collection.id}
+                    type="button"
+                    onClick={() => setSelectedCollectionId(collection.id)}
+                    className={cn(
+                      'w-full',
+                      'flex',
+                      'items-center',
+                      'gap-3',
+                      'px-4',
+                      'py-3',
+                      'rounded-xl',
+                      'transition-all',
+                      'focus:outline-none',
+                      'focus-visible:ring-2',
+                      'focus-visible:ring-[#007aff]',
+                      selectedCollectionId === collection.id
+                        ? 'bg-[#007aff]/10 border-2 border-[#007aff]'
+                        : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100',
+                    )}
+                  >
+                    <div
                       className={cn(
-                        'w-full',
+                        'w-8',
+                        'h-8',
+                        'rounded-lg',
                         'flex',
                         'items-center',
-                        'gap-3',
-                        'px-4',
-                        'py-3',
-                        'rounded-xl',
-                        'transition-all',
-                        'focus:outline-none',
-                        'focus-visible:ring-2',
-                        'focus-visible:ring-[#007aff]',
-                        selectedCollectionId === collection.id
-                          ? 'bg-[#007aff]/10 border-2 border-[#007aff]'
-                          : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100',
+                        'justify-center',
                       )}
+                      style={{ backgroundColor: `${collection.color}20` }}
                     >
+                      <FolderIcon
+                        className="w-4 h-4"
+                        style={{ color: collection.color ?? '#007aff' }}
+                      />
+                    </div>
+                    <div className={cn('flex-1', 'text-left')}>
                       <div
                         className={cn(
-                          'w-8',
-                          'h-8',
-                          'rounded-lg',
-                          'flex',
-                          'items-center',
-                          'justify-center',
+                          'text-sm',
+                          'font-medium',
+                          'text-gray-900',
                         )}
-                        style={{ backgroundColor: `${collection.color}20` }}
                       >
-                        <FolderIcon
-                          className="w-4 h-4"
-                          style={{ color: collection.color ?? '#007aff' }}
-                        />
+                        {collection.name}
                       </div>
-                      <div className={cn('flex-1', 'text-left')}>
-                        <div
-                          className={cn(
-                            'text-sm',
-                            'font-medium',
-                            'text-gray-900',
-                          )}
-                        >
-                          {collection.name}
-                        </div>
-                        <div className={cn('text-xs', 'text-gray-500')}>
-                          {collection.promptCount}{' '}
-                          {collection.promptCount === 1
-                            ? t.saveDialog.prompt
-                            : t.saveDialog.prompts}
-                        </div>
+                      <div className={cn('text-xs', 'text-gray-500')}>
+                        {collection.promptCount}{' '}
+                        {collection.promptCount === 1
+                          ? t.saveDialog.prompt
+                          : t.saveDialog.prompts}
                       </div>
-                      {selectedCollectionId === collection.id && (
-                        <CheckIcon
-                          className="w-5 h-5 text-[#007aff]"
-                          strokeWidth={2.5}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Create new collection button */}
-              <CreateCollectionButton
-                label={t.saveDialog.orChooseCollection}
-                onClick={() => {
-                  setMode('create')
-                  modeRef.current = 'create'
-                }}
-              />
-            </div>
-          ) : (
-            /* Create new collection form */
-            <div className="px-5 py-4">
-              <CreateCollectionForm
-                name={newCollectionName}
-                onNameChange={(value) => {
-                  setNewCollectionName(value)
-                  if (nameError) setNameError(null)
-                }}
-                color={newCollectionColor}
-                onColorChange={setNewCollectionColor}
-                nameError={nameError}
-                showBackButton
-                onBack={() => {
-                  setMode('select')
-                  modeRef.current = 'select'
-                  setNewCollectionName('')
-                  setNameError(null)
-                }}
-                autoFocus
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        {(mode === 'create' || (mode === 'select' && selectedCollectionId)) && (
-          <div
-            className={cn(
-              'px-5',
-              'pt-4',
-              'pb-6',
-              'sm:py-4',
-              'border-t',
-              'border-gray-100',
-              'flex-shrink-0',
-              'bg-gray-50/80',
+                    </div>
+                    {selectedCollectionId === collection.id && (
+                      <CheckIcon
+                        className="w-5 h-5 text-[#007aff]"
+                        strokeWidth={2.5}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
             )}
-            style={{
-              paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))',
-            }}
-          >
-            {mode === 'create' ? (
-              <button
-                type="button"
-                onClick={handleCreateAndSave}
-                disabled={isSaving || !newCollectionName.trim()}
-                className={cn(
-                  'w-full',
-                  'flex',
-                  'items-center',
-                  'justify-center',
-                  'gap-2',
-                  'px-4',
-                  'py-3',
-                  'bg-[#007aff]',
-                  'text-white',
-                  'rounded-xl',
-                  'font-medium',
-                  'transition-colors',
-                  'hover:bg-[#0071e3]',
-                  'active:opacity-80',
-                  'focus:outline-none',
-                  'focus-visible:ring-2',
-                  'focus-visible:ring-[#007aff]',
-                  'focus-visible:ring-offset-2',
-                  'disabled:opacity-50',
-                  'disabled:cursor-not-allowed',
-                )}
-              >
-                {isSaving ? (
-                  <SpinnerIcon className="w-5 h-5 animate-spin" />
-                ) : (
-                  t.saveDialog.createAndSave
-                )}
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleSaveToCollection}
-                disabled={isSaving}
-                className={cn(
-                  'w-full',
-                  'flex',
-                  'items-center',
-                  'justify-center',
-                  'gap-2',
-                  'px-4',
-                  'py-3',
-                  'bg-[#34C759]',
-                  'text-white',
-                  'rounded-xl',
-                  'font-medium',
-                  'transition-colors',
-                  'hover:bg-[#2fb350]',
-                  'active:opacity-80',
-                  'focus:outline-none',
-                  'focus-visible:ring-2',
-                  'focus-visible:ring-[#34C759]',
-                  'focus-visible:ring-offset-2',
-                  'disabled:opacity-50',
-                  'disabled:cursor-not-allowed',
-                )}
-              >
-                {isSaving ? (
-                  <SpinnerIcon className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    <CheckIcon className="w-5 h-5" strokeWidth={2} />
-                    {t.saveDialog.saveToSelected}
-                  </>
-                )}
-              </button>
-            )}
+
+            {/* Create new collection button */}
+            <CreateCollectionButton
+              label={t.saveDialog.orChooseCollection}
+              onClick={() => {
+                setMode('create')
+                modeRef.current = 'create'
+              }}
+            />
+          </div>
+        ) : (
+          /* Create new collection form */
+          <div className="px-6 py-4">
+            <CreateCollectionForm
+              name={newCollectionName}
+              onNameChange={(value) => {
+                setNewCollectionName(value)
+                if (nameError) setNameError(null)
+              }}
+              color={newCollectionColor}
+              onColorChange={setNewCollectionColor}
+              nameError={nameError}
+              showBackButton
+              onBack={() => {
+                setMode('select')
+                modeRef.current = 'select'
+                setNewCollectionName('')
+                setNameError(null)
+              }}
+              autoFocus
+            />
           </div>
         )}
       </div>
-    </div>
-  )
 
-  return createPortal(dialogContent, document.body)
+      {/* Footer */}
+      {(mode === 'create' || (mode === 'select' && selectedCollectionId)) && (
+        <div
+          className={cn(
+            'px-6',
+            'py-4',
+            'border-t',
+            'border-gray-100',
+            'bg-gray-50/80',
+            'rounded-b-2xl',
+          )}
+        >
+          {mode === 'create' ? (
+            <button
+              type="button"
+              onClick={handleCreateAndSave}
+              disabled={isSaving || !newCollectionName.trim()}
+              className={cn(
+                'w-full',
+                'flex',
+                'items-center',
+                'justify-center',
+                'gap-2',
+                'px-4',
+                'py-3',
+                'bg-[#007aff]',
+                'text-white',
+                'rounded-xl',
+                'font-medium',
+                'transition-colors',
+                'hover:bg-[#0071e3]',
+                'active:opacity-80',
+                'focus:outline-none',
+                'focus-visible:ring-2',
+                'focus-visible:ring-[#007aff]',
+                'focus-visible:ring-offset-2',
+                'disabled:opacity-50',
+                'disabled:cursor-not-allowed',
+              )}
+            >
+              {isSaving ? (
+                <SpinnerIcon className="w-5 h-5 animate-spin" />
+              ) : (
+                t.saveDialog.createAndSave
+              )}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleSaveToCollection}
+              disabled={isSaving}
+              className={cn(
+                'w-full',
+                'flex',
+                'items-center',
+                'justify-center',
+                'gap-2',
+                'px-4',
+                'py-3',
+                'bg-[#34C759]',
+                'text-white',
+                'rounded-xl',
+                'font-medium',
+                'transition-colors',
+                'hover:bg-[#2fb350]',
+                'active:opacity-80',
+                'focus:outline-none',
+                'focus-visible:ring-2',
+                'focus-visible:ring-[#34C759]',
+                'focus-visible:ring-offset-2',
+                'disabled:opacity-50',
+                'disabled:cursor-not-allowed',
+              )}
+            >
+              {isSaving ? (
+                <SpinnerIcon className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  <CheckIcon className="w-5 h-5" strokeWidth={2} />
+                  {t.saveDialog.saveToSelected}
+                </>
+              )}
+            </button>
+          )}
+        </div>
+      )}
+    </Dialog>
+  )
 }

@@ -29,10 +29,8 @@ interface ConfirmDialogProps {
 }
 
 /**
- * A user-friendly confirmation dialog component.
- * Features frosted glass effect, smooth animations, keyboard support,
- * and proper accessibility attributes.
- * Uses Dialog component for portal and backdrop rendering.
+ * Confirmation dialog with destructive action support.
+ * Built on Dialog component with keyboard navigation and proper focus management.
  */
 export default function ConfirmDialog({
   isOpen,
