@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import ManageCollectionsSheet from '../ManageCollectionsSheet'
+import ManageCollectionDialog from '../ManageCollectionDialog'
 import type { Collection } from '@/types/saved-prompts'
 
 const mockCollections: Collection[] = [
@@ -23,7 +23,7 @@ const mockCollections: Collection[] = [
   },
 ]
 
-describe('ManageCollectionsSheet', () => {
+describe('ManageCollectionDialog', () => {
   const defaultProps = {
     isOpen: true,
     onClose: jest.fn(),
@@ -36,33 +36,33 @@ describe('ManageCollectionsSheet', () => {
 
   describe('Rendering', () => {
     it('renders when isOpen is true', () => {
-      render(<ManageCollectionsSheet {...defaultProps} />)
+      render(<ManageCollectionDialog {...defaultProps} />)
 
       expect(screen.getByRole('dialog')).toBeInTheDocument()
       expect(screen.getByText('Manage Collections')).toBeInTheDocument()
     })
 
     it('does not render when isOpen is false', () => {
-      render(<ManageCollectionsSheet {...defaultProps} isOpen={false} />)
+      render(<ManageCollectionDialog {...defaultProps} isOpen={false} />)
 
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     })
 
     it('renders all collections', () => {
-      render(<ManageCollectionsSheet {...defaultProps} />)
+      render(<ManageCollectionDialog {...defaultProps} />)
 
       expect(screen.getByText('ChatGPT')).toBeInTheDocument()
       expect(screen.getByText('My Collection')).toBeInTheDocument()
     })
 
     it('shows empty message when no collections', () => {
-      render(<ManageCollectionsSheet {...defaultProps} collections={[]} />)
+      render(<ManageCollectionDialog {...defaultProps} collections={[]} />)
 
       expect(screen.getByText('No collections yet')).toBeInTheDocument()
     })
 
     it('renders collection colors as colored dots', () => {
-      render(<ManageCollectionsSheet {...defaultProps} />)
+      render(<ManageCollectionDialog {...defaultProps} />)
 
       // Both collections have colors, so they should render color indicator spans
       // We just verify the collections render - color rendering is implementation detail
@@ -74,7 +74,7 @@ describe('ManageCollectionsSheet', () => {
   describe('Actions', () => {
     it('renders rename buttons when onEdit is provided', () => {
       const onEdit = jest.fn()
-      render(<ManageCollectionsSheet {...defaultProps} onEdit={onEdit} />)
+      render(<ManageCollectionDialog {...defaultProps} onEdit={onEdit} />)
 
       expect(
         screen.getByRole('button', { name: /rename chatgpt/i }),
@@ -86,7 +86,7 @@ describe('ManageCollectionsSheet', () => {
 
     it('renders delete buttons when onDelete is provided', () => {
       const onDelete = jest.fn()
-      render(<ManageCollectionsSheet {...defaultProps} onDelete={onDelete} />)
+      render(<ManageCollectionDialog {...defaultProps} onDelete={onDelete} />)
 
       expect(
         screen.getByRole('button', { name: /delete chatgpt/i }),
@@ -100,7 +100,7 @@ describe('ManageCollectionsSheet', () => {
       const onEdit = jest.fn()
       const onClose = jest.fn()
       render(
-        <ManageCollectionsSheet
+        <ManageCollectionDialog
           {...defaultProps}
           onEdit={onEdit}
           onClose={onClose}
@@ -117,7 +117,7 @@ describe('ManageCollectionsSheet', () => {
       const onDelete = jest.fn()
       const onClose = jest.fn()
       render(
-        <ManageCollectionsSheet
+        <ManageCollectionDialog
           {...defaultProps}
           onDelete={onDelete}
           onClose={onClose}
@@ -136,7 +136,7 @@ describe('ManageCollectionsSheet', () => {
   describe('Interactions', () => {
     it('closes on close button click', () => {
       const onClose = jest.fn()
-      render(<ManageCollectionsSheet {...defaultProps} onClose={onClose} />)
+      render(<ManageCollectionDialog {...defaultProps} onClose={onClose} />)
 
       fireEvent.click(screen.getByRole('button', { name: /close/i }))
 
@@ -145,7 +145,7 @@ describe('ManageCollectionsSheet', () => {
 
     it('closes on backdrop click', () => {
       const onClose = jest.fn()
-      render(<ManageCollectionsSheet {...defaultProps} onClose={onClose} />)
+      render(<ManageCollectionDialog {...defaultProps} onClose={onClose} />)
 
       const backdrop = screen.getByRole('presentation')
       fireEvent.click(backdrop)
@@ -155,7 +155,7 @@ describe('ManageCollectionsSheet', () => {
 
     it('closes on escape key', () => {
       const onClose = jest.fn()
-      render(<ManageCollectionsSheet {...defaultProps} onClose={onClose} />)
+      render(<ManageCollectionDialog {...defaultProps} onClose={onClose} />)
 
       fireEvent.keyDown(document, { key: 'Escape' })
 
@@ -165,7 +165,7 @@ describe('ManageCollectionsSheet', () => {
 
   describe('Accessibility', () => {
     it('has proper dialog role and aria attributes', () => {
-      render(<ManageCollectionsSheet {...defaultProps} />)
+      render(<ManageCollectionDialog {...defaultProps} />)
 
       const dialog = screen.getByRole('dialog')
       expect(dialog).toHaveAttribute('aria-modal', 'true')
@@ -176,7 +176,7 @@ describe('ManageCollectionsSheet', () => {
     })
 
     it('has accessible close button', () => {
-      render(<ManageCollectionsSheet {...defaultProps} />)
+      render(<ManageCollectionDialog {...defaultProps} />)
 
       expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument()
     })
@@ -185,7 +185,7 @@ describe('ManageCollectionsSheet', () => {
       const onEdit = jest.fn()
       const onDelete = jest.fn()
       render(
-        <ManageCollectionsSheet
+        <ManageCollectionDialog
           {...defaultProps}
           onEdit={onEdit}
           onDelete={onDelete}

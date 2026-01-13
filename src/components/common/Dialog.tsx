@@ -16,9 +16,7 @@ interface DialogProps {
 }
 
 /**
- * A generic dialog component with portal rendering.
- * Features frosted glass effect, smooth animations, keyboard support,
- * and proper accessibility attributes.
+ * Accessible dialog with portal rendering, frosted glass effect, and keyboard support.
  */
 export default function Dialog({
   isOpen,

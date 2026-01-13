@@ -8,7 +8,7 @@ import CreateCollectionButton from '@/components/common/CreateCollectionButton'
 import PencilIcon from '@/components/icons/PencilIcon'
 import SelectorIcon from '@/components/icons/SelectorIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
-import ManageCollectionsSheet from './ManageCollectionsSheet'
+import ManageCollectionDialog from './ManageCollectionDialog'
 
 interface CollectionSidebarProps {
   /** List of collections to display */
@@ -188,8 +188,8 @@ export function CollectionSidebar({
             </button>
           )}
         </div>
-        {/* Manage Collections Sheet */}
-        <ManageCollectionsSheet
+        {/* Manage Collection Dialog */}
+        <ManageCollectionDialog
           isOpen={isManageSheetOpen}
           onClose={() => setIsManageSheetOpen(false)}
           collections={collections}
