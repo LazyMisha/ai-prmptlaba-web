@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useSyncExternalStore } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from '@/i18n/client'
 import { cn } from '@/lib/utils'
 import type { Collection, SavedPrompt } from '@/types/saved-prompts'
@@ -21,44 +21,22 @@ import PromptCard from '../common/PromptCard/PromptCard'
 import PromptCardHeader from '../common/PromptCard/PromptCardHeader'
 import PromptCardInfo from '../common/PromptCard/PromptCardInfo'
 import SavedPromptActions from './SavedPromptActions'
-import MoveToCollectionSheet from './MoveToCollectionSheet'
+import MoveToCollectionDialog from './MoveToCollectionDialog'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
-import ResponsiveDialog from '@/components/common/ResponsiveDialog'
-import CreateCollectionForm from '@/components/common/CreateCollectionForm'
+import RenameCollectionDialog from './RenameCollectionDialog'
+import CreateCollectionDialog from './CreateCollectionDialog'
 import { ToastContainer, showToast } from '@/components/common/Toast'
 import Loading from '@/components/common/Loading'
 
-// Hydration-safe client detection
-function useIsClient() {
-  return useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  )
-}
-
 /**
- * Props for the SavedPromptsClient component.
+ * Main component for saved prompts page. Manages collections, saved prompts,
+ * and their interactions (create, rename, delete, move).
  */
-interface SavedPromptsClientProps {
-  /** Base path for links (includes locale, e.g., '/en') */
-  basePath?: string
-}
-
-/**
- * SavedPromptsClient is the main client component for the saved prompts page.
- * It orchestrates loading data from IndexedDB, managing state, and rendering
- * the collection sidebar and prompt cards.
- */
-export default function SavedPromptsClient({
-  basePath = '',
-}: SavedPromptsClientProps) {
+export default function SavedPrompts() {
   const dict = useTranslations()
   const savedT = dict.saved
   const toastT = dict.toast
   const actionsT = dict.common.actions
-
-  const isClient = useIsClient()
 
   const [collections, setCollections] = useState<Collection[]>([])
   const [savedPrompts, setSavedPrompts] = useState<SavedPrompt[]>([])
@@ -97,28 +75,27 @@ export default function SavedPromptsClient({
       ? savedPrompts
       : savedPrompts.filter((p) => p.collectionId === selectedCollectionId)
 
-  const loadData = async () => {
-    if (!isClient) return
-    try {
-      setIsLoading(true)
-      const [collectionsData, promptsData] = await Promise.all([
-        getAllCollections(),
-        getAllSavedPrompts(),
-      ])
-      setCollections(collectionsData)
-      setSavedPrompts(promptsData)
-    } catch (error) {
-      console.error('Failed to load saved prompts:', error)
-      showToast('error', toastT.error.loadFailed)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true)
+        const [collectionsData, promptsData] = await Promise.all([
+          getAllCollections(),
+          getAllSavedPrompts(),
+        ])
+        setCollections(collectionsData)
+        setSavedPrompts(promptsData)
+      } catch (error) {
+        console.error('Failed to load saved prompts:', error)
+        showToast('error', toastT.error.loadFailed)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     loadData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isClient])
+  }, [])
 
   const handleDeletePrompt = async () => {
     if (!deletePromptId) return
@@ -238,16 +215,12 @@ export default function SavedPromptsClient({
     }
   }
 
-  if (!isClient) {
-    return null
-  }
-
   if (isLoading) {
     return <Loading />
   }
 
   if (savedPrompts.length === 0) {
-    return <EmptySavedState basePath={basePath} />
+    return <EmptySavedState />
   }
 
   return (
@@ -332,6 +305,7 @@ export default function SavedPromptsClient({
         </main>
       </div>
 
+      {/* Delete Prompt Confirmation Dialog */}
       <ConfirmDialog
         isOpen={deletePromptId !== null}
         title={savedT.prompts.delete}
@@ -343,6 +317,7 @@ export default function SavedPromptsClient({
         onClose={() => setDeletePromptId(null)}
       />
 
+      {/* Delete Collection Confirmation Dialog */}
       <ConfirmDialog
         isOpen={deleteCollectionId !== null}
         title={savedT.collections.delete}
@@ -354,147 +329,32 @@ export default function SavedPromptsClient({
         onClose={() => setDeleteCollectionId(null)}
       />
 
-      {/* Rename Collection Dialog */}
-      <ResponsiveDialog
-        isOpen={!!renameCollectionId}
-        onClose={() => setRenameCollectionId(null)}
-        title={savedT.collections.rename}
-        maxWidth="sm"
-        showCloseButton={false}
-        footer={
-          <div className={cn('flex', 'gap-3', 'justify-end', 'sm:justify-end')}>
-            <button
-              type="button"
-              onClick={() => setRenameCollectionId(null)}
-              className={cn(
-                'px-5',
-                'py-2.5',
-                'text-[15px]',
-                'font-medium',
-                'text-[#86868b]',
-                'rounded-xl',
-                'hover:bg-black/[0.04]',
-                'focus:outline-none',
-                'focus-visible:ring-2',
-                'focus-visible:ring-[#007aff]',
-              )}
-            >
-              {actionsT.cancel}
-            </button>
-            <button
-              type="button"
-              onClick={handleRenameCollection}
-              disabled={!renameValue.trim()}
-              className={cn(
-                'px-5',
-                'py-2.5',
-                'text-[15px]',
-                'font-semibold',
-                'text-white',
-                'bg-[#007aff]',
-                'rounded-xl',
-                'hover:bg-[#0071e3]',
-                'disabled:opacity-50',
-                'disabled:cursor-not-allowed',
-                'focus:outline-none',
-                'focus-visible:ring-2',
-                'focus-visible:ring-[#007aff]',
-                'focus-visible:ring-offset-2',
-              )}
-            >
-              {actionsT.save}
-            </button>
-          </div>
-        }
-      >
-        <input
-          type="text"
-          value={renameValue}
-          onChange={(e) => setRenameValue(e.target.value)}
-          placeholder={savedT.collections.collectionName}
-          className={cn(
-            'w-full',
-            'px-4',
-            'py-3',
-            'text-[17px]',
-            'border',
-            'border-black/[0.12]',
-            'rounded-xl',
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-[#007aff]',
-          )}
-          autoFocus
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleRenameCollection()
-            if (e.key === 'Escape') setRenameCollectionId(null)
-          }}
-        />
-      </ResponsiveDialog>
+      <RenameCollectionDialog
+        renameCollectionId={renameCollectionId}
+        renameValue={renameValue}
+        setRenameValue={setRenameValue}
+        setRenameCollectionId={setRenameCollectionId}
+        handleRenameCollection={handleRenameCollection}
+      />
 
-      {/* Create Collection Dialog */}
-      <ResponsiveDialog
-        isOpen={showCreateCollection}
-        onClose={() => {
-          setShowCreateCollection(false)
-          setNewCollectionName('')
-          setNewCollectionColor(DEFAULT_COLLECTION_COLOR as CollectionColor)
-          setNewCollectionNameError(null)
-        }}
-        title={savedT.collections.newCollection}
-        maxWidth="md"
-        footer={
-          <button
-            type="button"
-            onClick={handleCreateCollection}
-            disabled={!newCollectionName.trim()}
-            className={cn(
-              'w-full',
-              'flex',
-              'items-center',
-              'justify-center',
-              'gap-2',
-              'px-4',
-              'py-3',
-              'bg-[#007aff]',
-              'text-white',
-              'rounded-xl',
-              'font-medium',
-              'transition-colors',
-              'hover:bg-[#0071e3]',
-              'active:opacity-80',
-              'focus:outline-none',
-              'focus-visible:ring-2',
-              'focus-visible:ring-[#007aff]',
-              'focus-visible:ring-offset-2',
-              'disabled:opacity-50',
-              'disabled:cursor-not-allowed',
-            )}
-          >
-            {actionsT.create}
-          </button>
-        }
-      >
-        <CreateCollectionForm
-          name={newCollectionName}
-          onNameChange={(value) => {
-            setNewCollectionName(value)
-            if (newCollectionNameError) setNewCollectionNameError(null)
-          }}
-          color={newCollectionColor}
-          onColorChange={setNewCollectionColor}
-          nameError={newCollectionNameError}
-          autoFocus
-        />
-      </ResponsiveDialog>
+      <CreateCollectionDialog
+        showCreateCollection={showCreateCollection}
+        setShowCreateCollection={setShowCreateCollection}
+        newCollectionName={newCollectionName}
+        setNewCollectionName={setNewCollectionName}
+        newCollectionColor={newCollectionColor}
+        setNewCollectionColor={setNewCollectionColor}
+        newCollectionNameError={newCollectionNameError}
+        setNewCollectionNameError={setNewCollectionNameError}
+        handleCreateCollection={handleCreateCollection}
+      />
 
-      {/* Move to Collection - Mobile Sheet */}
-      <MoveToCollectionSheet
+      <MoveToCollectionDialog
         isOpen={!!movePromptId}
         onClose={() => setMovePromptId(null)}
         collections={collections}
         currentCollectionId={
-          savedPrompts.find((p) => p.id === movePromptId)?.collectionId
+          savedPrompts.find((p) => p.id === movePromptId)?.collectionId || ''
         }
         onSelect={handleMovePrompt}
       />

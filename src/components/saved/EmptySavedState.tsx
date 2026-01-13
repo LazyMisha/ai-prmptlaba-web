@@ -3,15 +3,10 @@ import { useTranslations } from '@/i18n/client'
 import { EmptyState } from '@/components/common/EmptyState'
 import BookmarkIcon from '@/components/icons/BookmarkIcon'
 
-interface EmptySavedStateProps {
-  /** Base path for links (includes locale) */
-  basePath?: string
-}
-
 /**
  * EmptySavedState displays a friendly empty state when no prompts are saved.
  */
-export function EmptySavedState({ basePath = '' }: EmptySavedStateProps) {
+export function EmptySavedState() {
   const dict = useTranslations()
   const t = dict.saved.empty
 
@@ -33,7 +28,7 @@ export function EmptySavedState({ basePath = '' }: EmptySavedStateProps) {
       title={t.title}
       description={t.description}
       ctaText={t.cta}
-      ctaHref={`${basePath}/enhance`}
+      ctaHref="/enhance"
     />
   )
 }

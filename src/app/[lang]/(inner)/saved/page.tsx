@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { PageContainer } from '@/components/common/PageContainer'
 import { PageDescription } from '@/components/common/PageDescription'
-import SavedPromptsClient from '@/components/saved/SavedPromptsClient'
+import SavedPrompts from '@/components/saved/SavedPrompts'
 import { getDictionary } from '@/i18n/dictionaries'
 import type { Locale } from '@/i18n/locales'
 
@@ -19,9 +19,7 @@ interface SavedPageProps {
 }
 
 /**
- * Saved prompts page - displays all saved prompts organized by collections.
- * Users can view, copy, and manage their saved enhanced prompts.
- * Page title is displayed in the Header via layout.
+ * Saved prompts page with collection organization.
  */
 export default async function SavedPage({ params }: SavedPageProps) {
   const { lang } = await params
@@ -33,7 +31,7 @@ export default async function SavedPage({ params }: SavedPageProps) {
       <PageDescription id="saved-description">
         {dict.saved.description}
       </PageDescription>
-      <SavedPromptsClient basePath={`/${locale}`} />
+      <SavedPrompts />
     </PageContainer>
   )
 }
