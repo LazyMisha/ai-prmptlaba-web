@@ -33,45 +33,44 @@ export default function CreateCollectionButton({
       disabled={disabled}
       className={cn(
         // Layout
-        'w-full',
         'flex',
         'items-center',
         'justify-center',
-        'gap-3',
+        'gap-2',
         // Spacing
-        'px-4',
+        'px-6',
         'py-3',
         // Size
-        'min-h-[44px]',
+        'min-h-[50px]',
+        // Background
+        'bg-[#007aff]',
+        'text-white',
         // Border
-        'rounded-xl',
-        'border-2',
-        'border-dashed',
-        'border-gray-300',
-        // Typography
-        'text-gray-600',
+        'rounded-2xl',
         // Hover
-        'hover:border-[#007aff]',
-        'hover:text-[#007aff]',
-        'hover:bg-[#007aff]/5',
-        // Transitions
-        'transition-colors',
+        'hover:bg-[#0071e3]',
+        'active:opacity-80',
+        'active:scale-[0.98]',
+        // Transition
+        'transition-all',
+        'duration-200',
+        // Typography
+        'text-[17px]',
+        'font-semibold',
         // Focus
         'focus:outline-none',
         'focus-visible:ring-2',
         'focus-visible:ring-[#007aff]',
+        'focus-visible:ring-offset-2',
         // Disabled
         'disabled:opacity-50',
         'disabled:cursor-not-allowed',
-        'disabled:hover:border-gray-300',
-        'disabled:hover:text-gray-600',
-        'disabled:hover:bg-transparent',
         // Custom classes
         className,
       )}
     >
       <FolderPlusIcon className="w-5 h-5" />
-      <span className={cn('text-sm', 'font-medium')}>{label}</span>
+      <span>{label}</span>
     </button>
   )
 }

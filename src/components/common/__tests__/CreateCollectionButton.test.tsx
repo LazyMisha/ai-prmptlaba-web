@@ -106,9 +106,9 @@ describe('CreateCollectionButton', () => {
 
       const button = screen.getByRole('button')
 
-      expect(button).toHaveClass('border-dashed')
-      expect(button).toHaveClass('border-2')
-      expect(button).toHaveClass('border-gray-300')
+      expect(button).toHaveClass('bg-[#007aff]')
+      expect(button).toHaveClass('text-white')
+      expect(button).toHaveClass('rounded-2xl')
     })
 
     it('applies custom className', () => {
@@ -131,7 +131,7 @@ describe('CreateCollectionButton', () => {
         />,
       )
 
-      expect(screen.getByRole('button')).toHaveClass('min-h-[44px]')
+      expect(screen.getByRole('button')).toHaveClass('min-h-[50px]')
     })
 
     it('has proper focus styles', () => {

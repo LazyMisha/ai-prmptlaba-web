@@ -1,14 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
 import CreateCollectionButton from '@/components/common/CreateCollectionButton'
 import PencilIcon from '@/components/icons/PencilIcon'
-import SelectorIcon from '@/components/icons/SelectorIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
-import ManageCollectionDialog from './ManageCollectionDialog'
+import { MobileViewActions } from './MobileViewActions'
 
 interface CollectionSidebarProps {
   /** List of collections to display */
@@ -46,7 +44,6 @@ export function CollectionSidebar({
 }: CollectionSidebarProps) {
   const dict = useTranslations()
   const t = dict.saved.collections
-  const [isManageSheetOpen, setIsManageSheetOpen] = useState(false)
   const totalCount = Object.values(promptCounts).reduce(
     (sum, count) => sum + count,
     0,
@@ -54,149 +51,16 @@ export function CollectionSidebar({
 
   return (
     <div className={className}>
-      {/* Mobile: Dropdown Selector */}
-      <div className="md:hidden">
-        <label
-          htmlFor="collection-selector"
-          className={cn(
-            // Typography
-            'text-sm',
-            'font-medium',
-            'text-gray-700',
-            // Layout
-            'block',
-            // Spacing
-            'mb-2',
-          )}
-        >
-          {t.label}
-        </label>
-        <div className="relative">
-          <select
-            id="collection-selector"
-            value={selectedId ?? 'all'}
-            onChange={(e) =>
-              onSelect(e.target.value === 'all' ? null : e.target.value)
-            }
-            className={cn(
-              // Sizing
-              'w-full',
-              // Spacing
-              'px-4',
-              'py-3',
-              'pr-10',
-              // Typography
-              'text-base',
-              'font-normal',
-              'text-gray-900',
-              // Background
-              'bg-white/80',
-              'backdrop-blur-sm',
-              // Border
-              'border',
-              'border-gray-200',
-              'rounded-xl',
-              // Shadow
-              'shadow-sm',
-              // Appearance
-              'appearance-none',
-              'cursor-pointer',
-              // Transition
-              'transition-all',
-              'duration-200',
-              // Focus
-              'focus:outline-none',
-              'focus:ring-2',
-              'focus:ring-blue-500/40',
-              'focus:border-blue-500',
-              'focus:bg-white',
-              // Hover
-              'hover:border-gray-300',
-              'hover:bg-white',
-            )}
-          >
-            <option value="all">
-              {t.all} ({totalCount})
-            </option>
-            {collections.map((collection) => (
-              <option key={collection.id} value={collection.id}>
-                {collection.name} ({promptCounts[collection.id] || 0})
-              </option>
-            ))}
-          </select>
-          <div
-            className={cn(
-              // Position
-              'absolute',
-              'right-3',
-              'top-1/2',
-              '-translate-y-1/2',
-              // Pointer events
-              'pointer-events-none',
-              // Color
-              'text-gray-400',
-            )}
-          >
-            <SelectorIcon className="w-5 h-5" />
-          </div>
-        </div>
-        {/* Mobile action buttons */}
-        <div className="flex gap-2 mt-3">
-          {onCreate && (
-            <CreateCollectionButton
-              onClick={onCreate}
-              label={t.create}
-              className="flex-1"
-            />
-          )}
-          {(onEdit || onDelete) && collections.length > 0 && (
-            <button
-              type="button"
-              onClick={() => setIsManageSheetOpen(true)}
-              className={cn(
-                // Layout
-                'flex',
-                'flex-1',
-                'items-center',
-                'justify-center',
-                'gap-2',
-                // Sizing
-                'min-h-[44px]',
-                'px-4',
-                // Typography
-                'text-[15px]',
-                'font-medium',
-                'text-[#007aff]',
-                // Border
-                'border',
-                'border-[#007aff]/30',
-                'rounded-xl',
-                // Hover
-                'hover:bg-[#007aff]/5',
-                'active:bg-[#007aff]/10',
-                // Transition
-                'transition-colors',
-                // Focus
-                'focus:outline-none',
-                'focus-visible:ring-2',
-                'focus-visible:ring-[#007aff]',
-                'focus-visible:ring-offset-2',
-              )}
-            >
-              <PencilIcon className="w-4 h-4" />
-              {t.manage}
-            </button>
-          )}
-        </div>
-        {/* Manage Collection Dialog */}
-        <ManageCollectionDialog
-          isOpen={isManageSheetOpen}
-          onClose={() => setIsManageSheetOpen(false)}
-          collections={collections}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      </div>
+      {/* Mobile: Custom Dropdown */}
+      <MobileViewActions
+        collections={collections}
+        selectedId={selectedId}
+        promptCounts={promptCounts}
+        onSelect={onSelect}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onCreate={onCreate}
+      />
       {/* Desktop: Vertical Sidebar */}
       <nav
         aria-label="Collections"
@@ -231,16 +95,19 @@ export function CollectionSidebar({
             'text-[15px]',
             'font-medium',
             'whitespace-nowrap',
+            // Border
+            'border-2',
+            selectedId === null ? 'border-[#007aff]' : 'border-transparent',
             // Effects
-            'rounded-xl',
+            'rounded-2xl',
             // Transitions
-            'transition-colors',
+            'transition-all',
             'duration-200',
             // Gap between text and count
             'gap-2',
             // Selected state
             selectedId === null
-              ? cn('bg-[#007aff]', 'text-white')
+              ? cn('text-[#007aff]')
               : cn('text-[#1d1d1f]', 'hover:bg-black/[0.04]'),
             // Focus
             'focus:outline-none',
@@ -254,7 +121,7 @@ export function CollectionSidebar({
             className={cn(
               'text-sm',
               'ml-1',
-              selectedId === null ? 'text-white/80' : 'text-[#86868b]',
+              selectedId === null ? 'text-[#007aff]/70' : 'text-[#86868b]',
             )}
           >
             {totalCount}
@@ -294,22 +161,27 @@ export function CollectionSidebar({
                 'min-h-[44px]',
                 // Spacing
                 'pl-3',
-                'pr-2',
+                'pr-3',
                 'py-2.5',
                 // Typography
                 'text-[15px]',
                 'font-medium',
                 'whitespace-nowrap',
+                // Border
+                'border-2',
+                selectedId === collection.id
+                  ? 'border-[#007aff]'
+                  : 'border-transparent',
                 // Effects
-                'rounded-xl',
+                'rounded-2xl',
                 // Cursor
                 'cursor-pointer',
                 // Transitions
-                'transition-colors',
+                'transition-all',
                 'duration-200',
                 // Selected state
                 selectedId === collection.id
-                  ? cn('bg-[#007aff]', 'text-white')
+                  ? cn('text-[#007aff]')
                   : cn('text-[#1d1d1f]', 'hover:bg-black/[0.04]'),
                 // Focus
                 'focus:outline-none',
@@ -357,9 +229,9 @@ export function CollectionSidebar({
                           'duration-150',
                           selectedId === collection.id
                             ? cn(
-                                'text-white/70',
-                                'hover:text-white',
-                                'hover:bg-white/20',
+                                'text-[#007aff]/60',
+                                'hover:text-[#007aff]',
+                                'hover:bg-[#007aff]/10',
                               )
                             : cn(
                                 'text-[#86868b]',
@@ -389,9 +261,9 @@ export function CollectionSidebar({
                           'duration-150',
                           selectedId === collection.id
                             ? cn(
-                                'text-white/70',
-                                'hover:text-white',
-                                'hover:bg-white/20',
+                                'text-[#ff3b30]/60',
+                                'hover:text-[#ff3b30]',
+                                'hover:bg-[#ff3b30]/10',
                               )
                             : cn(
                                 'text-[#86868b]',
@@ -415,7 +287,7 @@ export function CollectionSidebar({
                     'min-w-[1.5rem]',
                     'text-right',
                     selectedId === collection.id
-                      ? 'text-white/80'
+                      ? 'text-[#007aff]/70'
                       : 'text-[#86868b]',
                   )}
                 >
@@ -428,7 +300,11 @@ export function CollectionSidebar({
 
         {/* Create new collection button */}
         {onCreate && (
-          <CreateCollectionButton label={t.create} onClick={onCreate} />
+          <CreateCollectionButton
+            label={t.create}
+            onClick={onCreate}
+            className="w-full"
+          />
         )}
       </nav>
     </div>

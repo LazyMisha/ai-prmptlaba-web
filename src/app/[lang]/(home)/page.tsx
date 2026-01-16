@@ -23,7 +23,6 @@ interface HomePageProps {
 
 /**
  * Home page (Server Component)
- * Displays translated content based on the current locale.
  */
 export default async function HomePage({ params }: HomePageProps) {
   const { lang } = await params
@@ -59,7 +58,6 @@ export default async function HomePage({ params }: HomePageProps) {
       <PageDescription id="home-description">
         {dict.home.description}
       </PageDescription>
-
       <Link
         href={`/${locale}/enhance`}
         className={cn(

@@ -115,7 +115,7 @@ describe('SaveToCollectionDialog', () => {
       })
 
       const createButton = screen.getByRole('button', {
-        name: /or choose a collection/i,
+        name: /or create a new one/i,
       })
       fireEvent.click(createButton)
 
@@ -134,7 +134,7 @@ describe('SaveToCollectionDialog', () => {
       })
 
       fireEvent.click(
-        screen.getByRole('button', { name: /or choose a collection/i }),
+        screen.getByRole('button', { name: /or create a new one/i }),
       )
 
       await waitFor(() => {
@@ -151,7 +151,7 @@ describe('SaveToCollectionDialog', () => {
       })
 
       fireEvent.click(
-        screen.getByRole('button', { name: /or choose a collection/i }),
+        screen.getByRole('button', { name: /or create a new one/i }),
       )
 
       await waitFor(() => {
