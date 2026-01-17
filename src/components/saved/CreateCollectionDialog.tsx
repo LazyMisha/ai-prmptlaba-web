@@ -3,6 +3,7 @@ import { useTranslations } from '@/i18n/client'
 import Dialog from '../common/Dialog'
 import CreateCollectionForm from '@/components/common/CreateCollectionForm'
 import CloseIcon from '@/components/icons/CloseIcon'
+import { Button } from '@/components/common/Button'
 import type { CollectionColor } from '@/constants/saved-prompts'
 import { DEFAULT_COLLECTION_COLOR } from '@/constants/saved-prompts'
 
@@ -59,8 +60,7 @@ const CreateCollectionDialog = ({
           'items-center',
           'justify-between',
           'px-6',
-          'pt-5',
-          'pb-4',
+          'min-h-[50px]',
           'border-b',
           'border-gray-100',
         )}
@@ -120,32 +120,13 @@ const CreateCollectionDialog = ({
           'rounded-b-2xl',
         )}
       >
-        <button
-          type="button"
+        <Button
           onClick={handleCreateCollection}
           disabled={!newCollectionName.trim()}
-          className={cn(
-            'w-full',
-            'px-4',
-            'py-3',
-            'bg-[#007aff]',
-            'text-white',
-            'text-[15px]',
-            'font-semibold',
-            'rounded-xl',
-            'transition-colors',
-            'hover:bg-[#0071e3]',
-            'active:opacity-80',
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
-            'focus-visible:ring-offset-2',
-            'disabled:opacity-50',
-            'disabled:cursor-not-allowed',
-          )}
+          className="w-full"
         >
           {actionsT.create}
-        </button>
+        </Button>
       </div>
     </Dialog>
   )

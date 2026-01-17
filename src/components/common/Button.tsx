@@ -8,8 +8,8 @@ import SpinnerIcon from '@/components/icons/SpinnerIcon'
  * Common props shared between button and link variants.
  */
 interface BaseButtonProps {
-  /** Button content */
-  children: React.ReactNode
+  /** Button content (optional for icon-only buttons) */
+  children?: React.ReactNode
   /** Whether the button/link is disabled */
   disabled?: boolean
   /** Whether the button is in a loading state */

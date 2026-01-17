@@ -164,11 +164,11 @@
     "closeDialog": "Close dialog",
     "quickSaveTo": "Quick Save",
     "orChooseCollection": "or choose a collection",
-    "orCreateNew": "or create a new one",
+    "orCreateNew": "Create New Collection",
     "noCollectionsYet": "No collections yet. Create your first one.",
     "prompt": "prompt",
     "prompts": "prompts",
     "createAndSave": "Create & Save",
-    "saveToSelected": "Save to Selected Collection"
+    "saveToSelected": "Save to Collection"
   }
 }

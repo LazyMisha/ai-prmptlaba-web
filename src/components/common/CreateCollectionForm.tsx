@@ -139,6 +139,7 @@ export default function CreateCollectionForm({
           className={cn(
             // Sizing
             'w-full',
+            'min-h-[50px]',
             // Spacing
             'px-4',
             'py-3',
@@ -147,7 +148,7 @@ export default function CreateCollectionForm({
             // Border
             'border',
             nameError ? 'border-red-300' : 'border-gray-200',
-            'rounded-xl',
+            'rounded-2xl',
             // Focus
             'focus:outline-none',
             'focus:ring-2',

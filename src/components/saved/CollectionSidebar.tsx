@@ -50,11 +50,16 @@ export function CollectionSidebar({
     0,
   )
 
+  // Sort collections by creation date (newest first)
+  const sortedCollections = [...collections].sort(
+    (a, b) => b.createdAt - a.createdAt,
+  )
+
   return (
     <div className={className}>
       {/* Mobile: Custom Dropdown */}
       <MobileViewActions
-        collections={collections}
+        collections={sortedCollections}
         selectedId={selectedId}
         promptCounts={promptCounts}
         onSelect={onSelect}
@@ -129,7 +134,7 @@ export function CollectionSidebar({
           </span>
         </button>
         {/* Collection items */}
-        {collections.map((collection) => (
+        {sortedCollections.map((collection) => (
           <div
             key={collection.id}
             className={cn(

@@ -65,10 +65,15 @@ export function MobileViewActions({
   const selectedCount = selectedId ? promptCounts[selectedId] || 0 : totalCount
   const selectedColor = selectedCollection?.color
 
+  // Sort collections by creation date (newest first)
+  const sortedCollections = [...collections].sort(
+    (a, b) => b.createdAt - a.createdAt,
+  )
+
   // Build items array with "All" option first
   const items: CollectionItem[] = [
     { id: null, name: t.all, count: totalCount },
-    ...collections.map((c) => ({
+    ...sortedCollections.map((c) => ({
       id: c.id,
       name: c.name,
       color: c.color,

@@ -164,11 +164,11 @@
     "closeDialog": "Закрити діалог",
     "quickSaveTo": "Швидке збереження",
     "orChooseCollection": "або оберіть колекцію",
-    "orCreateNew": "або створіть нову",
+    "orCreateNew": "Створити нову колекцію",
     "noCollectionsYet": "Колекцій ще немає. Створіть першу.",
     "prompt": "промпт",
     "prompts": "промпти",
     "createAndSave": "Створити й зберегти",
-    "saveToSelected": "Зберегти в обрану колекцію"
+    "saveToSelected": "Зберегти в колекцію"
   }
 }
