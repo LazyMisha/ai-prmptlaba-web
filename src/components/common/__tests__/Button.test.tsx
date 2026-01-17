@@ -73,4 +73,36 @@ describe('Button', () => {
     const button = screen.getByRole('button')
     expect(button).toHaveAttribute('type', 'button')
   })
+
+  it('renders as Link when href is provided', () => {
+    render(<Button href="/test">Go to page</Button>)
+
+    const link = screen.getByRole('link', { name: /go to page/i })
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', '/test')
+  })
+
+  it('renders Link with icon', () => {
+    const icon = <span data-testid="icon">🔵</span>
+    render(
+      <Button href="/test" icon={icon}>
+        Go to page
+      </Button>,
+    )
+
+    expect(screen.getByTestId('icon')).toBeInTheDocument()
+    expect(screen.getByRole('link')).toBeInTheDocument()
+  })
+
+  it('applies disabled styles to Link', () => {
+    render(
+      <Button href="/test" disabled>
+        Disabled Link
+      </Button>,
+    )
+
+    const link = screen.getByRole('link')
+    expect(link).toHaveClass('pointer-events-none')
+    expect(link).toHaveClass('opacity-50')
+  })
 })

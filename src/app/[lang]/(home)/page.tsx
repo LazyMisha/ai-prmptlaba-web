@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { PageContainer } from '@/components/common/PageContainer'
 import { PageHeading } from '@/components/common/PageHeading'
 import { PageDescription } from '@/components/common/PageDescription'
+import { Button } from '@/components/common/Button'
 import { getDictionary } from '@/i18n/dictionaries'
 import type { Locale } from '@/i18n/locales'
 
@@ -58,45 +58,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <PageDescription id="home-description">
         {dict.home.description}
       </PageDescription>
-      <Link
-        href={`/${locale}/enhance`}
-        className={cn(
-          // Layout
-          'inline-flex',
-          'items-center',
-          'justify-center',
-          // Sizing
-          'px-7',
-          'py-3.5',
-          'min-h-[50px]',
-          // Typography
-          'text-[17px]',
-          'font-semibold',
-          'tracking-[-0.01em]',
-          'text-white',
-          // Background
-          'bg-[#007aff]',
-          // Border
-          'rounded-xl',
-          // Transition
-          'transition-all',
-          'duration-200',
-          'ease-out',
-          // Hover
-          'hover:bg-[#0071e3]',
-          // Focus - high contrast ring for accessibility
-          'focus:outline-none',
-          'focus-visible:ring-2',
-          'focus-visible:ring-[#007aff]',
-          'focus-visible:ring-offset-2',
-          'focus-visible:ring-offset-white',
-          // Active
-          'active:opacity-80',
-          'active:scale-[0.98]',
-        )}
-      >
-        {dict.home.cta}
-      </Link>
+      <Button href={`/${locale}/enhance`}>{dict.home.cta}</Button>
     </PageContainer>
   )
 }
