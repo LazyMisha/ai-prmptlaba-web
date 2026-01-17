@@ -24,7 +24,7 @@ export interface TargetSelectorProps {
 /**
  * Dropdown selector for choosing the enhancement target platform.
  */
-export default function TargetSelector({
+export default function ContextSelectorDropdown({
   value,
   onChange,
   disabled,

@@ -15,7 +15,7 @@ import {
 import { cn } from '@/lib/utils'
 import { savePromptHistory } from '@/lib/db/prompt-history'
 
-import TargetSelector from './TargetSelector'
+import ContextSelectorDropdown from './ContextSelectorDropdown'
 import PromptInput from './PromptInput'
 import EnhanceButton from './EnhanceButton'
 import PromptCard from '@/components/common/PromptCard/PromptCard'
@@ -157,7 +157,7 @@ export default function EnhanceForm() {
         }}
         aria-label={t.form.ariaLabel}
       >
-        <TargetSelector
+        <ContextSelectorDropdown
           value={target}
           onChange={setTarget}
           disabled={isLoading}

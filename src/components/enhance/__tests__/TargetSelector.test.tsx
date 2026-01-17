@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import TargetSelector from '../TargetSelector'
+import ContextSelectorDropdown from '../ContextSelectorDropdown'
 import { TOOL_CATEGORIES } from '@/constants/tool-categories'
 
-describe('TargetSelector', () => {
+describe('ContextSelectorDropdown', () => {
   const defaultProps = {
     value: TOOL_CATEGORIES.GENERAL,
     onChange: jest.fn(),
@@ -14,7 +14,7 @@ describe('TargetSelector', () => {
   })
 
   it('renders with label and current value', () => {
-    render(<TargetSelector {...defaultProps} />)
+    render(<ContextSelectorDropdown {...defaultProps} />)
 
     expect(
       screen.getByRole('combobox', { name: /target platform/i }),
@@ -22,7 +22,7 @@ describe('TargetSelector', () => {
   })
 
   it('calls onChange when selection changes', () => {
-    render(<TargetSelector {...defaultProps} />)
+    render(<ContextSelectorDropdown {...defaultProps} />)
 
     const select = screen.getByRole('combobox')
     fireEvent.change(select, {
@@ -35,20 +35,20 @@ describe('TargetSelector', () => {
   })
 
   it('renders all tool category options', () => {
-    render(<TargetSelector {...defaultProps} />)
+    render(<ContextSelectorDropdown {...defaultProps} />)
 
     const options = screen.getAllByRole('option')
     expect(options.length).toBeGreaterThan(5)
   })
 
   it('is disabled when disabled prop is true', () => {
-    render(<TargetSelector {...defaultProps} disabled />)
+    render(<ContextSelectorDropdown {...defaultProps} disabled />)
 
     expect(screen.getByRole('combobox')).toBeDisabled()
   })
 
   it('uses custom label', () => {
-    render(<TargetSelector {...defaultProps} label="Choose Target" />)
+    render(<ContextSelectorDropdown {...defaultProps} label="Choose Target" />)
 
     expect(
       screen.getByRole('combobox', { name: /choose target/i }),
@@ -57,7 +57,9 @@ describe('TargetSelector', () => {
 
   it('renders custom helper text', () => {
     const helperText = 'Custom helper text'
-    render(<TargetSelector {...defaultProps} helperText={helperText} />)
+    render(
+      <ContextSelectorDropdown {...defaultProps} helperText={helperText} />,
+    )
 
     expect(screen.getByText(helperText)).toBeInTheDocument()
   })
