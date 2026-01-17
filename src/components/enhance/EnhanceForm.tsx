@@ -17,7 +17,7 @@ import { savePromptHistory } from '@/lib/db/prompt-history'
 
 import ContextSelectorDropdown from './ContextSelectorDropdown'
 import PromptInput from './PromptInput'
-import EnhanceButton from './EnhanceButton'
+import { Button } from '@/components/common/Button'
 import PromptCard from '@/components/common/PromptCard/PromptCard'
 import PromptCardHeader from '@/components/common/PromptCard/PromptCardHeader'
 import EnhanceResultInfo from './EnhanceResultInfo'
@@ -175,11 +175,14 @@ export default function EnhanceForm() {
           className="mb-4"
         />
 
-        <EnhanceButton
+        <Button
           onClick={handleEnhance}
           disabled={!prompt.trim() || prompt.length < 3 || prompt.length > 2000}
           isLoading={isLoading}
-        />
+          className="w-full"
+        >
+          {isLoading ? t.form.enhancing : t.form.enhanceButton}
+        </Button>
       </form>
 
       {/* Result Display */}

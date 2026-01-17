@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import SpinnerIcon from '@/components/icons/SpinnerIcon'
 
 /**
  * Common props shared between button and link variants.
@@ -11,6 +12,8 @@ interface BaseButtonProps {
   children: React.ReactNode
   /** Whether the button/link is disabled */
   disabled?: boolean
+  /** Whether the button is in a loading state */
+  isLoading?: boolean
   /** Optional icon to display before text */
   icon?: React.ReactNode
   /** ARIA label for accessibility */
@@ -60,10 +63,13 @@ export function Button({
   href,
   type = 'button',
   disabled = false,
+  isLoading = false,
   icon,
   ariaLabel,
   className,
 }: ButtonProps) {
+  const isDisabled = disabled || isLoading
+
   const baseClasses = cn(
     // Layout
     'flex',
@@ -96,14 +102,14 @@ export function Button({
     'focus-visible:ring-[#007aff]',
     'focus-visible:ring-offset-2',
     // Disabled
-    disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
+    isDisabled && 'opacity-50 cursor-not-allowed pointer-events-none',
     // Custom classes
     className,
   )
 
   const content = (
     <>
-      {icon}
+      {isLoading ? <SpinnerIcon className="w-5 h-5" /> : icon}
       <span>{children}</span>
     </>
   )
@@ -122,8 +128,9 @@ export function Button({
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled}
+      disabled={isDisabled}
       aria-label={ariaLabel}
+      aria-busy={isLoading}
       className={baseClasses}
     >
       {content}
