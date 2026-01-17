@@ -87,7 +87,7 @@ export default function PromptInput({
           // Border
           'border',
           hasError ? 'border-red-400' : 'border-gray-200',
-          'rounded-xl',
+          'rounded-2xl',
           // Shadow - subtle depth
           'shadow-sm',
           // Resize
