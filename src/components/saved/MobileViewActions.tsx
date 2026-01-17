@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
 import CreateCollectionButton from '@/components/common/CreateCollectionButton'
-import ChevronIcon from '@/components/icons/ChevronIcon'
+import { Dropdown } from '@/components/common/Dropdown'
 import SlidersIcon from '@/components/icons/SlidersIcon'
 import ManageCollectionDialog from './ManageCollectionDialog'
 
@@ -24,6 +24,13 @@ interface MobileViewActionsProps {
   onDelete?: (id: string) => void
   /** Callback when create is requested */
   onCreate?: () => void
+}
+
+type CollectionItem = {
+  id: string | null
+  name: string
+  color?: string
+  count: number
 }
 
 /**
@@ -57,211 +64,58 @@ export function MobileViewActions({
   const selectedCount = selectedId ? promptCounts[selectedId] || 0 : totalCount
   const selectedColor = selectedCollection?.color
 
+  // Build items array with "All" option first
+  const items: CollectionItem[] = [
+    { id: null, name: t.all, count: totalCount },
+    ...collections.map((c) => ({
+      id: c.id,
+      name: c.name,
+      color: c.color,
+      count: promptCounts[c.id] || 0,
+    })),
+  ]
+
+  const handleSelectItem = (item: CollectionItem) => {
+    onSelect(item.id)
+    setIsDropdownOpen(false)
+  }
+
   return (
     <div className="md:hidden">
-      {/* Dropdown Trigger */}
-      <div className="relative">
-        <button
-          type="button"
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className={cn(
-            // Layout
-            'flex',
-            'items-center',
-            'justify-between',
-            'w-full',
-            // Spacing
-            'px-4',
-            'py-3',
-            // Typography
-            'text-[17px]',
-            'font-medium',
-            'text-[#1d1d1f]',
-            // Background
-            'bg-white/80',
-            'backdrop-blur-sm',
-            // Border
-            'border',
-            'border-black/[0.08]',
-            'rounded-2xl',
-            // Shadow
-            'shadow-sm',
-            // Transition
-            'transition-all',
-            'duration-200',
-            // Focus
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
-            'focus-visible:ring-offset-2',
-            // Hover
-            'hover:border-black/[0.12]',
-            'hover:bg-white',
-          )}
-        >
-          <span className="flex items-center gap-2 flex-1 min-w-0">
-            {selectedColor && (
-              <span
-                className="w-3 h-3 rounded-full shrink-0"
-                style={{ backgroundColor: selectedColor }}
-                aria-hidden="true"
-              />
-            )}
-            <span className="truncate">
-              {selectedName} ({selectedCount})
-            </span>
-          </span>
-          <ChevronIcon
-            className={cn(
-              'w-5',
-              'h-5',
-              'text-[#86868b]',
-              'transition-transform',
-              'duration-200',
-              'shrink-0',
-              isDropdownOpen && 'rotate-180',
-            )}
-          />
-        </button>
-
-        {/* Dropdown Menu */}
-        {isDropdownOpen && (
-          <>
-            {/* Backdrop */}
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setIsDropdownOpen(false)}
+      {/* Dropdown */}
+      <Dropdown
+        isOpen={isDropdownOpen}
+        onOpenChange={setIsDropdownOpen}
+        triggerText={`${selectedName} (${selectedCount})`}
+        triggerPrefix={
+          selectedColor && (
+            <span
+              className="w-3 h-3 rounded-full shrink-0"
+              style={{ backgroundColor: selectedColor }}
               aria-hidden="true"
             />
-            {/* Menu */}
-            <div
-              className={cn(
-                // Position
-                'absolute',
-                'left-0',
-                'right-0',
-                'top-full',
-                'z-50',
-                // Spacing
-                'mt-2',
-                // Background
-                'bg-white',
-                // Border
-                'border',
-                'border-black/[0.08]',
-                'rounded-2xl',
-                // Shadow
-                'shadow-lg',
-                // Animation
-                'animate-in',
-                'fade-in-0',
-                'zoom-in-95',
-                'slide-in-from-top-2',
-                'duration-200',
-                // Max height with scroll
-                'max-h-[40vh]',
-                'overflow-y-auto',
+          )
+        }
+        items={items}
+        onSelectItem={(item) => handleSelectItem(item)}
+        renderItem={(item) => (
+          <>
+            <span className="flex items-center gap-2 flex-1 min-w-0">
+              {item.color && (
+                <span
+                  className="w-3 h-3 rounded-full shrink-0"
+                  style={{ backgroundColor: item.color }}
+                  aria-hidden="true"
+                />
               )}
-            >
-              {/* All option */}
-              <button
-                type="button"
-                onClick={() => {
-                  onSelect(null)
-                  setIsDropdownOpen(false)
-                }}
-                className={cn(
-                  // Layout
-                  'flex',
-                  'items-center',
-                  'justify-between',
-                  'w-full',
-                  // Size
-                  'min-h-[50px]',
-                  // Spacing
-                  'px-4',
-                  'py-3',
-                  // Typography
-                  'text-[17px]',
-                  'font-medium',
-                  'text-left',
-                  // Border
-                  'border-b',
-                  'border-black/[0.08]',
-                  // Hover
-                  'hover:bg-black/[0.04]',
-                  // Transition
-                  'transition-colors',
-                  'duration-150',
-                  // Focus
-                  'focus:outline-none',
-                  'focus-visible:bg-black/[0.04]',
-                )}
-              >
-                <span className="text-[#1d1d1f]">{t.all}</span>
-                <span className="text-[#86868b] text-[15px]">{totalCount}</span>
-              </button>
-
-              {/* Collection items */}
-              {collections.map((collection, index) => (
-                <button
-                  key={collection.id}
-                  type="button"
-                  onClick={() => {
-                    onSelect(collection.id)
-                    setIsDropdownOpen(false)
-                  }}
-                  className={cn(
-                    // Layout
-                    'flex',
-                    'items-center',
-                    'justify-between',
-                    'w-full',
-                    // Size
-                    'min-h-[50px]',
-                    // Spacing
-                    'px-4',
-                    'py-3',
-                    // Typography
-                    'text-[17px]',
-                    'font-medium',
-                    'text-left',
-                    // Border
-                    index < collections.length - 1 && [
-                      'border-b',
-                      'border-black/[0.08]',
-                    ],
-                    // Hover
-                    'hover:bg-black/[0.04]',
-                    // Transition
-                    'transition-colors',
-                    'duration-150',
-                    // Focus
-                    'focus:outline-none',
-                    'focus-visible:bg-black/[0.04]',
-                  )}
-                >
-                  <span className="flex items-center gap-2 flex-1 min-w-0">
-                    {collection.color && (
-                      <span
-                        className="w-3 h-3 rounded-full shrink-0"
-                        style={{ backgroundColor: collection.color }}
-                        aria-hidden="true"
-                      />
-                    )}
-                    <span className="truncate text-[#1d1d1f]">
-                      {collection.name}
-                    </span>
-                  </span>
-                  <span className="text-[#86868b] text-[15px] ml-2">
-                    {promptCounts[collection.id] || 0}
-                  </span>
-                </button>
-              ))}
-            </div>
+              <span className="truncate text-[#1d1d1f]">{item.name}</span>
+            </span>
+            <span className="text-[#86868b] text-[15px] ml-2">
+              {item.count}
+            </span>
           </>
         )}
-      </div>
+      />
 
       {/* Action buttons */}
       <div className="flex gap-2 mt-3">

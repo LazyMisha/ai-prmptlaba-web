@@ -17,11 +17,9 @@ describe('EnhanceForm', () => {
   it('renders form with all inputs', () => {
     render(<EnhanceForm />)
 
-    expect(
-      screen.getByRole('combobox', { name: /context/i }),
-    ).toBeInTheDocument()
+    expect(screen.getByLabelText(/context/i)).toBeInTheDocument()
     expect(screen.getByRole('textbox', { name: /prompt/i })).toBeInTheDocument()
-    expect(screen.getByRole('button')).toBeDisabled()
+    expect(screen.getByRole('button', { name: /enhance/i })).toBeDisabled()
   })
 
   it('enables button when valid prompt entered', () => {
@@ -96,6 +94,6 @@ describe('EnhanceForm', () => {
     fireEvent.change(textarea, { target: { value: '' } })
 
     // Button should be disabled
-    expect(screen.getByRole('button')).toBeDisabled()
+    expect(screen.getByRole('button', { name: /enhance/i })).toBeDisabled()
   })
 })
