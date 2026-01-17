@@ -65,6 +65,27 @@ React Compiler is enabled. **DO NOT use:**
 - `useCallback`, `useMemo`, `React.memo()` — handled automatically
 - Exception: Use `useRef` for event listeners needing current state values
 
+**Skill Rules Superseded by React Compiler:**
+
+- `rerender-memo` — ignore, React Compiler handles memoization
+- `advanced-event-handler-refs` — use `useRef` instead of manual ref patterns
+- `advanced-use-latest` — not needed with React Compiler
+
+### Agent Skills (Performance & Design)
+
+Two Agent Skills are installed in `.github/skills/`:
+
+| Skill                         | Purpose                            | Triggers On                                                      |
+| ----------------------------- | ---------------------------------- | ---------------------------------------------------------------- |
+| `vercel-react-best-practices` | 45 React/Next.js performance rules | Writing/reviewing React code, data fetching, bundle optimization |
+| `web-design-guidelines`       | Web interface design patterns      | UI reviews, accessibility audits, design checks                  |
+
+**Precedence Rules:**
+
+- **Project instructions override skills** — e.g., don't use `useMemo()` even if skill suggests it (React Compiler handles this)
+- Skills provide implementation patterns; instructions define project standards
+- When in doubt, follow existing patterns in the codebase
+
 ---
 
 ## 2. Project Context
@@ -107,7 +128,7 @@ Check `README.md` for authoritative project structure before implementing featur
 - Server Components for data fetching; Client Components for interactivity
 - Use `async/await` (not `.then()`)
 - Use `next/image` for all images
-- Implement `loading.tsx` and `error.tsx` at route level
+- Implement `error.tsx` at route level
 
 ### Quality Rules
 
@@ -454,3 +475,4 @@ Before submitting any code, verify:
 - [ ] JSDoc for complex logic
 - [ ] No security vulnerabilities
 - [ ] Context7 MCP used for code generation
+- [ ] Performance patterns follow `vercel-react-best-practices` skill (where not conflicting with React Compiler)

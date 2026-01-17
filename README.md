@@ -23,10 +23,10 @@ src/
 │   ├── layout.tsx              # Root layout
 │   ├── globals.css             # Global styles with Tailwind imports
 │   ├── error.tsx               # Error boundary
-│   ├── loading.tsx             # Loading UI
 │   ├── not-found.tsx           # 404 page
 │   ├── [lang]/                 # Dynamic locale segment (i18n)
 │   │   ├── layout.tsx          # Locale layout with providers, validate locale and return 404 if invalid
+│   │   ├── loading.tsx         # Loading state for locale layout
 │   │   ├── (home)/             # Home route group
 │   │   │   ├── layout.tsx      # Home layout
 │   │   │   └── page.tsx        # Home page
@@ -68,7 +68,6 @@ src/
 │   ├── dictionaries.ts         # Dictionary loader
 │   └── dictionaries/           # Translation files
 │       ├── en.json             # English translations
-│       ├── pl.json             # Polish translations
 │       └── uk.json             # Ukrainian translations
 ├── lib/                        # Utility functions
 │   ├── openai.ts               # OpenAI API client with retries
