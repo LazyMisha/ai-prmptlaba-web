@@ -1,8 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import type { EnhancementTarget } from '@/types/enhance'
 import { cn } from '@/lib/utils'
-import SelectorIcon from '@/components/icons/SelectorIcon'
+import ChevronIcon from '@/components/icons/ChevronIcon'
 
 import { TOOL_CATEGORY_LIST } from '@/constants/tool-categories'
 
@@ -32,15 +33,26 @@ export default function ContextSelectorDropdown({
   helperText,
   className,
 }: TargetSelectorProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const selectedOption = TOOL_CATEGORY_LIST.find(
+    (option) => option.value === value,
+  )
+
+  const handleSelect = (newValue: EnhancementTarget) => {
+    onChange(newValue)
+    setIsDropdownOpen(false)
+  }
+
   return (
     <div className={className}>
       <label
-        htmlFor="target-selector"
+        id="target-selector-label"
         className={cn(
           // Typography
           'text-sm',
           'font-medium',
-          'text-gray-700',
+          'text-[#1d1d1f]',
           // Layout
           'block',
           // Spacing
@@ -51,79 +63,147 @@ export default function ContextSelectorDropdown({
       </label>
 
       <div className="relative">
-        <select
-          id="target-selector"
-          value={value}
-          onChange={(e) => onChange(e.target.value as EnhancementTarget)}
+        <button
+          type="button"
+          onClick={() => !disabled && setIsDropdownOpen(!isDropdownOpen)}
           disabled={disabled}
+          aria-labelledby="target-selector-label"
           aria-describedby="target-helper-text"
+          aria-expanded={isDropdownOpen}
           className={cn(
-            // Sizing
+            // Layout
+            'flex',
+            'items-center',
+            'justify-between',
             'w-full',
             // Spacing
             'px-4',
             'py-3',
-            'pr-10',
             // Typography
-            'text-base',
-            'font-normal',
-            'text-gray-900',
-            // Background - subtle frosted effect
+            'text-[17px]',
+            'font-medium',
+            'text-[#1d1d1f]',
+            // Background
             'bg-white/80',
             'backdrop-blur-sm',
             // Border
             'border',
-            'border-gray-200',
-            'rounded-xl',
-            // Shadow - subtle depth
+            'border-black/[0.08]',
+            'rounded-2xl',
+            // Shadow
             'shadow-sm',
-            // Appearance - hide default arrow
-            'appearance-none',
             // Transition
             'transition-all',
             'duration-200',
             // Focus
             'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-blue-500/40',
-            'focus:border-blue-500',
-            'focus:bg-white',
+            'focus-visible:ring-2',
+            'focus-visible:ring-[#007aff]',
+            'focus-visible:ring-offset-2',
             // Hover
-            'hover:border-gray-300',
-            'hover:bg-white',
+            !disabled && 'hover:border-black/[0.12]',
+            !disabled && 'hover:bg-white',
             // Disabled state
             disabled && 'opacity-50 cursor-not-allowed',
             !disabled && 'cursor-pointer',
           )}
         >
-          {TOOL_CATEGORY_LIST.map(({ value: categoryValue, label }) => (
-            <option key={categoryValue} value={categoryValue}>
-              {label}
-            </option>
-          ))}
-        </select>
-
-        <div
-          className={cn(
-            // Position
-            'absolute',
-            'right-3',
-            'top-1/2',
-            '-translate-y-1/2',
-            // Pointer events - allow clicks to pass through to select
-            'pointer-events-none',
-            // Color
-            'text-gray-400',
-          )}
-        >
-          <SelectorIcon
+          <span className="truncate">{selectedOption?.label}</span>
+          <ChevronIcon
             className={cn(
-              // Sizing
               'w-5',
               'h-5',
+              'text-[#86868b]',
+              'transition-transform',
+              'duration-200',
+              'shrink-0',
+              isDropdownOpen && 'rotate-180',
             )}
           />
-        </div>
+        </button>
+
+        {/* Dropdown Menu */}
+        {isDropdownOpen && !disabled && (
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setIsDropdownOpen(false)}
+              aria-hidden="true"
+            />
+            {/* Menu */}
+            <div
+              className={cn(
+                // Position
+                'absolute',
+                'left-0',
+                'right-0',
+                'top-full',
+                'z-50',
+                // Spacing
+                'mt-2',
+                // Background
+                'bg-white',
+                // Border
+                'border',
+                'border-black/[0.08]',
+                'rounded-2xl',
+                // Shadow
+                'shadow-lg',
+                // Animation
+                'animate-in',
+                'fade-in-0',
+                'zoom-in-95',
+                'slide-in-from-top-2',
+                'duration-200',
+                // Max height with scroll
+                'max-h-[40vh]',
+                'overflow-y-auto',
+              )}
+            >
+              {TOOL_CATEGORY_LIST.map((option, index) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => handleSelect(option.value)}
+                  className={cn(
+                    // Layout
+                    'flex',
+                    'items-center',
+                    'justify-between',
+                    'w-full',
+                    // Size
+                    'min-h-[50px]',
+                    // Spacing
+                    'px-4',
+                    'py-3',
+                    // Typography
+                    'text-[17px]',
+                    'font-medium',
+                    'text-left',
+                    // Border
+                    index < TOOL_CATEGORY_LIST.length - 1 && [
+                      'border-b',
+                      'border-black/[0.08]',
+                    ],
+                    // Hover
+                    'hover:bg-black/[0.04]',
+                    // Transition
+                    'transition-colors',
+                    'duration-150',
+                    // Focus
+                    'focus:outline-none',
+                    'focus-visible:bg-black/[0.04]',
+                  )}
+                >
+                  <span className="truncate text-[#1d1d1f]">
+                    {option.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       <p
@@ -131,8 +211,8 @@ export default function ContextSelectorDropdown({
         className={cn(
           // Typography
           'text-xs',
-          'font-light',
-          'text-gray-500',
+          'font-normal',
+          'text-[#86868b]',
           // Spacing
           'mt-2',
         )}

@@ -159,7 +159,7 @@ export function MobileViewActions({
                 'slide-in-from-top-2',
                 'duration-200',
                 // Max height with scroll
-                'max-h-[60vh]',
+                'max-h-[40vh]',
                 'overflow-y-auto',
               )}
             >
