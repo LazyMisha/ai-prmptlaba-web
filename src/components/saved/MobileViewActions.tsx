@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
-import CreateCollectionButton from '@/components/common/CreateCollectionButton'
+import { Button } from '@/components/common/Button'
+import FolderPlusIcon from '@/components/icons/FolderPlusIcon'
 import { Dropdown } from '@/components/common/Dropdown'
 import SlidersIcon from '@/components/icons/SlidersIcon'
 import ManageCollectionDialog from './ManageCollectionDialog'
@@ -120,11 +121,13 @@ export function MobileViewActions({
       {/* Action buttons */}
       <div className="flex gap-2 mt-3">
         {onCreate && (
-          <CreateCollectionButton
+          <Button
             onClick={onCreate}
-            label={t.create}
+            icon={<FolderPlusIcon className="w-5 h-5" />}
             className="flex-1"
-          />
+          >
+            {t.create}
+          </Button>
         )}
         {(onEdit || onDelete) && collections.length > 0 && (
           <button

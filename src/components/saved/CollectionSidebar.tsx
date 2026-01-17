@@ -3,7 +3,8 @@
 import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
-import CreateCollectionButton from '@/components/common/CreateCollectionButton'
+import { Button } from '@/components/common/Button'
+import FolderPlusIcon from '@/components/icons/FolderPlusIcon'
 import PencilIcon from '@/components/icons/PencilIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
 import { MobileViewActions } from './MobileViewActions'
@@ -300,11 +301,13 @@ export function CollectionSidebar({
 
         {/* Create new collection button */}
         {onCreate && (
-          <CreateCollectionButton
-            label={t.create}
+          <Button
             onClick={onCreate}
+            icon={<FolderPlusIcon className="w-5 h-5" />}
             className="w-full"
-          />
+          >
+            {t.create}
+          </Button>
         )}
       </nav>
     </div>

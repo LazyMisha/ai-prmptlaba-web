@@ -14,7 +14,8 @@ import { showToast } from '@/components/common/Toast'
 import Dialog from '@/components/common/Dialog'
 import CheckIcon from '@/components/icons/CheckIcon'
 import CloseIcon from '@/components/icons/CloseIcon'
-import CreateCollectionButton from '@/components/common/CreateCollectionButton'
+import { Button } from '@/components/common/Button'
+import FolderPlusIcon from '@/components/icons/FolderPlusIcon'
 import CreateCollectionForm from '@/components/common/CreateCollectionForm'
 import FolderIcon from '@/components/icons/FolderIcon'
 import SpinnerIcon from '@/components/icons/SpinnerIcon'
@@ -442,13 +443,15 @@ export default function SaveToCollectionDialog({
             )}
 
             {/* Create new collection button */}
-            <CreateCollectionButton
-              label={t.saveDialog.orCreateNew}
+            <Button
               onClick={() => {
                 setMode('create')
                 modeRef.current = 'create'
               }}
-            />
+              icon={<FolderPlusIcon className="w-5 h-5" />}
+            >
+              {t.saveDialog.orCreateNew}
+            </Button>
           </div>
         ) : (
           /* Create new collection form */
