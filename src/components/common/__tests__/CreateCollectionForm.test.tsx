@@ -231,7 +231,7 @@ describe('CreateCollectionForm', () => {
 
       const input = screen.getByLabelText(/name/i)
 
-      expect(input).toHaveClass('rounded-xl')
+      expect(input).toHaveClass('rounded-2xl')
       expect(input).toHaveClass('px-4')
       expect(input).toHaveClass('py-3')
     })

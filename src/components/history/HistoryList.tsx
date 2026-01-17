@@ -40,17 +40,18 @@ export default function HistoryList() {
       setEntries(history)
     } catch (err) {
       console.error('Failed to load history:', err)
-
       setError(historyT.error)
     } finally {
       setIsLoading(false)
     }
   }
 
-  // Load history entries on mount. React Compiler handles automatic memoization.
+  // Load history entries on mount only.
+  // loadHistory is intentionally excluded - we want to load once on mount,
+  // and the retry button calls loadHistory directly when needed.
   useEffect(() => {
     loadHistory()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional mount-only effect
   }, [])
 
   const handleDelete = async (id: string) => {

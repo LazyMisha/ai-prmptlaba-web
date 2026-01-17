@@ -25,7 +25,7 @@ import MoveToCollectionDialog from './MoveToCollectionDialog'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
 import RenameCollectionDialog from './RenameCollectionDialog'
 import CreateCollectionDialog from './CreateCollectionDialog'
-import { ToastContainer, showToast } from '@/components/common/Toast'
+import { showToast } from '@/components/common/Toast'
 import Loading from '@/components/common/Loading'
 
 /**
@@ -75,6 +75,7 @@ export default function SavedPrompts() {
       ? savedPrompts
       : savedPrompts.filter((p) => p.collectionId === selectedCollectionId)
 
+  // Load data on mount
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -94,8 +95,7 @@ export default function SavedPrompts() {
     }
 
     loadData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [toastT.error.loadFailed])
 
   const handleDeletePrompt = async () => {
     if (!deletePromptId) return
@@ -349,8 +349,6 @@ export default function SavedPrompts() {
         }
         onSelect={handleMovePrompt}
       />
-
-      <ToastContainer />
     </>
   )
 }

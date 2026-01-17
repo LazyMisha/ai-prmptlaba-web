@@ -72,51 +72,51 @@ export default function SaveToCollectionDialog({
   )
   const [nameError, setNameError] = useState<string | null>(null)
 
-  // Load collections when dialog opens
-  const loadCollections = async () => {
-    setIsLoadingCollections(true)
-
-    try {
-      const data = await getAllCollectionsWithCounts()
-
-      // Sort collections by creation date (newest first)
-      const sortedData = data.sort((a, b) => b.createdAt - a.createdAt)
-
-      setCollections(sortedData)
-
-      // Auto-select the default collection for this target if it exists
-      const defaultForTarget = sortedData.find(
-        (c) => c.isDefault && c.name === target,
-      )
-
-      if (defaultForTarget) {
-        setSelectedCollectionId(defaultForTarget.id)
-      } else if (sortedData.length > 0 && sortedData[0]) {
-        setSelectedCollectionId(sortedData[0].id)
-      }
-    } catch (error) {
-      console.error('Failed to load collections:', error)
-
-      showToast('error', t.toast.error.loadCollectionsFailed)
-    } finally {
-      setIsLoadingCollections(false)
-    }
-  }
-
-  // Handle escape key for going back from create to select mode
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape' && modeRef.current === 'create') {
-      event.stopPropagation()
-      setMode('select')
-      modeRef.current = 'select'
-      setNewCollectionName('')
-      setNameError(null)
-    }
-  }
-
   // Load collections and setup escape key listener for mode switching
   useEffect(() => {
     if (isOpen) {
+      // Load collections
+      const loadCollections = async () => {
+        setIsLoadingCollections(true)
+
+        try {
+          const data = await getAllCollectionsWithCounts()
+
+          // Sort collections by creation date (newest first)
+          const sortedData = data.sort((a, b) => b.createdAt - a.createdAt)
+
+          setCollections(sortedData)
+
+          // Auto-select the default collection for this target if it exists
+          const defaultForTarget = sortedData.find(
+            (c) => c.isDefault && c.name === target,
+          )
+
+          if (defaultForTarget) {
+            setSelectedCollectionId(defaultForTarget.id)
+          } else if (sortedData.length > 0 && sortedData[0]) {
+            setSelectedCollectionId(sortedData[0].id)
+          }
+        } catch (error) {
+          console.error('Failed to load collections:', error)
+
+          showToast('error', t.toast.error.loadCollectionsFailed)
+        } finally {
+          setIsLoadingCollections(false)
+        }
+      }
+
+      // Handle escape key for going back from create to select mode
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape' && modeRef.current === 'create') {
+          event.stopPropagation()
+          setMode('select')
+          modeRef.current = 'select'
+          setNewCollectionName('')
+          setNameError(null)
+        }
+      }
+
       loadCollections()
       document.addEventListener('keydown', handleKeyDown)
 
@@ -132,8 +132,7 @@ export default function SaveToCollectionDialog({
       setNewCollectionColor(DEFAULT_COLLECTION_COLOR as CollectionColor)
       setNameError(null)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen])
+  }, [isOpen, target, t.toast.error.loadCollectionsFailed])
 
   // Handle saving to selected collection
   const handleSaveToCollection = async () => {

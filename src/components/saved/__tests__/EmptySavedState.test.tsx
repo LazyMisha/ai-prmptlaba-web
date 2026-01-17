@@ -71,7 +71,7 @@ describe('EmptySavedState', () => {
       render(<EmptySavedState />)
 
       const link = screen.getByRole('link', { name: /start enhancing/i })
-      expect(link).toHaveClass('bg-[#007aff]', 'text-white', 'rounded-xl')
+      expect(link).toHaveClass('bg-[#007aff]', 'text-white', 'rounded-2xl')
     })
 
     it('has minimum touch target size for the CTA', () => {

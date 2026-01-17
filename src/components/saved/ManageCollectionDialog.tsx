@@ -132,7 +132,7 @@ export default function ManageCollectionDialog({
                       aria-label={`Rename ${collection.name}`}
                       className={cn(
                         'p-2.5',
-                        'rounded-xl',
+                        'rounded-2xl',
                         'text-gray-500',
                         'hover:text-[#007aff]',
                         'hover:bg-[#007aff]/10',
@@ -156,7 +156,7 @@ export default function ManageCollectionDialog({
                       aria-label={`Delete ${collection.name}`}
                       className={cn(
                         'p-2.5',
-                        'rounded-xl',
+                        'rounded-2xl',
                         'text-gray-500',
                         'hover:text-[#ff3b30]',
                         'hover:bg-[#ff3b30]/10',

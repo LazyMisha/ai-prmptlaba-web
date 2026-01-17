@@ -161,7 +161,7 @@ describe('LanguageSwitcher', () => {
 
       const dropdown = screen.getByRole('listbox')
       expect(dropdown).toHaveClass('bg-white')
-      expect(dropdown).toHaveClass('rounded-xl')
+      expect(dropdown).toHaveClass('rounded-2xl')
       expect(dropdown).toHaveClass('shadow-lg')
     })
 

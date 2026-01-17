@@ -197,7 +197,7 @@ export function LanguageSwitcher({
             'border',
             'border-black/[0.08]',
             // Border radius
-            'rounded-xl',
+            'rounded-2xl',
             // Shadow
             'shadow-lg',
             // Padding

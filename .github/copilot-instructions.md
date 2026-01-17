@@ -162,23 +162,23 @@ Check `README.md` for authoritative project structure before implementing featur
 
 **Design Tokens (MUST USE):**
 
-| Token             | Value                                                             |
-| ----------------- | ----------------------------------------------------------------- |
-| Primary text      | `text-[#1d1d1f]`                                                  |
-| Secondary text    | `text-[#86868b]`                                                  |
-| Blue (primary)    | `bg-[#007aff]` / `hover:bg-[#0071e3]`                             |
-| Red (destructive) | `bg-[#ff3b30]`                                                    |
-| Green (success)   | `bg-[#34c759]`                                                    |
-| Borders           | `border-black/[0.08]` or `border-black/[0.12]`                    |
-| Body text         | `text-[17px] tracking-[-0.01em]`                                  |
-| Border radius     | Cards: `rounded-2xl` / Buttons: `rounded-xl` / Tags: `rounded-lg` |
-| Transitions       | `duration-200 ease-out` or `duration-300 ease-out`                |
+| Token             | Value                                                              |
+| ----------------- | ------------------------------------------------------------------ |
+| Primary text      | `text-[#1d1d1f]`                                                   |
+| Secondary text    | `text-[#86868b]`                                                   |
+| Blue (primary)    | `bg-[#007aff]` / `hover:bg-[#0071e3]`                              |
+| Red (destructive) | `bg-[#ff3b30]`                                                     |
+| Green (success)   | `bg-[#34c759]`                                                     |
+| Borders           | `border-black/[0.08]` or `border-black/[0.12]`                     |
+| Body text         | `text-[17px] tracking-[-0.01em]`                                   |
+| Border radius     | Cards: `rounded-2xl` / Buttons: `rounded-2xl` / Tags: `rounded-lg` |
+| Transitions       | `duration-200 ease-out` or `duration-300 ease-out`                 |
 
 **Button Pattern:**
 
 ```tsx
 className={cn(
-  'bg-[#007aff] text-white rounded-xl px-7 py-3.5',
+  'bg-[#007aff] text-white rounded-2xl px-7 py-3.5',
   'text-[17px] font-semibold min-h-[50px]',
   'hover:bg-[#0071e3] active:opacity-80 active:scale-[0.98]',
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007aff] focus-visible:ring-offset-2'
@@ -232,21 +232,37 @@ className={cn(
 
 ```typescript
 import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
 
-const schema = z.object({
-  prompt: z.string().min(1).max(2000),
-})
+interface RequestBody {
+  target: string
+  prompt: string
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const validated = schema.parse(await req.json())
-    const result = await processData(validated)
+    const body: RequestBody = await req.json()
+
+    // Validate required fields
+    if (!body.target || typeof body.target !== 'string') {
+      return NextResponse.json(
+        { error: 'Missing or invalid "target" field' },
+        { status: 400 },
+      )
+    }
+
+    if (!body.prompt || typeof body.prompt !== 'string') {
+      return NextResponse.json(
+        { error: 'Missing or invalid "prompt" field' },
+        { status: 400 },
+      )
+    }
+
+    const result = await processData(body)
     return NextResponse.json({ data: result }, { status: 201 })
   } catch (err) {
-    if (err instanceof z.ZodError) {
+    if (err instanceof SyntaxError) {
       return NextResponse.json(
-        { error: 'Validation failed', details: err.errors },
+        { error: 'Invalid JSON in request body' },
         { status: 400 },
       )
     }

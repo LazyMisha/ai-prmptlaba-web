@@ -102,7 +102,7 @@ describe('SaveToCollectionDialog', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByRole('button', { name: /save to selected/i }),
+          screen.getByRole('button', { name: /save to collection/i }),
         ).toBeInTheDocument()
       })
     })
@@ -115,7 +115,7 @@ describe('SaveToCollectionDialog', () => {
       })
 
       const createButton = screen.getByRole('button', {
-        name: /or create a new one/i,
+        name: /create new collection/i,
       })
       fireEvent.click(createButton)
 
@@ -134,7 +134,7 @@ describe('SaveToCollectionDialog', () => {
       })
 
       fireEvent.click(
-        screen.getByRole('button', { name: /or create a new one/i }),
+        screen.getByRole('button', { name: /create new collection/i }),
       )
 
       await waitFor(() => {
@@ -151,7 +151,7 @@ describe('SaveToCollectionDialog', () => {
       })
 
       fireEvent.click(
-        screen.getByRole('button', { name: /or create a new one/i }),
+        screen.getByRole('button', { name: /create new collection/i }),
       )
 
       await waitFor(() => {

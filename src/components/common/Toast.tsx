@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
 import CheckIcon from '@/components/icons/CheckIcon'
@@ -44,13 +44,12 @@ function getServerMountedSnapshot() {
 function ToastItem({ toast, onDismiss }: ToastItemProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [isLeaving, setIsLeaving] = useState(false)
+  const onDismissRef = useRef(onDismiss)
 
-  const handleDismiss = () => {
-    setIsLeaving(true)
-    setTimeout(() => {
-      onDismiss(toast.id)
-    }, 200) // Match animation duration
-  }
+  // Keep ref in sync with latest onDismiss
+  useEffect(() => {
+    onDismissRef.current = onDismiss
+  }, [onDismiss])
 
   useEffect(() => {
     // Trigger enter animation
@@ -59,15 +58,24 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
     // Auto-dismiss after duration
     const duration = toast.duration ?? 3000
     const dismissTimer = setTimeout(() => {
-      handleDismiss()
+      setIsLeaving(true)
+      setTimeout(() => {
+        onDismissRef.current(toast.id)
+      }, 200) // Match animation duration
     }, duration)
 
     return () => {
       clearTimeout(enterTimer)
       clearTimeout(dismissTimer)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toast.duration])
+  }, [toast.duration, toast.id])
+
+  const handleDismiss = () => {
+    setIsLeaving(true)
+    setTimeout(() => {
+      onDismiss(toast.id)
+    }, 200) // Match animation duration
+  }
 
   const iconMap = {
     success: (
@@ -100,7 +108,7 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
         // Background
         bgColorMap[toast.type],
         // Border
-        'rounded-xl',
+        'rounded-2xl',
         // Shadow
         'shadow-lg',
         // Animation

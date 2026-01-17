@@ -120,7 +120,7 @@ export function EmptyState({
           'bg-[#007aff]',
           'text-white',
           // Effects
-          'rounded-xl',
+          'rounded-2xl',
           // Transitions
           'transition-all',
           'duration-200',
