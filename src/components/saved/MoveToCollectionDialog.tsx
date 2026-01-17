@@ -5,6 +5,7 @@ import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
 import Dialog from '@/components/common/Dialog'
 import CloseIcon from '@/components/icons/CloseIcon'
+import { Button } from '@/components/common/Button'
 
 interface MoveToCollectionDialogProps {
   /** Whether the sheet is open */
@@ -43,8 +44,7 @@ export default function MoveToCollectionDialog({
           'items-center',
           'justify-between',
           'px-6',
-          'pt-5',
-          'pb-4',
+          'min-h-[50px]',
           'border-b',
           'border-gray-100',
         )}
@@ -166,29 +166,20 @@ export default function MoveToCollectionDialog({
           'rounded-b-2xl',
         )}
       >
-        <button
-          type="button"
+        <Button
           onClick={onClose}
           className={cn(
             'w-full',
-            'px-5',
-            'py-3',
-            'text-[15px]',
-            'font-medium',
+            'bg-white',
             'text-[#86868b]',
-            'rounded-xl',
             'border',
             'border-black/[0.08]',
-            'hover:bg-white',
+            'hover:bg-gray-50',
             'active:bg-gray-100',
-            'transition-colors',
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
           )}
         >
           {actionsT.cancel}
-        </button>
+        </Button>
       </div>
     </Dialog>
   )

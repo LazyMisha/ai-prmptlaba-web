@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
 import Dialog from '@/components/common/Dialog'
 import CloseIcon from '@/components/icons/CloseIcon'
+import { Button } from '@/components/common/Button'
 
 interface RenameCollectionDialogProps {
   // Current value of the collection name input
@@ -39,8 +40,7 @@ const RenameCollectionDialog = ({
           'items-center',
           'justify-between',
           'px-6',
-          'pt-5',
-          'pb-4',
+          'min-h-[50px]',
           'border-b',
           'border-gray-100',
         )}
@@ -80,10 +80,11 @@ const RenameCollectionDialog = ({
             'w-full',
             'px-4',
             'py-3',
+            'min-h-[50px]',
             'text-[17px]',
             'border',
             'border-black/[0.12]',
-            'rounded-xl',
+            'rounded-2xl',
             'focus:outline-none',
             'focus:ring-2',
             'focus:ring-[#007aff]',
@@ -110,55 +111,27 @@ const RenameCollectionDialog = ({
           'rounded-b-2xl',
         )}
       >
-        <button
-          type="button"
+        <Button
           onClick={() => setRenameCollectionId(null)}
           className={cn(
             'flex-1',
-            'px-5',
-            'py-2.5',
-            'text-[15px]',
-            'font-medium',
+            'bg-white',
             'text-[#86868b]',
-            'rounded-xl',
             'border',
             'border-black/[0.08]',
-            'hover:bg-white',
+            'hover:bg-gray-50',
             'active:bg-gray-100',
-            'transition-colors',
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
           )}
         >
           {actionsT.cancel}
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
           onClick={handleRenameCollection}
           disabled={!renameValue.trim()}
-          className={cn(
-            'flex-1',
-            'px-5',
-            'py-2.5',
-            'text-[15px]',
-            'font-semibold',
-            'text-white',
-            'bg-[#007aff]',
-            'rounded-xl',
-            'hover:bg-[#0071e3]',
-            'active:opacity-80',
-            'transition-colors',
-            'disabled:opacity-50',
-            'disabled:cursor-not-allowed',
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
-            'focus-visible:ring-offset-2',
-          )}
+          className="flex-1"
         >
           {actionsT.save}
-        </button>
+        </Button>
       </div>
     </Dialog>
   )
