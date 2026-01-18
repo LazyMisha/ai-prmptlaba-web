@@ -124,7 +124,7 @@ export function MobileViewActions({
       />
 
       {/* Action buttons */}
-      <div className="flex gap-2 mt-3">
+      <div className="flex gap-2 mt-4">
         {onCreate && (
           <Button
             onClick={onCreate}

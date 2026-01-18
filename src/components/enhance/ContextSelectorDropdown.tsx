@@ -45,9 +45,17 @@ export default function ContextSelectorDropdown({
   }
 
   return (
-    <div className={className}>
+    <div
+      className={cn(
+        // Layout
+        'flex',
+        'flex-col',
+        // Spacing
+        'gap-1',
+      )}
+    >
       <label
-        id="target-selector-label"
+        htmlFor="target-selector-dropdown"
         className={cn(
           // Typography
           'text-sm',
@@ -55,13 +63,10 @@ export default function ContextSelectorDropdown({
           'text-[#1d1d1f]',
           // Layout
           'block',
-          // Spacing
-          'mb-2',
         )}
       >
         {label}
       </label>
-
       <Dropdown
         isOpen={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
@@ -69,12 +74,12 @@ export default function ContextSelectorDropdown({
         disabled={disabled}
         items={TOOL_CATEGORY_LIST}
         ariaLabel={label}
+        id="target-selector-dropdown"
         onSelectItem={(option) => handleSelect(option.value)}
         renderItem={(option) => (
           <span className="truncate text-[#1d1d1f]">{option.label}</span>
         )}
       />
-
       <p
         id="target-helper-text"
         className={cn(
@@ -82,8 +87,6 @@ export default function ContextSelectorDropdown({
           'text-xs',
           'font-normal',
           'text-[#86868b]',
-          // Spacing
-          'mt-2',
         )}
       >
         {helperText}

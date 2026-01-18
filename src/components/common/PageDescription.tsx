@@ -49,6 +49,8 @@ export function PageDescription({
         'text-pretty',
         // Rendering
         'antialiased',
+        // Margin 0
+        'm-0',
         // Custom classes
         className,
       )}

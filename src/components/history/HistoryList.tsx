@@ -151,7 +151,7 @@ export default function HistoryList() {
         'flex',
         'flex-col',
         // Spacing
-        'gap-6',
+        'gap-4',
       )}
     >
       {/* Header with clear button */}
@@ -187,7 +187,6 @@ export default function HistoryList() {
             'hover:text-[#ff3b30]',
             // Spacing
             'px-4',
-            'py-2',
             // Effects
             'transition-colors',
             'duration-200',

@@ -25,6 +25,8 @@ export function PageContainer({
         // Flex
         'flex',
         'flex-col',
+        // Space
+        'gap-4',
         // Fill parent height
         'flex-1',
         // Width - full width with constraint

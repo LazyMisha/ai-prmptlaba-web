@@ -148,9 +148,18 @@ export default function EnhanceForm() {
   }
 
   return (
-    <div>
+    <>
       {/* Input Form */}
       <form
+        className={cn(
+          // Layout
+          'flex',
+          'flex-col',
+          // Spacing
+          'gap-4',
+          // Spaceing
+          'm-0',
+        )}
         onSubmit={(e) => {
           e.preventDefault()
           handleEnhance()
@@ -163,18 +172,14 @@ export default function EnhanceForm() {
           disabled={isLoading}
           label={t.form.targetLabel}
           helperText={t.form.targetHelperText}
-          className="mb-4"
         />
-
         <PromptInput
           value={prompt}
           onChange={setPrompt}
           disabled={isLoading}
           error={error && !enhanced ? error : null}
           onKeyDown={handleKeyDown}
-          className="mb-4"
         />
-
         <Button
           onClick={handleEnhance}
           disabled={!prompt.trim() || prompt.length < 3 || prompt.length > 2000}
@@ -187,11 +192,7 @@ export default function EnhanceForm() {
 
       {/* Result Display */}
       {enhanced && (
-        <div
-          ref={resultRef}
-          tabIndex={-1}
-          className={cn('focus:outline-none', 'mt-6')}
-        >
+        <div ref={resultRef} tabIndex={-1} className={cn('focus:outline-none')}>
           <PromptCard originalPrompt={prompt} enhancedPrompt={enhanced}>
             <PromptCardHeader
               LeftSideComponent={<EnhanceResultInfo />}
@@ -206,6 +207,6 @@ export default function EnhanceForm() {
           </PromptCard>
         </div>
       )}
-    </div>
+    </>
   )
 }

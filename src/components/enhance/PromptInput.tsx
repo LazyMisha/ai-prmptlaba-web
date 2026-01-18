@@ -40,7 +40,16 @@ export default function PromptInput({
   const hasError = error || isOverMaximum
 
   return (
-    <div className={className}>
+    <div
+      className={cn(
+        // Layout
+        'flex',
+        'flex-col',
+        // Spacing
+        'gap-1',
+        className,
+      )}
+    >
       <label
         htmlFor="prompt-input"
         className={cn(
@@ -50,13 +59,10 @@ export default function PromptInput({
           'text-gray-700',
           // Layout
           'block',
-          // Spacing
-          'mb-2',
         )}
       >
         {t.promptLabel}
       </label>
-
       <textarea
         id="prompt-input"
         value={value}
@@ -116,8 +122,6 @@ export default function PromptInput({
           'flex',
           'justify-between',
           'items-center',
-          // Spacing
-          'mt-2',
           // Typography
           'text-xs',
           'font-light',
@@ -139,7 +143,6 @@ export default function PromptInput({
               ? `${charCount - maxChars} ${t.overLimit}`
               : t.helperText}
         </span>
-
         <span
           id="prompt-char-count"
           aria-live="polite"
@@ -152,15 +155,12 @@ export default function PromptInput({
           {charCount.toLocaleString()} / {maxChars.toLocaleString()}
         </span>
       </div>
-
       {/* Error message */}
       {error && (
         <p
           id="prompt-error"
           role="alert"
           className={cn(
-            // Spacing
-            'mt-2',
             // Typography
             'text-sm',
             'font-light',

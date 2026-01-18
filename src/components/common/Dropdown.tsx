@@ -22,6 +22,8 @@ interface DropdownProps<T> {
   renderItem: (item: T, index: number) => React.ReactNode
   /** Aria label for the trigger button */
   ariaLabel?: string
+  /** ID for the trigger button (for label association) */
+  id?: string
   /** Additional CSS classes for the trigger */
   triggerClassName?: string
   /** Additional CSS classes for the dropdown menu */
@@ -42,6 +44,7 @@ export function Dropdown<T>({
   onSelectItem,
   renderItem,
   ariaLabel,
+  id,
   triggerClassName,
   menuClassName,
 }: DropdownProps<T>) {
@@ -60,6 +63,7 @@ export function Dropdown<T>({
         disabled={disabled}
         aria-label={ariaLabel}
         aria-expanded={isOpen}
+        id={id}
         className={cn(
           // Layout
           'flex',

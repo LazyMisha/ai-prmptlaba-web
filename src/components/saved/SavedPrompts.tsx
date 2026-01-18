@@ -225,14 +225,12 @@ export default function SavedPrompts() {
 
   return (
     <>
-      <div className={cn('flex', 'flex-col', 'md:flex-row', 'md:gap-8')}>
+      <div className={cn('flex', 'flex-col', 'md:flex-row', 'gap-4')}>
         <aside
           className={cn(
             'w-full',
-            'mb-6',
             'md:w-[280px]',
             'md:shrink-0',
-            'md:mb-0',
             'md:sticky',
             'md:top-4',
             'md:self-start',
