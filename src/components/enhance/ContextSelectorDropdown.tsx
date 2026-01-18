@@ -52,6 +52,8 @@ export default function ContextSelectorDropdown({
         'flex-col',
         // Spacing
         'gap-1',
+        // Custom classes
+        className,
       )}
     >
       <label
