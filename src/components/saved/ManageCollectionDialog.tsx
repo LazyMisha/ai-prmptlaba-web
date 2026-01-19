@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
 import Dialog from '@/components/common/Dialog'
-import CloseIcon from '@/components/icons/CloseIcon'
+import DialogHeader from '@/components/common/Dialog/DialogHeader'
 import PencilIcon from '@/components/icons/PencilIcon'
 import TrashIcon from '@/components/icons/TrashIcon'
 
@@ -34,42 +34,7 @@ export default function ManageCollectionDialog({
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
-      {/* Header */}
-      <div
-        className={cn(
-          'flex',
-          'items-center',
-          'justify-between',
-          'px-6',
-          'pt-5',
-          'pb-4',
-          'border-b',
-          'border-gray-100',
-        )}
-      >
-        <h2 className={cn('text-lg', 'font-semibold', 'text-gray-900')}>
-          {t.manageTitle}
-        </h2>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className={cn(
-            'p-2',
-            '-mr-2',
-            'rounded-full',
-            'text-gray-400',
-            'hover:text-gray-600',
-            'hover:bg-gray-100',
-            'transition-colors',
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
-          )}
-        >
-          <CloseIcon className="w-5 h-5" />
-        </button>
-      </div>
+      <DialogHeader title={t.manageTitle} onClose={onClose} />
 
       {/* Content */}
       <div className={cn('max-h-[400px]', 'overflow-y-auto')}>

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import Dialog from '../Dialog'
+import Dialog from '../index'
 
 describe('Dialog', () => {
   const mockOnClose = jest.fn()

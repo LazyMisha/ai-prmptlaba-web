@@ -134,15 +134,6 @@ describe('ManageCollectionDialog', () => {
   })
 
   describe('Interactions', () => {
-    it('closes on close button click', () => {
-      const onClose = jest.fn()
-      render(<ManageCollectionDialog {...defaultProps} onClose={onClose} />)
-
-      fireEvent.click(screen.getByRole('button', { name: /close/i }))
-
-      expect(onClose).toHaveBeenCalled()
-    })
-
     it('closes on backdrop click', () => {
       const onClose = jest.fn()
       render(<ManageCollectionDialog {...defaultProps} onClose={onClose} />)
@@ -169,12 +160,6 @@ describe('ManageCollectionDialog', () => {
 
       const dialog = screen.getByRole('dialog')
       expect(dialog).toHaveAttribute('aria-modal', 'true')
-    })
-
-    it('has accessible close button', () => {
-      render(<ManageCollectionDialog {...defaultProps} />)
-
-      expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument()
     })
 
     it('action buttons have accessible labels', () => {

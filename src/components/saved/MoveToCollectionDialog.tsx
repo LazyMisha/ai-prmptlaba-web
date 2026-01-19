@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
 import type { Collection } from '@/types/saved-prompts'
 import Dialog from '@/components/common/Dialog'
-import CloseIcon from '@/components/icons/CloseIcon'
+import DialogHeader from '@/components/common/Dialog/DialogHeader'
 import { Button } from '@/components/common/Button'
 
 interface MoveToCollectionDialogProps {
@@ -37,41 +37,7 @@ export default function MoveToCollectionDialog({
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
-      {/* Header */}
-      <div
-        className={cn(
-          'flex',
-          'items-center',
-          'justify-between',
-          'px-6',
-          'min-h-[50px]',
-          'border-b',
-          'border-gray-100',
-        )}
-      >
-        <h2 className={cn('text-lg', 'font-semibold', 'text-gray-900')}>
-          {promptsT.move}
-        </h2>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className={cn(
-            'p-2',
-            '-mr-2',
-            'rounded-full',
-            'text-gray-400',
-            'hover:text-gray-600',
-            'hover:bg-gray-100',
-            'transition-colors',
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
-          )}
-        >
-          <CloseIcon className="w-5 h-5" />
-        </button>
-      </div>
+      <DialogHeader title={promptsT.move} onClose={onClose} />
 
       {/* Content */}
       <div className={cn('max-h-[400px]', 'overflow-y-auto')}>

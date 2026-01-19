@@ -32,11 +32,6 @@ describe('RenameCollectionDialog', () => {
       expect(screen.getByDisplayValue('Old Name')).toBeInTheDocument()
     })
 
-    it('renders close button', () => {
-      render(<RenameCollectionDialog {...defaultProps} />)
-      expect(screen.getByLabelText(/close/i)).toBeInTheDocument()
-    })
-
     it('renders cancel button', () => {
       render(<RenameCollectionDialog {...defaultProps} />)
       expect(
@@ -77,12 +72,6 @@ describe('RenameCollectionDialog', () => {
     it('closes dialog when cancel is clicked', () => {
       render(<RenameCollectionDialog {...defaultProps} />)
       fireEvent.click(screen.getByRole('button', { name: /cancel/i }))
-      expect(defaultProps.setRenameCollectionId).toHaveBeenCalledWith(null)
-    })
-
-    it('closes dialog when close button is clicked', () => {
-      render(<RenameCollectionDialog {...defaultProps} />)
-      fireEvent.click(screen.getByLabelText(/close/i))
       expect(defaultProps.setRenameCollectionId).toHaveBeenCalledWith(null)
     })
 

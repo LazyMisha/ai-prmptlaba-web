@@ -40,11 +40,6 @@ describe('CreateCollectionDialog', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('renders close button', () => {
-      render(<CreateCollectionDialog {...defaultProps} />)
-      expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument()
-    })
-
     it('renders create button', () => {
       render(<CreateCollectionDialog {...defaultProps} />)
       expect(

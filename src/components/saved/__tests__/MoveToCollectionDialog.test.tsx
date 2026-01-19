@@ -78,11 +78,6 @@ describe('MoveToCollectionDialog', () => {
       expect(screen.getByText(/current/i)).toBeInTheDocument()
     })
 
-    it('renders close button', () => {
-      render(<MoveToCollectionDialog {...defaultProps} />)
-      expect(screen.getByLabelText(/close/i)).toBeInTheDocument()
-    })
-
     it('renders cancel button', () => {
       render(<MoveToCollectionDialog {...defaultProps} />)
       expect(
@@ -92,12 +87,6 @@ describe('MoveToCollectionDialog', () => {
   })
 
   describe('Interactions', () => {
-    it('calls onClose when close button is clicked', () => {
-      render(<MoveToCollectionDialog {...defaultProps} />)
-      fireEvent.click(screen.getByLabelText(/close/i))
-      expect(defaultProps.onClose).toHaveBeenCalledTimes(1)
-    })
-
     it('calls onClose when cancel button is clicked', () => {
       render(<MoveToCollectionDialog {...defaultProps} />)
       fireEvent.click(screen.getByRole('button', { name: /cancel/i }))

@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
 import Dialog from '@/components/common/Dialog'
-import CloseIcon from '@/components/icons/CloseIcon'
+import DialogHeader from '@/components/common/Dialog/DialogHeader'
 import { Button } from '@/components/common/Button'
 
 interface RenameCollectionDialogProps {
@@ -33,41 +33,10 @@ const RenameCollectionDialog = ({
       isOpen={!!renameCollectionId}
       onClose={() => setRenameCollectionId(null)}
     >
-      {/* Header */}
-      <div
-        className={cn(
-          'flex',
-          'items-center',
-          'justify-between',
-          'px-6',
-          'min-h-[50px]',
-          'border-b',
-          'border-gray-100',
-        )}
-      >
-        <h2 className={cn('text-lg', 'font-semibold', 'text-gray-900')}>
-          {savedT.collections.rename}
-        </h2>
-        <button
-          type="button"
-          onClick={() => setRenameCollectionId(null)}
-          aria-label="Close"
-          className={cn(
-            'p-2',
-            '-mr-2',
-            'rounded-full',
-            'text-gray-400',
-            'hover:text-gray-600',
-            'hover:bg-gray-100',
-            'transition-colors',
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
-          )}
-        >
-          <CloseIcon className="w-5 h-5" />
-        </button>
-      </div>
+      <DialogHeader
+        title={savedT.collections.rename}
+        onClose={() => setRenameCollectionId(null)}
+      />
 
       {/* Content */}
       <div className={cn('px-6', 'py-4')}>

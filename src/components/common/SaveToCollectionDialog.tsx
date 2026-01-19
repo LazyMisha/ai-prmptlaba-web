@@ -12,8 +12,8 @@ import {
 } from '@/lib/db/saved-prompts'
 import { showToast } from '@/components/common/Toast'
 import Dialog from '@/components/common/Dialog'
+import DialogHeader from '@/components/common/Dialog/DialogHeader'
 import CheckIcon from '@/components/icons/CheckIcon'
-import CloseIcon from '@/components/icons/CloseIcon'
 import { Button } from '@/components/common/Button'
 import FolderPlusIcon from '@/components/icons/FolderPlusIcon'
 import CreateCollectionForm from '@/components/common/CreateCollectionForm'
@@ -251,46 +251,16 @@ export default function SaveToCollectionDialog({
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
-      {/* Header */}
-      <div
-        className={cn(
-          'flex',
-          'items-center',
-          'justify-between',
-          'px-6',
-          'min-h-[50px]',
-          'border-b',
-          'border-gray-100',
-        )}
-      >
-        <h2
-          id="save-dialog-title"
-          className={cn('text-lg', 'font-semibold', 'text-gray-900')}
-        >
-          {mode === 'select'
+      <DialogHeader
+        title={
+          mode === 'select'
             ? t.saveDialog.title
-            : t.saveDialog.newCollectionTitle}
-        </h2>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label={t.saveDialog.closeDialog}
-          className={cn(
-            'p-2',
-            '-mr-2',
-            'rounded-full',
-            'text-gray-400',
-            'hover:text-gray-600',
-            'hover:bg-gray-100',
-            'transition-colors',
-            'focus:outline-none',
-            'focus-visible:ring-2',
-            'focus-visible:ring-[#007aff]',
-          )}
-        >
-          <CloseIcon className="w-5 h-5" />
-        </button>
-      </div>
+            : t.saveDialog.newCollectionTitle
+        }
+        onClose={onClose}
+        titleId="save-dialog-title"
+        closeLabel={t.saveDialog.closeDialog}
+      />
 
       {/* Content */}
       <div className={cn('flex', 'flex-col', 'flex-1', 'min-h-0')}>
