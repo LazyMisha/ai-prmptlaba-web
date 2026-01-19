@@ -1,3 +1,5 @@
+'use client'
+
 import { cn } from '@/lib/utils'
 import CheckIcon from '@/components/icons/CheckIcon'
 import CopyIcon from '@/components/icons/CopyIcon'
