@@ -9,7 +9,7 @@ interface DropdownProps<T> {
   /** Callback when open state changes */
   onOpenChange: (isOpen: boolean) => void
   /** Display text for the trigger button */
-  triggerText: string
+  triggerText: React.ReactNode
   /** Optional element to display before the trigger text */
   triggerPrefix?: React.ReactNode
   /** Whether the dropdown is disabled */

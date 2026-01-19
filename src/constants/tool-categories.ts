@@ -22,9 +22,8 @@ export type ToolCategory =
 export const TOOL_CATEGORY_NAMES: Record<ToolCategory, string> = {
   [TOOL_CATEGORIES.IMAGE_GENERATOR]: 'Image',
   [TOOL_CATEGORIES.VIDEO_GENERATOR]: 'Video',
-  [TOOL_CATEGORIES.TEXT_GENERATOR]: 'Text',
-  [TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT]:
-    'Software Development Assistant',
+  [TOOL_CATEGORIES.TEXT_GENERATOR]: 'Chat & Writing',
+  [TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT]: 'Code',
   [TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR]: 'LinkedIn Post',
   [TOOL_CATEGORIES.FACEBOOK_POST_CREATOR]: 'Facebook Post',
   [TOOL_CATEGORIES.TWITTER_POST_CREATOR]: 'Twitter (X) Post',
@@ -33,48 +32,42 @@ export const TOOL_CATEGORY_NAMES: Record<ToolCategory, string> = {
 }
 
 /**
+ * Detailed descriptions for tool categories with example tools
+ */
+export const TOOL_CATEGORY_DESCRIPTIONS: Record<ToolCategory, string> = {
+  [TOOL_CATEGORIES.IMAGE_GENERATOR]:
+    '(Nano Banana, Midjourney, Stable Diffusion, DALL·E 3, Flux, Leonardo AI, Ideogram, Niji, etc.)',
+  [TOOL_CATEGORIES.VIDEO_GENERATOR]:
+    '(Sora, Runway, Luma, Kling, Pika, Haiper, etc.)',
+  [TOOL_CATEGORIES.TEXT_GENERATOR]: '(ChatGPT, Gemini, Claude, DeepSeek, etc.)',
+  [TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT]:
+    '(GitHub Copilot, Cursor, Windsurf, Codeium, etc.)',
+  [TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR]: '(Professional LinkedIn post)',
+  [TOOL_CATEGORIES.FACEBOOK_POST_CREATOR]: '(Create engaging Facebook post)',
+  [TOOL_CATEGORIES.TWITTER_POST_CREATOR]: '(Compose catchy Twitter (X) tweet)',
+  [TOOL_CATEGORIES.INSTAGRAM_POST_GENERATOR]:
+    '(Write compelling Instagram captions with hashtags)',
+  [TOOL_CATEGORIES.GENERAL]: '(ChatGPT, Gemini, Claude, etc.)',
+}
+
+/**
  * Ordered list of tool categories for UI display
  */
-export const TOOL_CATEGORY_LIST: Array<{ value: ToolCategory; label: string }> =
-  [
-    {
-      value: TOOL_CATEGORIES.GENERAL,
-      label: TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.GENERAL],
-    },
-    {
-      value: TOOL_CATEGORIES.IMAGE_GENERATOR,
-      label: TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.IMAGE_GENERATOR],
-    },
-    {
-      value: TOOL_CATEGORIES.VIDEO_GENERATOR,
-      label: TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.VIDEO_GENERATOR],
-    },
-    {
-      value: TOOL_CATEGORIES.TEXT_GENERATOR,
-      label: TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.TEXT_GENERATOR],
-    },
-    {
-      value: TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT,
-      label:
-        TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.SOFTWARE_DEVELOPMENT_ASSISTANT],
-    },
-    {
-      value: TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR,
-      label: TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.LINKEDIN_POST_GENERATOR],
-    },
-    {
-      value: TOOL_CATEGORIES.FACEBOOK_POST_CREATOR,
-      label: TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.FACEBOOK_POST_CREATOR],
-    },
-    {
-      value: TOOL_CATEGORIES.TWITTER_POST_CREATOR,
-      label: TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.TWITTER_POST_CREATOR],
-    },
-    {
-      value: TOOL_CATEGORIES.INSTAGRAM_POST_GENERATOR,
-      label: TOOL_CATEGORY_NAMES[TOOL_CATEGORIES.INSTAGRAM_POST_GENERATOR],
-    },
-  ]
+export const TOOL_CATEGORY_LIST: Array<{
+  value: ToolCategory
+  label: string
+  description: string
+}> = (Object.keys(TOOL_CATEGORIES) as Array<keyof typeof TOOL_CATEGORIES>).map(
+  (key) => {
+    const value = TOOL_CATEGORIES[key]
+
+    return {
+      value,
+      label: TOOL_CATEGORY_NAMES[value],
+      description: TOOL_CATEGORY_DESCRIPTIONS[value],
+    }
+  },
+)
 
 /**
  * Resolve a tool name to its category

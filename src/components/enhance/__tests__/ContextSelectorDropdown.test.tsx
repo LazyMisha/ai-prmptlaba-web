@@ -17,9 +17,9 @@ describe('ContextSelectorDropdown', () => {
     render(<ContextSelectorDropdown {...defaultProps} />)
 
     expect(screen.getByText('Target Platform')).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', { name: /target platform/i }),
-    ).toHaveTextContent('General')
+    const button = screen.getByRole('button', { name: /target platform/i })
+    expect(button).toHaveTextContent('General')
+    expect(button).toHaveTextContent('(ChatGPT, Gemini, Claude, etc.)')
   })
 
   it('calls onChange when selection changes', async () => {
@@ -28,11 +28,17 @@ describe('ContextSelectorDropdown', () => {
     const button = screen.getByRole('button', { name: /target platform/i })
     fireEvent.click(button)
 
+    // Wait for dropdown to open and show options with descriptions
     await waitFor(() => {
       expect(screen.getByText('Image')).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByText('Image'))
+    // Click on the Image option button (dropdown item)
+    const dropdownButtons = screen.getAllByRole('button')
+    const imageButton = dropdownButtons.find((btn) =>
+      btn.textContent?.includes('Image'),
+    )
+    fireEvent.click(imageButton!)
 
     expect(defaultProps.onChange).toHaveBeenCalledWith(
       TOOL_CATEGORIES.IMAGE_GENERATOR,
@@ -71,5 +77,46 @@ describe('ContextSelectorDropdown', () => {
     )
 
     expect(screen.getByText(helperText)).toBeInTheDocument()
+  })
+
+  it('displays descriptions alongside labels in dropdown', async () => {
+    render(<ContextSelectorDropdown {...defaultProps} />)
+
+    const button = screen.getByRole('button', { name: /target platform/i })
+    fireEvent.click(button)
+
+    await waitFor(() => {
+      expect(screen.getByText('Image')).toBeInTheDocument()
+      expect(
+        screen.getByText(
+          /Nano Banana, Midjourney, Stable Diffusion, DALL·E 3/i,
+        ),
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('shows tooltip with full text on trigger button', () => {
+    render(<ContextSelectorDropdown {...defaultProps} />)
+
+    const button = screen.getByRole('button', { name: /target platform/i })
+    expect(button.querySelector('[title]')).toHaveAttribute(
+      'title',
+      'General (ChatGPT, Gemini, Claude, etc.)',
+    )
+  })
+
+  it('shows tooltips on dropdown items', async () => {
+    render(<ContextSelectorDropdown {...defaultProps} />)
+
+    const button = screen.getByRole('button', { name: /target platform/i })
+    fireEvent.click(button)
+
+    await waitFor(() => {
+      const imageOption = screen.getByText('Image').closest('div')
+      expect(imageOption).toHaveAttribute(
+        'title',
+        expect.stringContaining('Image'),
+      )
+    })
   })
 })
