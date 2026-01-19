@@ -75,13 +75,13 @@ export default function ContextSelectorDropdown({
         triggerText={
           selectedOption ? (
             <span
-              className="flex items-center gap-1.5 min-w-0"
+              className={cn('flex', 'items-center', 'gap-1.5', 'min-w-0')}
               title={`${selectedOption.label} ${selectedOption.description}`}
             >
-              <span className="text-[#1d1d1f] shrink-0">
+              <span className={cn('text-[#1d1d1f]', 'shrink-0')}>
                 {selectedOption.label}
               </span>
-              <span className="text-xs text-[#86868b]/60 truncate">
+              <span className={cn('text-xs', 'text-[#86868b]', 'truncate')}>
                 {selectedOption.description}
               </span>
             </span>
@@ -96,11 +96,13 @@ export default function ContextSelectorDropdown({
         onSelectItem={(option) => handleSelect(option.value)}
         renderItem={(option) => (
           <div
-            className="flex flex-col gap-0.5 min-w-0"
+            className={cn('flex', 'flex-col', 'gap-0.5', 'min-w-0')}
             title={`${option.label} ${option.description}`}
           >
-            <span className="truncate text-[#1d1d1f]">{option.label}</span>
-            <span className="text-xs text-[#86868b]/60 truncate">
+            <span className={cn('truncate', 'text-[#1d1d1f]')}>
+              {option.label}
+            </span>
+            <span className={cn('text-xs', 'text-[#86868b]', 'truncate')}>
               {option.description}
             </span>
           </div>

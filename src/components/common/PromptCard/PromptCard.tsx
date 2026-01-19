@@ -115,9 +115,7 @@ export function PromptCard({
                 {t.original}
               </span>
               {!isOriginalExpanded && (
-                <span
-                  className={cn('text-xs', 'text-[#86868b]/60', 'truncate')}
-                >
+                <span className={cn('text-xs', 'text-[#86868b]', 'truncate')}>
                   {originalPrompt}
                 </span>
               )}
@@ -186,9 +184,7 @@ export function PromptCard({
                 {t.enhanced}
               </span>
               {!isEnhancedExpanded && (
-                <span
-                  className={cn('text-xs', 'text-[#007aff]/50', 'truncate')}
-                >
+                <span className={cn('text-xs', 'text-[#0071e3]', 'truncate')}>
                   {enhancedPrompt}
                 </span>
               )}
