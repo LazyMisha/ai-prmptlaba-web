@@ -165,14 +165,22 @@ Check `README.md` for authoritative project structure before implementing featur
 | Token             | Value                                                              |
 | ----------------- | ------------------------------------------------------------------ |
 | Primary text      | `text-[#1d1d1f]`                                                   |
-| Secondary text    | `text-[#86868b]`                                                   |
+| Secondary text    | `text-[#86868b]` (metadata, labels)                                |
 | Blue (primary)    | `bg-[#007aff]` / `hover:bg-[#0071e3]`                              |
+| Blue (dark)       | `text-[#0071e3]` (for text on light blue backgrounds)              |
 | Red (destructive) | `bg-[#ff3b30]`                                                     |
 | Green (success)   | `bg-[#34c759]`                                                     |
 | Borders           | `border-black/[0.08]` or `border-black/[0.12]`                     |
 | Body text         | `text-[17px] tracking-[-0.01em]`                                   |
 | Border radius     | Cards: `rounded-2xl` / Buttons: `rounded-2xl` / Tags: `rounded-lg` |
 | Transitions       | `duration-200 ease-out` or `duration-300 ease-out`                 |
+
+**⚠️ TEXT CONTRAST RULES:**
+
+- NEVER use opacity on text colors (e.g., `text-[#86868b]/60`) - it breaks WCAG contrast
+- Use solid colors only for text
+- When text appears on colored backgrounds, ensure 4.5:1 minimum contrast ratio
+- For emphasis/hierarchy, use different solid colors or font weights, not opacity
 
 **Button Pattern:**
 
