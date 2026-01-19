@@ -35,6 +35,7 @@ export type Dictionary = {
     loading: string
     entry: string
     entries: string
+    entriesMany: string
   }
   home: {
     title: string

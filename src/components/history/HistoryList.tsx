@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from '@/i18n/client'
+import { pluralizeUk } from '@/lib/utils/pluralization'
 import type { PromptHistoryEntry } from '@/types/history'
 import {
   getAllPromptHistory,
@@ -173,7 +174,11 @@ export default function HistoryList() {
           )}
         >
           {entries.length}{' '}
-          {entries.length === 1 ? commonT.entry : commonT.entries}
+          {pluralizeUk(entries.length, [
+            commonT.entry,
+            commonT.entries,
+            commonT.entriesMany,
+          ])}
         </p>
         <button
           type="button"

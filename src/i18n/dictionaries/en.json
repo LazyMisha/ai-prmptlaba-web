@@ -28,7 +28,8 @@
     },
     "loading": "Loading…",
     "entry": "entry",
-    "entries": "entries"
+    "entries": "entries",
+    "entriesMany": "entries"
   },
   "home": {
     "title": "AI Prompt Laba",

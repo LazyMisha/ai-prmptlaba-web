@@ -28,7 +28,8 @@
     },
     "loading": "Завантаження…",
     "entry": "запис",
-    "entries": "записи"
+    "entries": "записи",
+    "entriesMany": "записів"
   },
   "home": {
     "title": "AI Prompt Laba",
@@ -40,10 +41,10 @@
     "form": {
       "ariaLabel": "Форма прокачування промпту",
       "targetLabel": "Контекст",
-      "targetHelperText": "Задайте контекст для кращого результату",
+      "targetHelperText": "Задай контекст для кращого результату",
       "promptLabel": "Промпт",
       "placeholder": "наприклад: напиши пост про моє підвищення",
-      "helperText": "Натисніть ⌘ / Ctrl + Enter, щоб прокачати",
+      "helperText": "Натисни ⌘ / Ctrl + Enter, щоб прокачати",
       "moreCharNeeded": "потрібен ще символ",
       "moreCharsNeeded": "потрібно ще символів",
       "overLimit": "перевищено ліміт",
@@ -165,7 +166,7 @@
     "quickSaveTo": "Зберегти в",
     "orChooseCollection": "або оберіть колекцію",
     "orCreateNew": "Створити нову колекцію",
-    "noCollectionsYet": "Колекцій ще немає. Створіть першу.",
+    "noCollectionsYet": "Колекцій ще немає. Створи першу.",
     "prompt": "промпт",
     "prompts": "промпти",
     "createAndSave": "Створити й зберегти",
