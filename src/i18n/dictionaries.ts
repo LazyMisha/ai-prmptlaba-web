@@ -133,6 +133,7 @@ export type Dictionary = {
     target: string
     original: string
     enhanced: string
+    prompt: string
     expandCollapse: string
     deleteEntry: string
     copy: string

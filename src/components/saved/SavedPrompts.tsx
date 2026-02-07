@@ -268,8 +268,8 @@ export default function SavedPrompts() {
               {filteredPrompts.map((prompt) => (
                 <PromptCard
                   key={prompt.id}
-                  originalPrompt={prompt.originalPrompt}
                   enhancedPrompt={prompt.enhancedPrompt}
+                  variant="compact"
                 >
                   <PromptCardHeader
                     LeftSideComponent={

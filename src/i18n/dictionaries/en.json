@@ -127,6 +127,7 @@
     "target": "Context",
     "original": "BEFORE",
     "enhanced": "AFTER",
+    "prompt": "PROMPT",
     "expandCollapse": "Tap to expand",
     "deleteEntry": "Delete entry",
     "copy": "Copy",

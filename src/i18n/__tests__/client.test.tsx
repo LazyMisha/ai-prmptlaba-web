@@ -145,6 +145,7 @@ const mockDictionary: Dictionary = {
     target: 'Target',
     original: 'Original',
     enhanced: 'Enhanced',
+    prompt: 'Prompt',
     expandCollapse: 'Expand/Collapse',
     deleteEntry: 'Delete entry',
     copy: 'Copy',

@@ -127,6 +127,7 @@
     "target": "Контекст",
     "original": "ДО",
     "enhanced": "ПІСЛЯ",
+    "prompt": "ПРОМПТ",
     "expandCollapse": "Торкніться, щоб розгорнути",
     "deleteEntry": "Видалити запис",
     "copy": "Копіювати",

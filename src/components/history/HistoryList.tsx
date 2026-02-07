@@ -220,8 +220,8 @@ export default function HistoryList() {
         {entries.map((entry) => (
           <PromptCard
             key={entry.id}
-            originalPrompt={entry.originalPrompt}
             enhancedPrompt={entry.enhancedPrompt}
+            variant="compact"
           >
             <PromptCardHeader
               LeftSideComponent={

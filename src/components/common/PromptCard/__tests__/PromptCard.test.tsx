@@ -7,6 +7,7 @@ jest.mock('@/i18n/client', () => ({
     promptCard: {
       original: 'BEFORE',
       enhanced: 'AFTER',
+      prompt: 'PROMPT',
     },
   }),
 }))
@@ -35,11 +36,11 @@ describe('PromptCard', () => {
       expect(screen.getByText('AFTER')).toBeInTheDocument()
     })
 
-    it('shows preview text when sections are collapsed', () => {
+    it('shows preview text for collapsed sections', () => {
       const { container } = render(<PromptCard {...defaultProps} />)
-      // Both previews should be visible when collapsed
+      // Only BEFORE preview should be visible (AFTER starts expanded in full variant)
       const previews = container.querySelectorAll('.truncate')
-      expect(previews.length).toBe(2)
+      expect(previews.length).toBe(1)
     })
 
     it('applies custom className', () => {
@@ -126,52 +127,45 @@ describe('PromptCard', () => {
   })
 
   describe('AFTER Section - Expand/Collapse', () => {
-    it('starts in collapsed state', () => {
+    it('starts in expanded state for full variant', () => {
       render(<PromptCard {...defaultProps} />)
       const afterButton = screen.getByRole('button', {
-        name: /AFTER\. Click to expand/i,
+        name: /AFTER\. Click to collapse/i,
       })
-      expect(afterButton).toHaveAttribute('aria-expanded', 'false')
+      expect(afterButton).toHaveAttribute('aria-expanded', 'true')
     })
 
-    it('expands when clicked', () => {
+    it('collapses when clicked', () => {
       render(<PromptCard {...defaultProps} />)
       const afterButton = screen.getByRole('button', {
-        name: /AFTER\. Click to expand/i,
+        name: /AFTER\. Click to collapse/i,
       })
 
       fireEvent.click(afterButton)
 
       expect(
         screen.getByRole('button', {
-          name: /AFTER\. Click to collapse/i,
+          name: /AFTER\. Click to expand/i,
         }),
-      ).toHaveAttribute('aria-expanded', 'true')
+      ).toHaveAttribute('aria-expanded', 'false')
     })
 
     it('hides preview when expanded', () => {
       render(<PromptCard {...defaultProps} />)
       const afterButton = screen.getByRole('button', {
-        name: /AFTER\. Click to expand/i,
+        name: /AFTER\. Click to collapse/i,
       })
 
-      fireEvent.click(afterButton)
-
-      // Preview should not be in the AFTER button
+      // Preview should not be in the AFTER button when expanded
       const afterSection = afterButton.closest('button')
-      const preview = afterSection?.querySelector('.text-\\[\\#007aff\\]\\/50')
+      const preview = afterSection?.querySelector('.truncate')
       expect(preview).not.toBeInTheDocument()
     })
 
     it('shows full text when expanded', () => {
       render(<PromptCard {...defaultProps} />)
-      const afterButton = screen.getByRole('button', {
-        name: /AFTER\. Click to expand/i,
-      })
 
-      fireEvent.click(afterButton)
-
-      // Full text should be visible
+      // Full text should be visible by default (starts expanded)
       expect(
         screen.getByText(defaultProps.enhancedPrompt, {
           selector: 'p.text-sm',
@@ -179,23 +173,23 @@ describe('PromptCard', () => {
       ).toBeInTheDocument()
     })
 
-    it('collapses when clicked again', () => {
+    it('expands again after collapsing', () => {
       render(<PromptCard {...defaultProps} />)
       const afterButton = screen.getByRole('button', {
-        name: /AFTER\. Click to expand/i,
+        name: /AFTER\. Click to collapse/i,
       })
 
       fireEvent.click(afterButton)
-      const expandedButton = screen.getByRole('button', {
-        name: /AFTER\. Click to collapse/i,
+      const collapsedButton = screen.getByRole('button', {
+        name: /AFTER\. Click to expand/i,
       })
-      fireEvent.click(expandedButton)
+      fireEvent.click(collapsedButton)
 
       expect(
         screen.getByRole('button', {
-          name: /AFTER\. Click to expand/i,
+          name: /AFTER\. Click to collapse/i,
         }),
-      ).toHaveAttribute('aria-expanded', 'false')
+      ).toHaveAttribute('aria-expanded', 'true')
     })
   })
 
@@ -206,13 +200,9 @@ describe('PromptCard', () => {
       const beforeButton = screen.getByRole('button', {
         name: /BEFORE\. Click to expand/i,
       })
-      const afterButton = screen.getByRole('button', {
-        name: /AFTER\. Click to expand/i,
-      })
 
-      // Expand both
+      // AFTER starts expanded, expand BEFORE too
       fireEvent.click(beforeButton)
-      fireEvent.click(afterButton)
 
       // Both should be expanded
       expect(
@@ -233,20 +223,25 @@ describe('PromptCard', () => {
       const beforeButton = screen.getByRole('button', {
         name: /BEFORE\. Click to expand/i,
       })
-      const afterButton = screen.getByRole('button', {
-        name: /AFTER\. Click to expand/i,
-      })
 
-      // Expand only BEFORE
+      // Collapse AFTER first, then expand BEFORE
+      const afterButton = screen.getByRole('button', {
+        name: /AFTER\. Click to collapse/i,
+      })
+      fireEvent.click(afterButton)
       fireEvent.click(beforeButton)
 
-      // BEFORE expanded, AFTER still collapsed
+      // BEFORE expanded, AFTER collapsed
       expect(
         screen.getByRole('button', {
           name: /BEFORE\. Click to collapse/i,
         }),
       ).toHaveAttribute('aria-expanded', 'true')
-      expect(afterButton).toHaveAttribute('aria-expanded', 'false')
+      expect(
+        screen.getByRole('button', {
+          name: /AFTER\. Click to expand/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'false')
     })
   })
 
@@ -261,7 +256,7 @@ describe('PromptCard', () => {
       ).toBeInTheDocument()
       expect(
         screen.getByRole('button', {
-          name: /AFTER\. Click to expand/i,
+          name: /AFTER\. Click to collapse/i,
         }),
       ).toBeInTheDocument()
     })
@@ -286,6 +281,78 @@ describe('PromptCard', () => {
       // Should have at least 2 chevron icons (one for each section)
       const svgElements = container.querySelectorAll('svg')
       expect(svgElements.length).toBeGreaterThanOrEqual(2)
+    })
+  })
+
+  describe('Compact Variant', () => {
+    const compactProps = {
+      enhancedPrompt: defaultProps.enhancedPrompt,
+      variant: 'compact' as const,
+      children: <div>Header content</div>,
+    }
+
+    it('does not render BEFORE section', () => {
+      render(<PromptCard {...compactProps} />)
+      expect(screen.queryByText('BEFORE')).not.toBeInTheDocument()
+    })
+
+    it('uses PROMPT label instead of AFTER', () => {
+      render(<PromptCard {...compactProps} />)
+      expect(screen.getByText('PROMPT')).toBeInTheDocument()
+      expect(screen.queryByText('AFTER')).not.toBeInTheDocument()
+    })
+
+    it('starts enhanced section collapsed', () => {
+      render(<PromptCard {...compactProps} />)
+      const promptButton = screen.getByRole('button', {
+        name: /PROMPT\. Click to expand/i,
+      })
+      expect(promptButton).toHaveAttribute('aria-expanded', 'false')
+    })
+
+    it('expands enhanced section when clicked', () => {
+      render(<PromptCard {...compactProps} />)
+      const promptButton = screen.getByRole('button', {
+        name: /PROMPT\. Click to expand/i,
+      })
+
+      fireEvent.click(promptButton)
+
+      expect(
+        screen.getByRole('button', {
+          name: /PROMPT\. Click to collapse/i,
+        }),
+      ).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    it('shows full text when expanded', () => {
+      render(<PromptCard {...compactProps} />)
+      const promptButton = screen.getByRole('button', {
+        name: /PROMPT\. Click to expand/i,
+      })
+
+      fireEvent.click(promptButton)
+
+      expect(
+        screen.getByText(compactProps.enhancedPrompt, {
+          selector: 'p.text-sm',
+        }),
+      ).toBeInTheDocument()
+    })
+
+    it('renders only one chevron icon', () => {
+      const { container } = render(<PromptCard {...compactProps} />)
+      const svgElements = container.querySelectorAll('svg')
+      expect(svgElements.length).toBe(1)
+    })
+
+    it('renders header content', () => {
+      render(<PromptCard {...compactProps} />)
+      expect(screen.getByText('Header content')).toBeInTheDocument()
+    })
+
+    it('does not require originalPrompt prop', () => {
+      expect(() => render(<PromptCard {...compactProps} />)).not.toThrow()
     })
   })
 })
