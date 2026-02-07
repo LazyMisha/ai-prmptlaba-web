@@ -6,21 +6,15 @@ import { cn } from '@/lib/utils'
 import ChevronIcon from '@/components/icons/ChevronIcon'
 
 export interface PromptCardProps {
-  /** Original prompt text before enhancement (required for full variant) */
   originalPrompt?: string
-  /** Enhanced prompt text */
   enhancedPrompt: string
   /** Display variant: 'full' shows both before/after, 'compact' shows only enhanced */
   variant?: 'full' | 'compact'
-  /** Additional CSS classes */
   className?: string
-  /** Header content */
   children: React.ReactNode
 }
 
-/**
- * Reusable prompt card component for displaying enhanced prompts.
- */
+/** Reusable prompt card for displaying enhanced prompts. */
 export function PromptCard({
   originalPrompt,
   enhancedPrompt,
@@ -63,10 +57,7 @@ export function PromptCard({
         className,
       )}
     >
-      {/* Header */}
       {children}
-
-      {/* Content */}
       <div className={cn('p-4', 'space-y-4')}>
         {/* Original Prompt - collapsible (hidden in compact variant) */}
         {!isCompact && (

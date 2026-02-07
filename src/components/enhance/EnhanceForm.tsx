@@ -20,6 +20,7 @@ import PromptInput from './PromptInput'
 import { Button } from '@/components/common/Button'
 import PromptCard from '@/components/common/PromptCard/PromptCard'
 import PromptCardHeader from '@/components/common/PromptCard/PromptCardHeader'
+import TokenBadge from '@/components/common/PromptCard/TokenBadge'
 import EnhanceResultInfo from './EnhanceResultInfo'
 import EnhanceResultActions from './EnhanceResultActions'
 
@@ -204,6 +205,9 @@ export default function EnhanceForm() {
                 />
               }
             />
+            <div className={cn('px-4', 'pt-3')}>
+              <TokenBadge text={enhanced} target={target} />
+            </div>
           </PromptCard>
         </div>
       )}

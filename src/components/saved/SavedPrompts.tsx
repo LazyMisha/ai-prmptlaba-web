@@ -20,6 +20,7 @@ import { CollectionSidebar } from './CollectionSidebar'
 import PromptCard from '../common/PromptCard/PromptCard'
 import PromptCardHeader from '../common/PromptCard/PromptCardHeader'
 import PromptCardInfo from '../common/PromptCard/PromptCardInfo'
+import TokenBadge from '../common/PromptCard/TokenBadge'
 import SavedPromptActions from './SavedPromptActions'
 import MoveToCollectionDialog from './MoveToCollectionDialog'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
@@ -287,6 +288,12 @@ export default function SavedPrompts() {
                       />
                     }
                   />
+                  <div className={cn('px-4', 'pt-3')}>
+                    <TokenBadge
+                      text={prompt.enhancedPrompt}
+                      target={prompt.target}
+                    />
+                  </div>
                 </PromptCard>
               ))}
             </div>

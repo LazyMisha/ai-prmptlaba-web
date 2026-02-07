@@ -14,6 +14,7 @@ import ConfirmDialog from '@/components/common/ConfirmDialog'
 import PromptCard from '@/components/common/PromptCard/PromptCard'
 import PromptCardHeader from '../common/PromptCard/PromptCardHeader'
 import PromptCardInfo from '../common/PromptCard/PromptCardInfo'
+import TokenBadge from '../common/PromptCard/TokenBadge'
 import HistoryPromptActions from './HistoryPromptActions'
 import EmptyHistoryState from './EmptyHistoryState'
 import Loading from '@/components/common/Loading'
@@ -238,6 +239,9 @@ export default function HistoryList() {
                 />
               }
             />
+            <div className={cn('px-4', 'pt-3')}>
+              <TokenBadge text={entry.enhancedPrompt} target={entry.target} />
+            </div>
           </PromptCard>
         ))}
       </div>

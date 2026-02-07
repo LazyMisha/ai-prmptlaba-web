@@ -1,5 +1,10 @@
 import '@testing-library/jest-dom'
 
+// Polyfill TextDecoder/TextEncoder for gpt-tokenizer
+import { TextDecoder, TextEncoder } from 'util'
+global.TextDecoder = TextDecoder
+global.TextEncoder = TextEncoder
+
 // Provide a global mock for i18n client hooks so tests don't need wrapping
 // with an actual I18nProvider. This returns the English dictionary by default.
 jest.mock('@/i18n/client', () => {

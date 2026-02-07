@@ -136,7 +136,8 @@
     "delete": "Видалити",
     "copyToClipboard": "Копіювати в буфер",
     "copiedToClipboard": "Скопійовано в буфер",
-    "moveToAnother": "Перемістити в іншу колекцію"
+    "moveToAnother": "Перемістити в іншу колекцію",
+    "tokens": "токенів"
   },
   "toast": {
     "success": {

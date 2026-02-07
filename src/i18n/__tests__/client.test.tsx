@@ -155,6 +155,7 @@ const mockDictionary: Dictionary = {
     copyToClipboard: 'Copy to clipboard',
     copiedToClipboard: 'Copied!',
     moveToAnother: 'Move to another',
+    tokens: 'tokens',
   },
   toast: {
     success: {

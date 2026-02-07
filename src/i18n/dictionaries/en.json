@@ -136,7 +136,8 @@
     "delete": "Delete",
     "copyToClipboard": "Copy to Clipboard",
     "copiedToClipboard": "Copied to Clipboard",
-    "moveToAnother": "Move to Another Collection"
+    "moveToAnother": "Move to Another Collection",
+    "tokens": "tokens"
   },
   "toast": {
     "success": {

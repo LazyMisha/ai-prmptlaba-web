@@ -1,22 +1,39 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { PromptCard } from '../PromptCard'
 
-// Mock translations
 jest.mock('@/i18n/client', () => ({
   useTranslations: () => ({
     promptCard: {
       original: 'BEFORE',
       enhanced: 'AFTER',
       prompt: 'PROMPT',
+      tokens: 'tokens',
     },
   }),
+}))
+
+jest.mock('@/hooks/useTokenCount', () => ({
+  useTokenCount: () => ({
+    tokenCount: 42,
+    efficiency: 'low',
+    isLoading: false,
+  }),
+}))
+
+jest.mock('@/lib/utils/tokenCount', () => ({
+  getThresholdCategory: () => 'text',
 }))
 
 const defaultProps = {
   originalPrompt: 'Write a function to calculate fibonacci numbers',
   enhancedPrompt:
     'Create an efficient TypeScript function that calculates fibonacci numbers using dynamic programming with memoization for optimal performance.',
-  children: <div>Header content</div>,
+  children: (
+    <>
+      <div>Header content</div>
+      <div>Token badge</div>
+    </>
+  ),
 }
 
 describe('PromptCard', () => {
@@ -288,7 +305,12 @@ describe('PromptCard', () => {
     const compactProps = {
       enhancedPrompt: defaultProps.enhancedPrompt,
       variant: 'compact' as const,
-      children: <div>Header content</div>,
+      children: (
+        <>
+          <div>Header content</div>
+          <div>Token badge</div>
+        </>
+      ),
     }
 
     it('does not render BEFORE section', () => {
