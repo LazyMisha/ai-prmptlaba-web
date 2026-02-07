@@ -1,8 +1,8 @@
-# AI Prompt Laba
+# Project Architect
 
-Professional prompt creation and management tool built with Next.js 16, React 19, and TypeScript.
+## File Structure
 
-### Set up environment variables:
+### Environment variables:
 
 Edit `.env.local` and add OpenAI API key:
 
@@ -10,7 +10,7 @@ Edit `.env.local` and add OpenAI API key:
 OPENAI_API_KEY=sk-proj-...your-actual-key-here...
 ```
 
-## Project Structure
+### Project Structure
 
 ```
 .husky/                         # Husky git hooks
@@ -31,22 +31,22 @@ src/
 │   │   │   ├── layout.tsx      # Home layout
 │   │   │   └── page.tsx        # Home page
 │   │   └── (inner)/            # Inner pages route group
-│   │       ├── enhance/        # Prompt enhancement page
+│   │       ├── enhance/        # Enhance route
 │   │       │   ├── layout.tsx  # Pass page specific title to the Header
-│   │       │   └── page.tsx
-│   │       ├── history/        # Prompt history page
+│   │       │   └── page.tsx    # Enhance page
+│   │       ├── history/        # History route
 │   │       │   ├── layout.tsx  # Pass page specific title to the Header
-│   │       │   └── page.tsx
-│   │       └── saved/          # Saved prompts page
+│   │       │   └── page.tsx    # History page
+│   │       └── saved/          # Saved prompts route
 │   │           ├── layout.tsx  # Pass page specific title to the Header
-│   │           └── page.tsx
+│   │           └── page.tsx    # Saved prompts page
 │   └── api/                    # API routes
-│       └── enhance/            # Prompt enhancement endpoint
-│           └── route.ts        # POST /api/enhance handler
+│       └── enhance/            # Enhance API route
+│           └── route.ts        # API route for prompt enhancement
 ├── components/                 # React components
 │   ├── common/                 # Shared/reusable UI components
 │   │   └── __tests__/          # Component tests
-│   ├── enhance/                # Prompt enhancement UI components
+│   ├── enhance/                # Enhance page UI components
 │   │   └── __tests__/          # Component tests
 │   ├── history/                # History page components
 │   │   └── __tests__/          # Component tests
@@ -71,9 +71,9 @@ src/
 │       └── uk.json             # Ukrainian translations
 ├── lib/                        # Utility functions
 │   ├── openai.ts               # OpenAI API client with retries
-│   ├── utils.ts                # cn() utility for className merging
+│   ├── utils.ts                # General utilities
 │   ├── ai/                     # AI-related utilities
-│   │   ├── prompt-enhancer.ts  # Core enhancement logic
+│   │   ├── prompt-enhancer.ts  # Core enhancement logic, OpenAI API calls
 │   │   └── __tests__/          # Enhancement tests
 │   ├── db/                     # Database utilities
 │   │   ├── prompt-history.ts   # Prompt history storage
@@ -83,10 +83,7 @@ src/
 │   │   └── cache.ts            # Time To Live (TTL) cache implementation
 │   └── __tests__/              # Lib tests
 ├── types/                      # TypeScript type definitions
-│   ├── enhance.ts              # Enhancement types
-│   ├── history.ts              # History types
-│   └── saved-prompts.ts        # Saved prompts types
-└── proxy.ts                    # Proxy configuration
+└── proxy.ts                    # Next.js proxy configuration
 
 .prettierc                      # Prettier configuration
 .eslint.config.mjs               # ESLint configuration
@@ -97,7 +94,3 @@ package.json                    # npm package configuration
 postcss.config.js                # PostCSS configuration
 tsconfig.json                    # TypeScript configuration
 ```
-
-## License
-
-Private

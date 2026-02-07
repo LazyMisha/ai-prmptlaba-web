@@ -1,203 +1,86 @@
-# GitHub Copilot Project Instructions
+# AI Coding Instructions
 
-> **Production-grade Next.js + React + TypeScript application.**
-> All code must meet Senior Frontend Engineer standards.
+## Project Overview
 
----
+Production-grade Mextjs app built with Nextjs 16 (App Router) and Tailwind CSS
+It uses OpenAI API to enhance user-provided AI prompts, making them more professional and effective
+React 19+ with React Compiler is used for optimal performance
 
-## 1. CRITICAL RULES (Always Follow)
+## Implementation Approach
 
-### Context7 MCP
+- Break down requirements into logical steps
+- Implement each step thoroughly
+- Think step by step through the entire process
 
-Automatically use Context7 MCP tools (`resolve-library-id` → `query-docs`) for any library code generation or documentation lookup.
+## Project Context & Architecture
 
-**Installed Package Versions (use these for Context7 queries):**
+- Always refer to `DESIGN.md` for page specifications, user flows
+- Check `README.md` for authoritative project structure before implementing features
 
-| Package    | Installed Version | Context7 Library ID       |
-| ---------- | ----------------- | ------------------------- |
-| Next.js    | 16.0.10           | `/vercel/next.js/v16.1.0` |
-| React      | 19.2.3            | `/facebook/react`         |
-| TypeScript | 5.x               | `/microsoft/typescript`   |
+## Context7 MCP Usage
 
-**Version Matching (CRITICAL):**
+- Always use Context7 to get the latest documentation of used libraries
 
-1. **Use the Context7 Library IDs from the table above** — these are pre-validated for this project
-2. When querying Context7, **always use the highest available version** within the same major version
-3. For packages not in the table: call `resolve-library-id`, then pick the **newest** version matching your major version
-4. Never assume API compatibility — always verify against versioned docs
-5. **Next.js 16 uses `proxy.ts`** (not `middleware.ts`) — this is a breaking change from Next.js 15
+## Restrictions
 
-### Planning Requirement
+- Do not change the code that you didn't ask to change
+- Do not break existing functionality
 
-**Before writing ANY code**, propose a plan including:
+## Validation Requirement
 
-- Files to create/update
-- Server vs Client Components (with reasoning)
-- State management approach
-- Error/loading/empty states
-- Testing strategy
-
-**Wait for user approval before generating code.**
-
-### Validation Requirement
-
-**After ANY code changes**, run:
+- After ANY code changes, run:
 
 ```bash
 npm run lint && npm run type-check && npm run test
 ```
 
-Fix all failures before proceeding.
+- If any of these checks fail, fix them
 
-### Architectural Restrictions
+## General Coding Conventions
 
-**DO NOT modify without explicit approval:**
-
-- Project structure, routing, or folder organization
-- Config files (next.config.ts, tsconfig.json, eslint, tailwind, prettier)
-- Root/global layouts, providers, or shared utilities in `src/lib/`
-- Authentication or global state logic
-
-### React Compiler (Automatic Memoization)
-
-React Compiler is enabled. **DO NOT use:**
-
-- `useCallback`, `useMemo`, `React.memo()` — handled automatically
-- Exception: Use `useRef` for event listeners needing current state values
-
-**Skill Rules Superseded by React Compiler:**
-
-- `rerender-memo` — ignore, React Compiler handles memoization
-- `advanced-event-handler-refs` — use `useRef` instead of manual ref patterns
-- `advanced-use-latest` — not needed with React Compiler
-
-### Agent Skills (Performance & Design)
-
-Two Agent Skills are installed in `.github/skills/`:
-
-| Skill                         | Purpose                            | Triggers On                                                      |
-| ----------------------------- | ---------------------------------- | ---------------------------------------------------------------- |
-| `vercel-react-best-practices` | 45 React/Next.js performance rules | Writing/reviewing React code, data fetching, bundle optimization |
-| `web-design-guidelines`       | Web interface design patterns      | UI reviews, accessibility audits, design checks                  |
-
-**Precedence Rules:**
-
-- **Project instructions override skills** — e.g., don't use `useMemo()` even if skill suggests it (React Compiler handles this)
-- Skills provide implementation patterns; instructions define project standards
-- When in doubt, follow existing patterns in the codebase
-
----
-
-## 2. Project Context
-
-### Structure
-
-Check `README.md` for authoritative project structure before implementing features.
-
-| Location                    | Purpose                      |
-| --------------------------- | ---------------------------- |
-| `src/app/[lang]/`           | Pages with i18n routing      |
-| `src/components/common/`    | Shared UI components         |
-| `src/components/<feature>/` | Feature-specific components  |
-| `src/components/icons/`     | Reusable SVG icon components |
-| `src/lib/`                  | Utilities, AI, DB helpers    |
-| `src/i18n/dictionaries/`    | Translation files (en, uk)   |
-| `src/types/`                | TypeScript definitions       |
-| `src/constants/`            | App-wide constants           |
-
-### Key Principles
-
-- Extend existing code; don't restructure
-- Follow patterns in similar existing files
-- All user-facing strings → translation files (no hardcoded text)
+- All user-facing strings add to app/i18n/\*\* files
 - Every new component/utility MUST have tests in `__tests__/`
+- Create reusable components in `app/components/` folder in case of need, always use best practices and SOLID, DRY principles
 
----
-
-## 3. Code Standards
-
-### TypeScript
+## TypeScript
 
 - Strict typing; avoid `any` unless absolutely necessary
 - Use latest stable TypeScript features
 - Define interfaces for all props and data structures
 
-### React & Next.js
+## React & Next.js
 
 - Functional components only
 - Server Components for data fetching; Client Components for interactivity
 - Use `async/await` (not `.then()`)
 - Use `next/image` for all images
-- Implement `error.tsx` at route level
 
-### Quality Rules
-
-| Rule                  | Implementation                          |
-| --------------------- | --------------------------------------- |
-| DRY                   | Extract repeated logic to utilities     |
-| Single Responsibility | One component = one purpose             |
-| Named Exports         | Unless single-purpose default component |
-| Self-documenting      | Clear, descriptive names                |
-| JSDoc                 | Complex logic, public APIs, utilities   |
-
-### Error Handling
+## Error Handling
 
 - Try-catch for async operations with logging
 - User-friendly messages; never expose stack traces
 - Handle all edge cases defensively
 - Validate inputs on both client and server
 
-### Security
+## Security
 
 - Sanitize all user inputs
 - No `dangerouslySetInnerHTML` without sanitization
-- Sensitive data in environment variables only
 - Follow OWASP best practices
 
----
+## App Styling
 
-## 4. Styling
+- Apple-like UI: Use backdrop-blur-md, high-contrast text on soft backgrounds, and rounded-2xl for borders. Borders should be subtle: border-black/[0.05]
 
-### Design System: Apple-Inspired
+- Use Apple-like clean and minimal design
+- Consistent spacing, font sizes, and colors
+- Responsive design for mobile and desktop
 
-**Design Tokens (MUST USE):**
+## TailwindCSS Rules
 
-| Token             | Value                                                              |
-| ----------------- | ------------------------------------------------------------------ |
-| Primary text      | `text-[#1d1d1f]`                                                   |
-| Secondary text    | `text-[#86868b]` (metadata, labels)                                |
-| Blue (primary)    | `bg-[#007aff]` / `hover:bg-[#0071e3]`                              |
-| Blue (dark)       | `text-[#0071e3]` (for text on light blue backgrounds)              |
-| Red (destructive) | `bg-[#ff3b30]`                                                     |
-| Green (success)   | `bg-[#34c759]`                                                     |
-| Borders           | `border-black/[0.08]` or `border-black/[0.12]`                     |
-| Body text         | `text-[17px] tracking-[-0.01em]`                                   |
-| Border radius     | Cards: `rounded-2xl` / Buttons: `rounded-2xl` / Tags: `rounded-lg` |
-| Transitions       | `duration-200 ease-out` or `duration-300 ease-out`                 |
-
-**⚠️ TEXT CONTRAST RULES:**
-
-- NEVER use opacity on text colors (e.g., `text-[#86868b]/60`) - it breaks WCAG contrast
-- Use solid colors only for text
-- When text appears on colored backgrounds, ensure 4.5:1 minimum contrast ratio
-- For emphasis/hierarchy, use different solid colors or font weights, not opacity
-
-**Button Pattern:**
-
-```tsx
-className={cn(
-  'bg-[#007aff] text-white rounded-2xl px-7 py-3.5',
-  'text-[17px] font-semibold min-h-[50px]',
-  'hover:bg-[#0071e3] active:opacity-80 active:scale-[0.98]',
-  'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007aff] focus-visible:ring-offset-2'
-)}
-```
-
-### TailwindCSS Rules
-
-1. **Mobile-first mandatory** — Base styles for mobile, then `sm:`, `md:`, `lg:`, `xl:`
-2. **Always use `cn()`** from `@/lib/utils` for className merging
-3. **Group classes with comments:**
+- Mobile-first mandatory
+- Always use `cn()` from `@/lib/utils` for className merging
+- Group classes with comments, example:
 
 ```tsx
 className={cn(
@@ -214,255 +97,25 @@ className={cn(
 )}
 ```
 
-### Accessibility Requirements
+## Accessibility Requirements
 
-| Requirement    | Implementation                                                                                     |
-| -------------- | -------------------------------------------------------------------------------------------------- |
-| Touch targets  | Min `44px` height (`min-h-[44px]`)                                                                 |
-| Focus states   | `focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007aff] focus-visible:ring-offset-2` |
-| Color contrast | WCAG 2.1 AA (4.5:1 text, 3:1 UI)                                                                   |
-| Semantics      | Proper HTML elements, ARIA labels, heading hierarchy                                               |
-| Keyboard nav   | All interactive elements focusable and operable                                                    |
+- Always use Accessibility best practices
+- Semantic HTML5 elements
+- ARIA attributes where necessary
 
-### Icons
+## Icons
 
-- All icons as components in `src/components/icons/`
-- Accept `className` prop; use `cn()` for merging
-- Include `aria-hidden="true"` for decorative icons
-- Naming: `{Name}Icon.tsx` (e.g., `ChevronIcon.tsx`)
-- **Every icon MUST have a test file**
+- All icons in `app/components/icons/` as React components
+- Check existing icons before adding new ones
 
----
-
-## 5. API & Data
-
-### Route Handler Pattern
-
-```typescript
-import { NextRequest, NextResponse } from 'next/server'
-
-interface RequestBody {
-  target: string
-  prompt: string
-}
-
-export async function POST(req: NextRequest) {
-  try {
-    const body: RequestBody = await req.json()
-
-    // Validate required fields
-    if (!body.target || typeof body.target !== 'string') {
-      return NextResponse.json(
-        { error: 'Missing or invalid "target" field' },
-        { status: 400 },
-      )
-    }
-
-    if (!body.prompt || typeof body.prompt !== 'string') {
-      return NextResponse.json(
-        { error: 'Missing or invalid "prompt" field' },
-        { status: 400 },
-      )
-    }
-
-    const result = await processData(body)
-    return NextResponse.json({ data: result }, { status: 201 })
-  } catch (err) {
-    if (err instanceof SyntaxError) {
-      return NextResponse.json(
-        { error: 'Invalid JSON in request body' },
-        { status: 400 },
-      )
-    }
-    console.error('API error:', err)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 },
-    )
-  }
-}
-```
-
-### Response Format
-
-```typescript
-// Success: { data: T }
-// Error: { error: string, code?: string, details?: unknown }
-```
-
-### Data Fetching
-
-- Prefer Server Components with native `fetch`
-- Use Next.js caching (`revalidate`, Cache API)
-- Implement proper error boundaries
-
----
-
-## 6. Testing
-
-### Organization
+## Testing Guidelines
 
 - Test files in `__tests__/` folders adjacent to source
 - Naming: `{SourceFile}.test.tsx` or `.test.ts`
+- Use Jest and React Testing Library
+- Avoid redundant tests; focus on critical paths
 
-### Component Testing (React Testing Library)
-
-```typescript
-describe('EnhanceButton', () => {
-  it('renders correctly', () => {
-    render(<EnhanceButton onClick={jest.fn()} />)
-    expect(screen.getByRole('button', { name: /enhance/i })).toBeInTheDocument()
-  })
-
-  it('shows loading state', () => {
-    render(<EnhanceButton onClick={jest.fn()} isLoading />)
-    expect(screen.getByRole('button')).toBeDisabled()
-  })
-
-  it('calls onClick when clicked', () => {
-    const handleClick = jest.fn()
-    render(<EnhanceButton onClick={handleClick} />)
-    fireEvent.click(screen.getByRole('button'))
-    expect(handleClick).toHaveBeenCalledTimes(1)
-  })
-})
-```
-
-### Testing Rules
-
-- Query by accessible elements (role, label, text)
-- Test user behavior, not implementation
-- Cover: happy path, edge cases, error states, loading states
-- Mock external dependencies; avoid over-mocking
-- Deterministic tests (mock dates/random values)
-
----
-
-## 7. Workflow & Conventions
-
-### Code Generation Workflow
-
-1. **Read** `README.md` for project structure
-2. **Analyze** existing patterns in similar files
-3. **Plan** and get approval
-4. **Implement** production-ready code
-5. **Test** — create test files (mandatory)
-6. **Validate** — run lint, type-check, tests
-7. **Document** — JSDoc for complex logic
-
-### Code Removal
-
-1. **Find** all references/usages
-2. **Plan** removal steps; get approval
-3. **Remove** code and references
-4. **Test** thoroughly to ensure no breakage
-5. **Validate** — run lint, type-check, tests
-
-### File Naming
-
-| Type       | Convention   | Example                  |
-| ---------- | ------------ | ------------------------ |
-| Components | PascalCase   | `EnhanceButton.tsx`      |
-| Utilities  | camelCase    | `formatDate.ts`          |
-| Types      | camelCase    | `enhance.ts`             |
-| Tests      | Match source | `EnhanceButton.test.tsx` |
-
-### Import Order
-
-```typescript
-// 1. React/Next.js
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-
-// 2. Third-party
-import { z } from 'zod'
-
-// 3. Internal (@/)
-import type { EnhanceRequest } from '@/types/enhance'
-import { EnhanceButton } from '@/components/enhance/EnhanceButton'
-import { cn } from '@/lib/utils'
-
-// 4. Relative
-import { formatDate } from './utils'
-```
-
-### Component Pattern
-
-```typescript
-interface ComponentNameProps {
-  /** Required callback */
-  onClick: () => void
-  /** Loading state */
-  isLoading?: boolean
-  /** Additional classes */
-  className?: string
-}
-
-export function ComponentName({
-  onClick,
-  isLoading = false,
-  className,
-}: ComponentNameProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={isLoading}
-      className={cn('base-classes', className)}
-    >
-      {isLoading ? 'Loading...' : 'Action'}
-    </button>
-  )
-}
-```
-
----
-
-## 8. Internationalization (i18n)
-
-### Structure
-
-```
-src/i18n/
-├── dictionaries.ts      # getDictionary(locale)
-├── locales.ts           # 'en' | 'uk'
-└── dictionaries/
-    ├── en.json
-    └── uk.json
-```
-
-### Usage
-
-**Server Component:**
-
-```tsx
-const dict = await getDictionary(locale)
-return <h1>{dict.page.title}</h1>
-```
-
-**Client Component:**
-
-```tsx
-'use client'
-
-import { useTranslations } from '@/i18n/client'
-
-export function ClientComponent() {
-  const dict = useTranslations()
-  return <h1>{dict.page.title}</h1>
-}
-```
-
-### Rules
-
-- All user-facing strings in translation files
-- Keep all language files in sync
-- Hierarchical keys: `enhance.form.placeholder`
-- Add to ALL language files simultaneously
-
----
-
-## 9. Performance Targets
+## Performance Targets
 
 | Metric                  | Target               |
 | ----------------------- | -------------------- |
@@ -472,31 +125,8 @@ export function ClientComponent() {
 | Cumulative Layout Shift | < 0.1                |
 | Page Bundle Size        | < 200KB (compressed) |
 
-### Performance Rules
+## Performance Rules
 
 - Server Components for data-heavy logic
 - Dynamic imports for heavy components
-- Lazy-load images and media
 - No new dependencies without approval
-- Cache data fetches appropriately
-
----
-
-## 10. Quality Checklist
-
-Before submitting any code, verify:
-
-- [ ] Plan approved by user
-- [ ] Follows existing project patterns
-- [ ] TypeScript strict (no `any`)
-- [ ] Error handling complete
-- [ ] Accessible (keyboard, ARIA, contrast)
-- [ ] Mobile-first responsive
-- [ ] Tests written and passing
-- [ ] `npm run lint` passes
-- [ ] `npm run type-check` passes
-- [ ] No hardcoded strings (use i18n)
-- [ ] JSDoc for complex logic
-- [ ] No security vulnerabilities
-- [ ] Context7 MCP used for code generation
-- [ ] Performance patterns follow `vercel-react-best-practices` skill (where not conflicting with React Compiler)
