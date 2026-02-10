@@ -33,7 +33,7 @@ interface SaveToCollectionDialogProps {
   /** Callback when prompt is successfully saved */
   onSaved?: () => void
   /** The original prompt text */
-  originalPrompt: string
+  originalPrompt?: string
   /** The enhanced prompt text */
   enhancedPrompt: string
   /** The target tool category */

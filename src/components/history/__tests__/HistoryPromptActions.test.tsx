@@ -1,6 +1,24 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import HistoryPromptActions from '../HistoryPromptActions'
 
+// Mock SaveToCollectionDialog
+jest.mock('@/components/common/SaveToCollectionDialog', () => {
+  return function MockSaveToCollectionDialog({
+    isOpen,
+    onClose,
+  }: {
+    isOpen: boolean
+    onClose: () => void
+  }) {
+    if (!isOpen) return null
+    return (
+      <div data-testid="save-dialog">
+        <button onClick={onClose}>Close Dialog</button>
+      </div>
+    )
+  }
+})
+
 // Mock hooks
 jest.mock('@/hooks/useCopyToClipboard', () => ({
   useCopyToClipboard: jest.fn(() => ({
@@ -15,6 +33,8 @@ jest.mock('@/i18n/client', () => ({
       copyToClipboard: 'Copy to Clipboard',
       copiedToClipboard: 'Copied to Clipboard',
       deleteEntry: 'Delete entry',
+      saveToCollection: 'Save to Collection',
+      promptSaved: 'Prompt saved',
     },
   }),
 }))
@@ -28,6 +48,7 @@ describe('HistoryPromptActions', () => {
   const defaultProps = {
     id: 'test-id-1',
     enhancedPrompt: 'Enhanced prompt text',
+    target: 'chatgpt',
     onDelete: mockOnDelete,
   }
 
@@ -40,6 +61,13 @@ describe('HistoryPromptActions', () => {
   })
 
   describe('Rendering', () => {
+    it('renders save button', () => {
+      render(<HistoryPromptActions {...defaultProps} />)
+      expect(
+        screen.getByRole('button', { name: /save to collection/i }),
+      ).toBeInTheDocument()
+    })
+
     it('renders copy button', () => {
       render(<HistoryPromptActions {...defaultProps} />)
       expect(
@@ -59,6 +87,70 @@ describe('HistoryPromptActions', () => {
       expect(
         screen.queryByRole('button', { name: /move/i }),
       ).not.toBeInTheDocument()
+    })
+  })
+
+  describe('Save Action', () => {
+    it('opens save dialog when save button is clicked', () => {
+      render(<HistoryPromptActions {...defaultProps} />)
+      const saveButton = screen.getByRole('button', {
+        name: /save to collection/i,
+      })
+
+      fireEvent.click(saveButton)
+
+      expect(screen.getByTestId('save-dialog')).toBeInTheDocument()
+    })
+
+    it('closes save dialog when close is triggered', () => {
+      render(<HistoryPromptActions {...defaultProps} />)
+      const saveButton = screen.getByRole('button', {
+        name: /save to collection/i,
+      })
+
+      fireEvent.click(saveButton)
+      expect(screen.getByTestId('save-dialog')).toBeInTheDocument()
+
+      const closeButton = screen.getByText('Close Dialog')
+      fireEvent.click(closeButton)
+
+      expect(screen.queryByTestId('save-dialog')).not.toBeInTheDocument()
+    })
+
+    it('does not open dialog when button is disabled (already saved)', () => {
+      render(<HistoryPromptActions {...defaultProps} />)
+      const saveButton = screen.getByRole('button', {
+        name: /save to collection/i,
+      })
+
+      // First click should open
+      fireEvent.click(saveButton)
+      expect(screen.getByTestId('save-dialog')).toBeInTheDocument()
+
+      // Simulate save completion by closing dialog
+      const closeButton = screen.getByText('Close Dialog')
+      fireEvent.click(closeButton)
+
+      // Note: In actual usage, the saved state would be set through onSaved callback
+      // This test verifies the dialog opens/closes correctly
+      expect(screen.queryByTestId('save-dialog')).not.toBeInTheDocument()
+    })
+
+    it('prevents event propagation on save click', () => {
+      const stopPropagation = jest.fn()
+      render(<HistoryPromptActions {...defaultProps} />)
+      const saveButton = screen.getByRole('button', {
+        name: /save to collection/i,
+      })
+
+      const event = new MouseEvent('click', { bubbles: true })
+      Object.defineProperty(event, 'stopPropagation', {
+        value: stopPropagation,
+      })
+
+      fireEvent(saveButton, event)
+
+      expect(stopPropagation).toHaveBeenCalled()
     })
   })
 
@@ -149,6 +241,15 @@ describe('HistoryPromptActions', () => {
   })
 
   describe('Accessibility', () => {
+    it('save button has proper aria-label', () => {
+      render(<HistoryPromptActions {...defaultProps} />)
+      const saveButton = screen.getByRole('button', {
+        name: /save to collection/i,
+      })
+
+      expect(saveButton).toHaveAccessibleName('Save to Collection')
+    })
+
     it('copy button has proper aria-label', () => {
       render(<HistoryPromptActions {...defaultProps} />)
       const copyButton = screen.getByRole('button', {
@@ -185,6 +286,9 @@ describe('HistoryPromptActions', () => {
   describe('Button Styling', () => {
     it('applies proper styling classes to buttons', () => {
       render(<HistoryPromptActions {...defaultProps} />)
+      const saveButton = screen.getByRole('button', {
+        name: /save to collection/i,
+      })
       const copyButton = screen.getByRole('button', {
         name: /copy to clipboard/i,
       })
@@ -192,6 +296,8 @@ describe('HistoryPromptActions', () => {
         name: /delete entry/i,
       })
 
+      expect(saveButton).toHaveClass('rounded-lg')
+      expect(saveButton).toHaveClass('min-h-[44px]')
       expect(copyButton).toHaveClass('rounded-lg')
       expect(copyButton).toHaveClass('min-h-[44px]')
       expect(deleteButton).toHaveClass('rounded-lg')

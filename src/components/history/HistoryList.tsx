@@ -235,6 +235,7 @@ export default function HistoryList() {
                 <HistoryPromptActions
                   id={entry.id}
                   enhancedPrompt={entry.enhancedPrompt}
+                  target={entry.target}
                   onDelete={handleDelete}
                 />
               }

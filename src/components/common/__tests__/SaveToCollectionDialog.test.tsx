@@ -72,6 +72,18 @@ describe('SaveToCollectionDialog', () => {
         expect(screen.getByText('Save to Collection')).toBeInTheDocument()
       })
     })
+
+    it('renders and functions correctly without originalPrompt', async () => {
+      const propsWithoutOriginal = {
+        ...defaultProps,
+        originalPrompt: undefined,
+      }
+      render(<SaveToCollectionDialog {...propsWithoutOriginal} />)
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument()
+        expect(screen.getByText('Save to Collection')).toBeInTheDocument()
+      })
+    })
   })
 
   describe('Select mode', () => {

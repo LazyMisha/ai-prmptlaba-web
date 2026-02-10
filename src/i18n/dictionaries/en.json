@@ -137,6 +137,8 @@
     "copyToClipboard": "Copy to Clipboard",
     "copiedToClipboard": "Copied to Clipboard",
     "moveToAnother": "Move to Another Collection",
+    "saveToCollection": "Save to Collection",
+    "promptSaved": "Prompt saved",
     "tokens": "tokens"
   },
   "toast": {

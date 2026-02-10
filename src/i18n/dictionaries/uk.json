@@ -137,6 +137,8 @@
     "copyToClipboard": "Копіювати в буфер",
     "copiedToClipboard": "Скопійовано в буфер",
     "moveToAnother": "Перемістити в іншу колекцію",
+    "saveToCollection": "Зберегти в колекцію",
+    "promptSaved": "Промпт збережено",
     "tokens": "токенів"
   },
   "toast": {

@@ -13,7 +13,7 @@ interface EnhanceResultActionsProps {
   /** The enhanced prompt text to save/copy */
   enhancedPrompt: string
   /** Original prompt for saving to collection */
-  originalPrompt: string
+  originalPrompt?: string
   /** Target category for saving */
   target: string
 }

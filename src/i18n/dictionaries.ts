@@ -143,6 +143,8 @@ export type Dictionary = {
     copyToClipboard: string
     copiedToClipboard: string
     moveToAnother: string
+    saveToCollection: string
+    promptSaved: string
     tokens: string
   }
   toast: {

@@ -807,7 +807,8 @@ describe('saved-prompts database', () => {
         collectionId: collection.id,
       })
 
-      expect(result.originalPrompt.length).toBe(10000)
+      expect(result.originalPrompt).toBeDefined()
+      expect(result.originalPrompt?.length).toBe(10000)
       expect(result.enhancedPrompt.length).toBe(10000)
     })
   })
