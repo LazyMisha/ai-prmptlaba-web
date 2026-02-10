@@ -113,7 +113,6 @@ export default function EnhanceForm() {
       // Save to history
       try {
         await savePromptHistory({
-          originalPrompt: prompt.trim(),
           enhancedPrompt: successData.enhanced,
           target: TOOL_CATEGORY_NAMES[target],
         })
@@ -200,7 +199,6 @@ export default function EnhanceForm() {
               RightSideComponent={
                 <EnhanceResultActions
                   enhancedPrompt={enhanced}
-                  originalPrompt={prompt}
                   target={TOOL_CATEGORY_NAMES[target]}
                 />
               }

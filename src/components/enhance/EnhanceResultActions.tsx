@@ -12,8 +12,6 @@ import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 interface EnhanceResultActionsProps {
   /** The enhanced prompt text to save/copy */
   enhancedPrompt: string
-  /** Original prompt for saving to collection */
-  originalPrompt?: string
   /** Target category for saving */
   target: string
 }
@@ -24,7 +22,6 @@ interface EnhanceResultActionsProps {
  */
 export default function EnhanceResultActions({
   enhancedPrompt,
-  originalPrompt,
   target,
 }: EnhanceResultActionsProps) {
   const dict = useTranslations()
@@ -125,7 +122,6 @@ export default function EnhanceResultActions({
         isOpen={isSaveDialogOpen}
         onClose={() => setIsSaveDialogOpen(false)}
         onSaved={handleSaved}
-        originalPrompt={originalPrompt}
         enhancedPrompt={enhancedPrompt}
         target={target}
       />

@@ -395,7 +395,6 @@ export async function savePrompt(
   const now = Date.now()
   const savedPrompt: SavedPrompt = {
     id: generateId(),
-    originalPrompt: data.originalPrompt,
     enhancedPrompt: data.enhancedPrompt,
     target: data.target,
     collectionId: data.collectionId,

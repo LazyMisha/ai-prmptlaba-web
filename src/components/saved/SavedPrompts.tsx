@@ -270,7 +270,6 @@ export default function SavedPrompts() {
                 <PromptCard
                   key={prompt.id}
                   enhancedPrompt={prompt.enhancedPrompt}
-                  variant="compact"
                 >
                   <PromptCardHeader
                     LeftSideComponent={

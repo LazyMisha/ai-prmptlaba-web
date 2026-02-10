@@ -4,8 +4,6 @@
 export interface PromptHistoryEntry {
   /** Unique identifier for the history entry */
   id: string
-  /** Original prompt text before enhancement */
-  originalPrompt: string
   /** Enhanced prompt text */
   enhancedPrompt: string
   /** Target tool category selected */
@@ -18,7 +16,6 @@ export interface PromptHistoryEntry {
  * Request payload for saving a prompt to history.
  */
 export interface SavePromptHistoryRequest {
-  originalPrompt: string
   enhancedPrompt: string
   target: string
 }

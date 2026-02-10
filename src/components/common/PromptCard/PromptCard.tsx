@@ -8,8 +8,6 @@ import ChevronIcon from '@/components/icons/ChevronIcon'
 export interface PromptCardProps {
   originalPrompt?: string
   enhancedPrompt: string
-  /** Display variant: 'full' shows both before/after, 'compact' shows only enhanced */
-  variant?: 'full' | 'compact'
   className?: string
   children: React.ReactNode
 }
@@ -18,11 +16,10 @@ export interface PromptCardProps {
 export function PromptCard({
   originalPrompt,
   enhancedPrompt,
-  variant = 'full',
   className,
   children,
 }: PromptCardProps) {
-  const isCompact = variant === 'compact'
+  const isCompact = !originalPrompt
   const [isOriginalExpanded, setIsOriginalExpanded] = useState(false)
   const [isEnhancedExpanded, setIsEnhancedExpanded] = useState(!isCompact)
 

@@ -37,7 +37,6 @@ const defaultProps = {
   isOpen: true,
   onClose: jest.fn(),
   onSaved: jest.fn(),
-  originalPrompt: 'Original prompt text',
   enhancedPrompt: 'Enhanced prompt text',
   target: 'ChatGPT',
 }
@@ -69,18 +68,6 @@ describe('SaveToCollectionDialog', () => {
     it('displays correct title in select mode', async () => {
       render(<SaveToCollectionDialog {...defaultProps} />)
       await waitFor(() => {
-        expect(screen.getByText('Save to Collection')).toBeInTheDocument()
-      })
-    })
-
-    it('renders and functions correctly without originalPrompt', async () => {
-      const propsWithoutOriginal = {
-        ...defaultProps,
-        originalPrompt: undefined,
-      }
-      render(<SaveToCollectionDialog {...propsWithoutOriginal} />)
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument()
         expect(screen.getByText('Save to Collection')).toBeInTheDocument()
       })
     })

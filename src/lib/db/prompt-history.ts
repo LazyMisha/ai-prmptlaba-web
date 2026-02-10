@@ -98,7 +98,6 @@ export async function savePromptHistory(
 
   const entry: PromptHistoryEntry = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
-    originalPrompt: data.originalPrompt,
     enhancedPrompt: data.enhancedPrompt,
     target: data.target,
     timestamp: Date.now(),

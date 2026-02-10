@@ -32,8 +32,6 @@ interface SaveToCollectionDialogProps {
   onClose: () => void
   /** Callback when prompt is successfully saved */
   onSaved?: () => void
-  /** The original prompt text */
-  originalPrompt?: string
   /** The enhanced prompt text */
   enhancedPrompt: string
   /** The target tool category */
@@ -50,7 +48,6 @@ export default function SaveToCollectionDialog({
   isOpen,
   onClose,
   onSaved,
-  originalPrompt,
   enhancedPrompt,
   target,
 }: SaveToCollectionDialogProps) {
@@ -146,7 +143,6 @@ export default function SaveToCollectionDialog({
 
     try {
       await savePrompt({
-        originalPrompt,
         enhancedPrompt,
         target,
         collectionId: selectedCollectionId,
@@ -173,7 +169,6 @@ export default function SaveToCollectionDialog({
       const collection = await getOrCreateDefaultCollection(target)
 
       await savePrompt({
-        originalPrompt,
         enhancedPrompt,
         target,
         collectionId: collection.id,
@@ -231,7 +226,6 @@ export default function SaveToCollectionDialog({
 
       // Save the prompt to the new collection
       await savePrompt({
-        originalPrompt,
         enhancedPrompt,
         target,
         collectionId: newCollection.id,

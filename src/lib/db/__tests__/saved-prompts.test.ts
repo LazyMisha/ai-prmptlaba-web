@@ -380,7 +380,6 @@ describe('saved-prompts database', () => {
       it('cascades deletion to saved prompts', async () => {
         const collection = await createCollection({ name: 'Test' })
         await savePrompt({
-          originalPrompt: 'Original',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: collection.id,
@@ -399,19 +398,16 @@ describe('saved-prompts database', () => {
         const collection2 = await createCollection({ name: 'Collection 2' })
 
         await savePrompt({
-          originalPrompt: 'Prompt 1',
           enhancedPrompt: 'Enhanced 1',
           target: 'general',
           collectionId: collection1.id,
         })
         await savePrompt({
-          originalPrompt: 'Prompt 2',
           enhancedPrompt: 'Enhanced 2',
           target: 'general',
           collectionId: collection1.id,
         })
         await savePrompt({
-          originalPrompt: 'Prompt 3',
           enhancedPrompt: 'Enhanced 3',
           target: 'image',
           collectionId: collection2.id,
@@ -488,14 +484,12 @@ describe('saved-prompts database', () => {
     describe('savePrompt', () => {
       it('creates saved prompt with correct structure', async () => {
         const result = await savePrompt({
-          originalPrompt: 'Original text',
           enhancedPrompt: 'Enhanced text',
           target: 'image-generator',
           collectionId: testCollection.id,
         })
 
         expect(result).toMatchObject({
-          originalPrompt: 'Original text',
           enhancedPrompt: 'Enhanced text',
           target: 'image-generator',
           collectionId: testCollection.id,
@@ -507,7 +501,6 @@ describe('saved-prompts database', () => {
 
       it('links to existing collection', async () => {
         const result = await savePrompt({
-          originalPrompt: 'Original',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -518,7 +511,6 @@ describe('saved-prompts database', () => {
 
       it('includes optional notes when provided', async () => {
         const result = await savePrompt({
-          originalPrompt: 'Original',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -530,13 +522,11 @@ describe('saved-prompts database', () => {
 
       it('generates unique IDs for each prompt', async () => {
         const prompt1 = await savePrompt({
-          originalPrompt: 'First',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
         })
         const prompt2 = await savePrompt({
-          originalPrompt: 'Second',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -549,7 +539,6 @@ describe('saved-prompts database', () => {
     describe('getAllSavedPrompts', () => {
       it('returns all prompts sorted by createdAt descending', async () => {
         await savePrompt({
-          originalPrompt: 'First',
           enhancedPrompt: 'First Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -558,7 +547,6 @@ describe('saved-prompts database', () => {
         await new Promise((resolve) => setTimeout(resolve, 10))
 
         await savePrompt({
-          originalPrompt: 'Second',
           enhancedPrompt: 'Second Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -567,8 +555,8 @@ describe('saved-prompts database', () => {
         const result = await getAllSavedPrompts()
 
         expect(result.length).toBe(2)
-        expect(result[0]?.originalPrompt).toBe('Second')
-        expect(result[1]?.originalPrompt).toBe('First')
+        expect(result[0]?.enhancedPrompt).toBe('Second Enhanced')
+        expect(result[1]?.enhancedPrompt).toBe('First Enhanced')
       })
 
       it('returns empty array when no prompts exist', async () => {
@@ -583,13 +571,11 @@ describe('saved-prompts database', () => {
         const collection2 = await createCollection({ name: 'Other Collection' })
 
         await savePrompt({
-          originalPrompt: 'In Collection 1',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
         })
         await savePrompt({
-          originalPrompt: 'In Collection 2',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: collection2.id,
@@ -598,7 +584,7 @@ describe('saved-prompts database', () => {
         const result = await getSavedPromptsByCollection(testCollection.id)
 
         expect(result.length).toBe(1)
-        expect(result[0]?.originalPrompt).toBe('In Collection 1')
+        expect(result[0]?.collectionId).toBe(testCollection.id)
       })
 
       it('returns empty array for non-existent collection', async () => {
@@ -611,7 +597,6 @@ describe('saved-prompts database', () => {
     describe('getSavedPromptById', () => {
       it('returns prompt by ID', async () => {
         const created = await savePrompt({
-          originalPrompt: 'Test',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -620,7 +605,7 @@ describe('saved-prompts database', () => {
         const result = await getSavedPromptById(created.id)
 
         expect(result?.id).toBe(created.id)
-        expect(result?.originalPrompt).toBe('Test')
+        expect(result?.enhancedPrompt).toBe('Enhanced')
       })
 
       it('returns null for non-existent ID', async () => {
@@ -633,7 +618,6 @@ describe('saved-prompts database', () => {
     describe('updateSavedPrompt', () => {
       it('updates prompt fields', async () => {
         const created = await savePrompt({
-          originalPrompt: 'Test',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -648,7 +632,6 @@ describe('saved-prompts database', () => {
 
       it('updates updatedAt timestamp', async () => {
         const created = await savePrompt({
-          originalPrompt: 'Test',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -671,7 +654,6 @@ describe('saved-prompts database', () => {
     describe('deleteSavedPrompt', () => {
       it('removes prompt from store', async () => {
         const created = await savePrompt({
-          originalPrompt: 'To Delete',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -690,7 +672,6 @@ describe('saved-prompts database', () => {
           name: 'Target Collection',
         })
         const prompt = await savePrompt({
-          originalPrompt: 'Test',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -705,13 +686,11 @@ describe('saved-prompts database', () => {
     describe('bulkDeleteSavedPrompts', () => {
       it('removes multiple prompts', async () => {
         const prompt1 = await savePrompt({
-          originalPrompt: 'First',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
         })
         const prompt2 = await savePrompt({
-          originalPrompt: 'Second',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -732,13 +711,11 @@ describe('saved-prompts database', () => {
       it('moves multiple prompts to new collection', async () => {
         const collection2 = await createCollection({ name: 'Target' })
         const prompt1 = await savePrompt({
-          originalPrompt: 'First',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
         })
         const prompt2 = await savePrompt({
-          originalPrompt: 'Second',
           enhancedPrompt: 'Enhanced',
           target: 'general',
           collectionId: testCollection.id,
@@ -801,14 +778,11 @@ describe('saved-prompts database', () => {
       const longText = 'x'.repeat(10000)
 
       const result = await savePrompt({
-        originalPrompt: longText,
         enhancedPrompt: longText,
         target: 'general',
         collectionId: collection.id,
       })
 
-      expect(result.originalPrompt).toBeDefined()
-      expect(result.originalPrompt?.length).toBe(10000)
       expect(result.enhancedPrompt.length).toBe(10000)
     })
   })

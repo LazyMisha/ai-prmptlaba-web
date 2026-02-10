@@ -26,8 +26,6 @@ export interface Collection {
 export interface SavedPrompt {
   /** Unique identifier for the saved prompt */
   id: string
-  /** Original prompt text before enhancement */
-  originalPrompt?: string
   /** Enhanced prompt text */
   enhancedPrompt: string
   /** Target tool category used for enhancement */
@@ -66,7 +64,6 @@ export interface UpdateCollectionRequest {
  * Request payload for saving a prompt to a collection.
  */
 export interface SavePromptRequest {
-  originalPrompt?: string
   enhancedPrompt: string
   target: string
   collectionId: string

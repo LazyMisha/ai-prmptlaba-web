@@ -55,7 +55,7 @@ describe('PromptCard', () => {
 
     it('shows preview text for collapsed sections', () => {
       const { container } = render(<PromptCard {...defaultProps} />)
-      // Only BEFORE preview should be visible (AFTER starts expanded in full variant)
+      // Only BEFORE preview should be visible (AFTER starts expanded when originalPrompt is provided)
       const previews = container.querySelectorAll('.truncate')
       expect(previews.length).toBe(1)
     })
@@ -144,7 +144,7 @@ describe('PromptCard', () => {
   })
 
   describe('AFTER Section - Expand/Collapse', () => {
-    it('starts in expanded state for full variant', () => {
+    it('starts in expanded state when originalPrompt is provided', () => {
       render(<PromptCard {...defaultProps} />)
       const afterButton = screen.getByRole('button', {
         name: /AFTER\. Click to collapse/i,
@@ -301,10 +301,9 @@ describe('PromptCard', () => {
     })
   })
 
-  describe('Compact Variant', () => {
+  describe('Without originalPrompt', () => {
     const compactProps = {
       enhancedPrompt: defaultProps.enhancedPrompt,
-      variant: 'compact' as const,
       children: (
         <>
           <div>Header content</div>
