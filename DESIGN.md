@@ -34,6 +34,7 @@
     - **Prompt Input:** Text area for user input
     - **Action Button:** "Enhance"
   - **Output (Post-Action):**
+    - Card Token badge: displays the number of tokens used
     - Card Displays: "BEFORE" and "AFTER" expandable text
     - Card Metadata: Date and Category badges
     - Card Actions: Copy, Save
@@ -49,6 +50,7 @@
   - **"Create Collection" Button:** Blue primary button - opens modal for new collection creation
   - **"Manage Collections" Button:** Blue primary button - opens collection management modal
   - **List View:**
+    - Card Token badge: displays the number of tokens used
     - Card Displays: "BEFORE" and "AFTER" expandable text
     - Card Metadata: Date and Category badges
     - Card Actions: Copy, Delete, Move
@@ -63,8 +65,9 @@
   - **Counter:** (e.g., "12 entries")
   - **"Clear All" Button:** Text button to wipe history -> confirmation dialog
   - **List View:** sorted by most recent
+    - Card Token badge: displays the number of tokens used
     - Card Displays: "BEFORE" and "AFTER" expandable text
-    - Metadata: Date and Category badges
+    - Card Metadata: Date and Category badges
     - Card Actions: Copy, Delete, Save
 
 ### Header & Navigation
