@@ -76,11 +76,12 @@ export function Button({
     'items-center',
     'justify-center',
     'gap-2',
+    'min-w-0',
     // Spacing
     'px-6',
     'py-3',
     // Size
-    'min-h-[50px]',
+    'h-[50px]',
     // Background
     'bg-[#007aff]',
     'text-white',
@@ -110,7 +111,7 @@ export function Button({
   const content = (
     <>
       {isLoading ? <SpinnerIcon className="w-5 h-5" /> : icon}
-      <span>{children}</span>
+      <span className="min-w-0 truncate">{children}</span>
     </>
   )
 
